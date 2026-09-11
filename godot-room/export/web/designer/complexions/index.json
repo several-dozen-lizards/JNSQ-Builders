@@ -1,0 +1,32 @@
+[
+  {
+    "name": "natural",
+    "label": "Natural grain",
+    "texture_id": "862a26e335e958b70534cb5f0d7c47ef30ab148a56c42b3e9da969cf76f12963",
+    "file": "natural.png"
+  },
+  {
+    "name": "soft",
+    "label": "Soft with freckles",
+    "texture_id": "b2a6ac8cd4f9febdb447368e29c76cd68410bb66e46d9dcfa2d5f75126eea8fc",
+    "file": "soft.png"
+  },
+  {
+    "name": "mature",
+    "label": "Mature detail",
+    "texture_id": "3f94f3f6a5cab92dedf5cce392a87332312fc435f1cb44c6e7b897daef9a5fbb",
+    "file": "mature.png"
+  },
+  {
+    "texture_id": "e1666bb29fbd6bb38574d007bd48bff3c34ba0836de34e480ad1b287a9629a8f",
+    "label": "Kay - original texture",
+    "file": "kay-original.png",
+    "name": "kay-original"
+  },
+  {
+    "texture_id": "9c58f283b7889daf459908986f60e29a501f179d3f85652c22219dc2849d7cca",
+    "label": "Generated head - fitting study",
+    "file": "generated-head-study.png",
+    "name": "generated-head-study"
+  }
+]

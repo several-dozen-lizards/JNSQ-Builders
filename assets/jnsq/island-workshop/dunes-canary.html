@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{background:#17272c;color:white;font:14px system-ui}#pairs{display:grid;grid-template-columns:480px 480px;gap:12px}canvas{width:480px;height:280px}</style><script src="/builders/standalone.js" defer></script></head><body><h1>Dunes · before / after</h1><div id="pairs"></div><pre id="result">RUNNING</pre><script type="module">
+import * as THREE from './vendor/three.module.js';import {duneHeight} from './dunes.mjs';import {random} from './terrain.mjs?caves=retired';
+const errors=[],original=console.error;console.error=(...a)=>{errors.push(a.join(' '));original(...a);};
+try{
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,280);renderer.toneMapping=THREE.ACESFilmicToneMapping;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xa7c3d1);scene.add(new THREE.HemisphereLight(0xcce4ff,0x756044,1.6));const light=new THREE.DirectionalLight(0xffe4b7,3);light.position.set(-40,35,-40);scene.add(light);
+const camera=new THREE.PerspectiveCamera(43,480/280,.1,1000);camera.position.set(96,65,114);camera.lookAt(0,3,0);
+const reports=[];
+for(const seed of [42,4271,9182]){
+const rng=random(seed),p=Array.from({length:12},()=>rng()*Math.PI*2);
+for(const after of [false,true]){
+const g=new THREE.PlaneGeometry(160,160,128,128);g.rotateX(-Math.PI/2);const pos=g.attributes.position;
+for(let i=0;i<pos.count;i++){const u=pos.getX(i)/160,v=pos.getZ(i)/160,along=u*Math.cos(p[5])+v*Math.sin(p[5]),across=-u*Math.sin(p[5])+v*Math.cos(p[5]);pos.setY(i,after?duneHeight(u,v,p):3+5*(.5+.5*Math.sin(across*85+Math.sin(along*12+p[6])))**2);}
+g.computeVertexNormals();const mat=new THREE.MeshStandardMaterial({color:0xc0a26d,roughness:1}),mesh=new THREE.Mesh(g,mat);scene.add(mesh);renderer.render(scene,camera);
+const canvas=document.createElement('canvas');canvas.width=480;canvas.height=280;canvas.getContext('2d').drawImage(renderer.domElement,0,0);const frame=document.createElement('div');frame.append('Seed '+seed+' · '+(after?'rolling dunes':'previous'),canvas);document.querySelector('#pairs').append(frame);
+reports.push({seed,after,triangles:renderer.info.render.triangles,calls:renderer.info.render.calls});scene.remove(mesh);g.dispose();mat.dispose();
+}}
+document.querySelector('#result').textContent=JSON.stringify({status:errors.length?'FAIL':'PASS',errors,reports},null,2);renderer.dispose();
+}catch(e){document.querySelector('#result').textContent='FAIL '+e.stack;}
+</script></body></html>

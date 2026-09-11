@@ -1,0 +1,326 @@
+{
+  "source_sha256": "bf1d20a21b32a7b4520cdd3533b54a90f9c314b73e1aaec20969e5493e58e7be",
+  "rows": [
+    {
+      "name": "Human",
+      "vertices": 11072,
+      "max_displacements_m": {
+        "character_heart": 0.012604225426912308,
+        "character_oval": 0.015801530331373215,
+        "character_square": 0.02065657451748848,
+        "character_fine": 0.013143053278326988,
+        "character_round": 0.018739281222224236,
+        "character_aquiline": 0.016707684844732285,
+        "character_age": 0.016513374869369168,
+        "body_softness": 0.008951682597398758,
+        "body_power": 0.021518249064683914
+      }
+    },
+    {
+      "name": "Human.eyebrow001",
+      "vertices": 124,
+      "max_displacements_m": {
+        "character_heart": 0.008029507473111153,
+        "character_oval": 0.004240944515913725,
+        "character_square": 0.01326646190136671,
+        "character_fine": 0.007707035169005394,
+        "character_round": 0.004577953368425369,
+        "character_aquiline": 0.00628275703638792,
+        "character_age": 0.006969193984491686,
+        "body_softness": 0.0010389043018221855,
+        "body_power": 1.0433553143229801e-05
+      }
+    },
+    {
+      "name": "Human.eyelashes01",
+      "vertices": 250,
+      "max_displacements_m": {
+        "character_heart": 0.008331796154379845,
+        "character_oval": 0.002553516300395131,
+        "character_square": 0.006794361397624016,
+        "character_fine": 0.004338616970926523,
+        "character_round": 0.004738606978207827,
+        "character_aquiline": 0.0029790913686156273,
+        "character_age": 0.00026021422885397325,
+        "body_softness": 0.001145520363934338,
+        "body_power": 1.1147056284244172e-05
+      }
+    },
+    {
+      "name": "Human.high-poly",
+      "vertices": 1076,
+      "max_displacements_m": {
+        "character_heart": 0.008331796154379845,
+        "character_oval": 0.002488562138751149,
+        "character_square": 0.006598745938390493,
+        "character_fine": 0.004232830833643675,
+        "character_round": 0.004538457840681076,
+        "character_aquiline": 0.0029070170130580664,
+        "character_age": 0.0,
+        "body_softness": 0.0011106504825875163,
+        "body_power": 1.1098097274953034e-05
+      }
+    },
+    {
+      "name": "Human.male_casualsuit01",
+      "vertices": 8864,
+      "max_displacements_m": {
+        "character_heart": 0.001691713579930365,
+        "character_oval": 0.015736419707536697,
+        "character_square": 0.009728880599141121,
+        "character_fine": 0.014375118538737297,
+        "character_round": 0.010391429997980595,
+        "character_aquiline": 0.009835503064095974,
+        "character_age": 0.0035797434596655025,
+        "body_softness": 0.0726773589849472,
+        "body_power": 0.021846504881978035
+      }
+    },
+    {
+      "name": "Human.short01",
+      "vertices": 3050,
+      "max_displacements_m": {
+        "character_heart": 0.007210524752736092,
+        "character_oval": 0.01752055436372757,
+        "character_square": 0.014036446809768677,
+        "character_fine": 0.01196272298693657,
+        "character_round": 0.01258247159421444,
+        "character_aquiline": 0.010512587614357471,
+        "character_age": 0.008993571485873295,
+        "body_softness": 0.0029406696557998657,
+        "body_power": 0.0013519281055778265
+      }
+    },
+    {
+      "name": "Human.teeth_base.001",
+      "vertices": 4494,
+      "max_displacements_m": {
+        "character_heart": 0.0023067740257829428,
+        "character_oval": 0.008240526542067528,
+        "character_square": 0.0017179251881316304,
+        "character_fine": 0.0064319116063416,
+        "character_round": 0.005766797810792923,
+        "character_aquiline": 0.009839228354394436,
+        "character_age": 0.0,
+        "body_softness": 0.0016287424368783832,
+        "body_power": 0.0005189221701584756
+      }
+    },
+    {
+      "name": "Human.tongue01.001",
+      "vertices": 253,
+      "max_displacements_m": {
+        "character_heart": 0.0026098121888935566,
+        "character_oval": 0.008844082243740559,
+        "character_square": 0.0015312954783439636,
+        "character_fine": 0.005951804108917713,
+        "character_round": 0.007021198980510235,
+        "character_aquiline": 0.007459626998752356,
+        "character_age": 0.0,
+        "body_softness": 0.002064830856397748,
+        "body_power": 0.0006595927407033741
+      }
+    },
+    {
+      "name": "Study6.SweptCrop",
+      "vertices": 3050,
+      "max_displacements_m": {
+        "character_heart": 0.007210524752736092,
+        "character_oval": 0.019466577097773552,
+        "character_square": 0.014036446809768677,
+        "character_fine": 0.01376121211796999,
+        "character_round": 0.01258247159421444,
+        "character_aquiline": 0.011697463691234589,
+        "character_age": 0.008993571485873295,
+        "body_softness": 0.0029406696557998657,
+        "body_power": 0.0013519281055778265
+      }
+    },
+    {
+      "name": "Study6.FineStrands",
+      "vertices": 12600,
+      "max_displacements_m": {
+        "character_heart": 5.9054149460280314e-05,
+        "character_oval": 0.019885044544935226,
+        "character_square": 0.007232919335365295,
+        "character_fine": 0.015068929642438889,
+        "character_round": 0.011962302960455418,
+        "character_aquiline": 0.011962302960455418,
+        "character_age": 0.0012445057720737148,
+        "body_softness": 4.856917712459108e-07,
+        "body_power": 1.126401087958584e-07
+      }
+    },
+    {
+      "name": "Asset7.afro01",
+      "vertices": 2240,
+      "max_displacements_m": {
+        "character_heart": 0.004432206507772207,
+        "character_oval": 0.019145870581269264,
+        "character_square": 0.013993756845593452,
+        "character_fine": 0.014677668921649456,
+        "character_round": 0.011519303545355797,
+        "character_aquiline": 0.011519303545355797,
+        "character_age": 0.007363152693406984,
+        "body_softness": 0.001132522476837039,
+        "body_power": 0.0009700565133243799
+      }
+    },
+    {
+      "name": "Asset7.bob01",
+      "vertices": 5432,
+      "max_displacements_m": {
+        "character_heart": 0.012680565938353539,
+        "character_oval": 0.018235716968774796,
+        "character_square": 0.020270083099603653,
+        "character_fine": 0.01619095914065838,
+        "character_round": 0.01875903457403183,
+        "character_aquiline": 0.01664426364004612,
+        "character_age": 0.01656062574455992,
+        "body_softness": 0.004989681765437126,
+        "body_power": 0.003664261195808649
+      }
+    },
+    {
+      "name": "Asset7.braid01",
+      "vertices": 4679,
+      "max_displacements_m": {
+        "character_heart": 0.010448019951581955,
+        "character_oval": 0.01681729592382908,
+        "character_square": 0.013777188025414944,
+        "character_fine": 0.013226181268692017,
+        "character_round": 0.016332997009158134,
+        "character_aquiline": 0.010090394876897335,
+        "character_age": 0.012136740096426788,
+        "body_softness": 0.02461812272667885,
+        "body_power": 0.016777193173766136
+      }
+    },
+    {
+      "name": "Asset7.eyebrow009",
+      "vertices": 124,
+      "max_displacements_m": {
+        "character_heart": 0.008331796154379845,
+        "character_oval": 0.004449841566383839,
+        "character_square": 0.01319715566933155,
+        "character_fine": 0.007602427154779434,
+        "character_round": 0.005804707296192646,
+        "character_aquiline": 0.0061622364446520805,
+        "character_age": 0.006712678404438671,
+        "body_softness": 0.0011106504825875163,
+        "body_power": 1.1098097274953034e-05
+      }
+    },
+    {
+      "name": "Asset7.long01",
+      "vertices": 3312,
+      "max_displacements_m": {
+        "character_heart": 0.009650600142776966,
+        "character_oval": 0.016617417335510254,
+        "character_square": 0.020793378353118896,
+        "character_fine": 0.018491914495825768,
+        "character_round": 0.015506144613027573,
+        "character_aquiline": 0.01075752917677164,
+        "character_age": 0.01630471867011333,
+        "body_softness": 0.04849168658256531,
+        "body_power": 0.02189880982041359
+      }
+    },
+    {
+      "name": "Asset7.ponytail01",
+      "vertices": 3902,
+      "max_displacements_m": {
+        "character_heart": 0.00628070579841733,
+        "character_oval": 0.016377557069063187,
+        "character_square": 0.01382563728839159,
+        "character_fine": 0.011215119622647762,
+        "character_round": 0.010000680573284626,
+        "character_aquiline": 0.00982687808573246,
+        "character_age": 0.007716914580496208,
+        "body_softness": 0.0021949198562651873,
+        "body_power": 0.013925937004387379
+      }
+    },
+    {
+      "name": "Asset7.rehmanpolanski_moustache_viking",
+      "vertices": 1598,
+      "max_displacements_m": {
+        "character_heart": 0.00477822357788682,
+        "character_oval": 0.01029947493225336,
+        "character_square": 0.01604965329170227,
+        "character_fine": 0.00977266300469637,
+        "character_round": 0.010606680996716022,
+        "character_aquiline": 0.01604284904897213,
+        "character_age": 0.014500373396343634,
+        "body_softness": 0.0031716276425868273,
+        "body_power": 0.0011013931361958385
+      }
+    },
+    {
+      "name": "Asset7.wdg_scruffy_beard",
+      "vertices": 2300,
+      "max_displacements_m": {
+        "character_heart": 0.009511644951999187,
+        "character_oval": 0.016465209424495697,
+        "character_square": 0.02215617336332798,
+        "character_fine": 0.016398923471570015,
+        "character_round": 0.015383599326014519,
+        "character_aquiline": 0.011816725134849548,
+        "character_age": 0.016561129095545656,
+        "body_softness": 0.004024765454232693,
+        "body_power": 0.005713817663490772
+      }
+    },
+    {
+      "name": "Groom8.ShortCoils",
+      "vertices": 60765,
+      "max_displacements_m": {
+        "character_heart": 0.0007760105072520673,
+        "character_oval": 0.015303869731724262,
+        "character_square": 0.011483332142233849,
+        "character_fine": 0.010558880865573883,
+        "character_round": 0.009182321839034557,
+        "character_aquiline": 0.009182321839034557,
+        "character_age": 0.006730574850697848,
+        "body_softness": 7.161597022786736e-05,
+        "body_power": 3.672087404993363e-05
+      }
+    }
+  ],
+  "controls": [
+    "character_heart",
+    "character_oval",
+    "character_square",
+    "character_fine",
+    "character_round",
+    "character_aquiline",
+    "character_age",
+    "body_softness",
+    "body_power"
+  ],
+  "rendered_weights": {
+    "baseline": {},
+    "heart": {
+      "RANGE9_character_heart_Full": 1.0
+    },
+    "oval": {
+      "RANGE9_character_oval_Full": 1.0
+    },
+    "square": {
+      "RANGE9_character_square_Full": 0.7599999904632568,
+      "RANGE9_body_power_Full": 0.7999999523162842
+    },
+    "fine": {
+      "RANGE9_character_fine_Full": 0.7599999904632568
+    },
+    "round": {
+      "RANGE9_character_round_Full": 1.0,
+      "RANGE9_body_softness_Full": 0.8200000524520874
+    },
+    "aquiline": {
+      "RANGE9_character_aquiline_Full": 0.6399999856948853,
+      "RANGE9_character_age_Full": 0.7000000476837158
+    }
+  },
+  "source_unchanged": true
+}

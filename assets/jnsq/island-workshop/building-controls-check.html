@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Building controls check</title><style>body{font:16px system-ui;background:#16251f;color:#f1eee4;margin:20px}label{display:block;margin-top:10px}button,select,input{padding:7px;margin:4px}aside{max-width:560px}#status{position:fixed;right:20px;top:20px;background:#243f33;padding:16px;max-width:360px}.row{display:flex}summary{font-weight:bold}#stage{display:none}</style><script src="/builders/standalone.js" defer></script></head><body><h1>Building controls check</h1><p>Disposable in-memory fixture. Uses the real building editor; no saved island is changed. Geometry is built, but this page does not render 3D.</p><aside><section></section><section></section></aside><div id="stage"></div><output id="status">Starting</output><script type="module">
+import * as THREE from './vendor/three.module.js';
+import {installBuildingEditor} from './building-editor.mjs';
+let editor;const history=[];
+let world={size:160,heights:Array(129**2).fill(2),objects:[],textures:[],structures:[{id:'fixture',shape:'rectangle',x:0,y:2.12,z:0,width:18,depth:18,rotation:0,floors:2,stairs:true,roof:'auto',material:'plaster'}]};
+const status=message=>document.querySelector('#status').textContent=message;
+window.addEventListener('error',e=>status('ERROR: '+e.message));
+editor=installBuildingEditor({scene:new THREE.Scene(),world:()=>world,remember:()=>history.push(structuredClone(world)),rebuild:()=>editor.refresh(),changed:status,status,chooseTool:()=>{},frameBuilding:()=>{}});
+const undo=document.createElement('button');undo.textContent='Undo fixture edit';undo.onclick=()=>{if(history.length){world=history.pop();editor.refresh();status('Fixture restored');}};document.body.prepend(undo);status('Ready · geometry and real controls loaded');
+</script></body></html>

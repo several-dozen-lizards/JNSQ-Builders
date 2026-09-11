@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Ground surface comparison</title>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>body{background:#17251f;color:#e7eee7;font:14px system-ui;margin:20px}#images{display:grid;grid-template-columns:480px 480px;gap:12px}figure{margin:0}canvas{width:480px;height:240px}pre{white-space:pre-wrap}</style><script src="/builders/standalone.js" defer></script></head>
+<body><h1>Ground and crystals · before / after</h1><p>Same scene, geometry, camera and lights. Left: previous. Right: updated.</p><div id="images"></div><pre id="result">RUNNING</pre>
+<script>window.addEventListener('error',e=>document.querySelector('#result').textContent='FAIL '+e.message);</script>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+import {islandMaterials as oldMaterials} from './__before/materials.mjs';
+import {islandMaterials} from './materials.mjs';
+import {createGroundCover as oldCover} from './__before/ground-cover.mjs';
+import {createGroundCover} from './ground-cover.mjs';
+import {createFlora as oldFlora} from './__before/flora-render.mjs';
+import {createFlora} from './flora-render.mjs';
+import {CRYSTAL_IDS} from './geology.mjs';
+import {createSunlight} from './sunlight.mjs';
+import {daylight} from './daylight.mjs';
+import {weatherProfile} from './weather.mjs';
+const failures=[],reports=[],originalError=console.error;console.error=(...args)=>{failures.push(args.join(' '));originalError(...args);};
+try{
+ const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,240);renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ const ready=new Promise(resolve=>THREE.DefaultLoadingManager.onLoad=resolve);
+ const materials=[oldMaterials(renderer,()=>{},e=>failures.push(e)),islandMaterials(renderer,()=>{},e=>failures.push(e))];await ready;
+ const flora=[oldFlora(materials[0]),createFlora(materials[1])];
+ const camera=new THREE.PerspectiveCamera(42,2,.03,150);
+ function scene(){const s=new THREE.Scene();s.background=new THREE.Color(0x7d8b92);s.add(new THREE.HemisphereLight(0xddeaff,0x64543d,1.4));const sun=new THREE.DirectionalLight(0xffe3bd,3);sun.position.set(-5,8,5);sun.castShadow=true;Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:.1,far:40});sun.shadow.mapSize.set(1024,1024);sun.shadow.normalBias=.015;s.add(sun);return s;}
+ function terrain(mat,kind){const g=new THREE.PlaneGeometry(18,18,64,64);g.rotateX(-Math.PI/2);const p=g.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,2+Math.sin(p.getX(i)*.4)*Math.cos(p.getZ(i)*.4)*.25);g.computeVertexNormals();
+ const paint=new Float32Array(p.count*4),extra0=new Float32Array(p.count*4),extra1=new Float32Array(p.count*4);
+ for(let i=0;i<p.count;i++){if(kind==='meadow')paint[i*4]=1;else if(kind==='gravel')extra1[i*4]=1;else if(kind==='moss')extra0[i*4+3]=1;else paint[i*4+1]=1;}
+ for(const [name,values] of [['groundPaint',paint],['groundExtra0',extra0],['groundExtra1',extra1]])g.setAttribute(name,new THREE.BufferAttribute(values,4));
+ const m=new THREE.Mesh(g,mat);m.receiveShadow=true;return m;}
+ const scenes=[scene(),scene()],solars=scenes.map(s=>createSunlight(s));
+ for(const kind of ['meadow','gravel','moss','grass blades','quartz','amethyst']){
+  const pair=[];
+  for(let v=0;v<2;v++){
+   const s=scenes[v];for(const child of [...s.children])if(!child.isLight)s.remove(child);camera.position.set(5,6,8);camera.lookAt(0,2,0);
+   if(['meadow','gravel','moss'].includes(kind))s.add(terrain(materials[v].terrain,kind));
+   else if(kind==='grass blades'){
+    const world={size:12,seed:7,style:'meadow',heights:Array(129**2).fill(2),objects:[]};
+    const mount=document.createElement('div');const cover=[oldCover,createGroundCover][v](s,()=>{},mount);cover.rebuild(world);cover.update(0);
+    const base=new THREE.Mesh(new THREE.PlaneGeometry(18,18),new THREE.MeshStandardMaterial({color:0x465331,roughness:1}));base.rotation.x=-Math.PI/2;base.position.y=1.96;base.receiveShadow=true;s.add(base);
+    camera.position.set(1.1,2.75,1.65);camera.lookAt(0,2.15,0);
+   }else{
+    const group=flora[v].object(kind);s.add(group);const box=new THREE.Box3().setFromObject(group),center=box.getCenter(new THREE.Vector3()),span=box.getSize(new THREE.Vector3()).length();camera.position.copy(center).add(new THREE.Vector3(.6,.25,1).normalize().multiplyScalar(span*1.2));camera.lookAt(center);
+    const back=new THREE.Mesh(new THREE.PlaneGeometry(16,12),new THREE.MeshStandardMaterial({color:0xbca887,roughness:1}));back.position.set(0,3,-2);s.add(back);
+    for(let i=-5;i<=5;i++){const bar=new THREE.Mesh(new THREE.BoxGeometry(.14,8,.1),new THREE.MeshStandardMaterial({color:i%2?0x243544:0x896435}));bar.position.set(i*.5,3,-1.9);s.add(bar);}
+   }
+   solars[v].update(0,daylight(10),weatherProfile('clear'),false,{});renderer.render(s,camera);
+   const calls=renderer.info.render.calls,triangles=renderer.info.render.triangles;
+   const canvas=document.createElement('canvas');canvas.width=480;canvas.height=240;canvas.getContext('2d').drawImage(renderer.domElement,0,0);const fig=document.createElement('figure');fig.append(kind+' · '+(v?'updated':'previous'),canvas);document.querySelector('#images').append(fig);
+   pair.push({calls,triangles});if(renderer.getContext().getError())failures.push('GL error '+kind);
+  }
+  if(JSON.stringify(pair[0])!==JSON.stringify(pair[1]))failures.push('Budget changed '+kind);reports.push({kind,before:pair[0],after:pair[1]});
+ }
+ // Compile and draw every crystal type with overlapping instances from three views.
+ let crystalViews=0;
+ for(const id of CRYSTAL_IDS){const s=scene(),part=flora[1].parts(id)[0],m=new THREE.InstancedMesh(part.geometry,part.material,3),matrix=new THREE.Matrix4();for(let i=0;i<3;i++){matrix.makeTranslation(i*.3,0,-i*.2);m.setMatrixAt(i,matrix);}s.add(m);for(const x of [-4,0,4]){camera.position.set(x,3,7);camera.lookAt(0,1,0);renderer.render(s,camera);crystalViews++;}}
+ document.querySelector('#result').textContent=JSON.stringify({status:failures.length?'FAIL':'PASS',reports,crystalViews,failures,textureBytesWithMipmaps:Math.ceil(256*256*4*4/3)},null,2);renderer.dispose();
+}catch(e){document.querySelector('#result').textContent='FAIL '+e.stack;}
+</script></body></html>

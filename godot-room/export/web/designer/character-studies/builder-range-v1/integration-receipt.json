@@ -1,0 +1,15 @@
+{
+  "recipe_id": "cbbbd9810e70434e9f7ac3b472c6ab58",
+  "source_candidate": {
+    "candidate_id": "05a16eb70cca452a89cced24f7994ecc",
+    "sha256": "cb429a6d5b4bd08c892add436a0abc18d7acec53eebda84dc02b5b2d14ebeee6",
+    "original_name": "Editable human range.glb"
+  },
+  "selected": {
+    "fine": 0.88,
+    "horns": 1.0,
+    "tail": 1.0,
+    "ears": 1.0
+  },
+  "skin_texture": "976a6f3db4661d2c9a30f5733909820b5e17a99ca70ce55ba39cdac859d21edf"
+}

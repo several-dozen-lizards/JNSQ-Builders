@@ -1,0 +1,32 @@
+{
+  "candidate": "3e9a05b1dac34892bc51fda10cb99eff",
+  "triangles": 5743,
+  "occupied_texels": 370181,
+  "features": {
+    "forehead": {
+      "peak": 0.3522768344813501,
+      "texels_above_01": 3691,
+      "curves": 3
+    },
+    "under-eye": {
+      "peak": 0.3507871251160736,
+      "texels_above_01": 911,
+      "curves": 4
+    },
+    "crow": {
+      "peak": 0.3522110058619562,
+      "texels_above_01": 814,
+      "curves": 6
+    },
+    "nasolabial": {
+      "peak": 0.35063433859331705,
+      "texels_above_01": 959,
+      "curves": 2
+    },
+    "marionette": {
+      "peak": 0.335342444130775,
+      "texels_above_01": 214,
+      "curves": 2
+    }
+  }
+}

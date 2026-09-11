@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Ribbon navigation checks</title><style>body{font:14px system-ui;background:#17272c;color:#edf2e9;padding:20px}button{padding:10px}#workshopRibbon{width:420px}.ribbon-tabs{display:flex;overflow:auto;width:420px}.ribbon-tabs button{flex:0 0 150px}.ribbon-panel{width:420px;height:200px;overflow:auto}.wide{width:950px;display:flex;gap:25px}.furniture-gallery{width:180px;overflow:auto;flex:none;height:100px}.cards{width:600px;height:75px;background:linear-gradient(90deg,#c8b37c,#647f67)}.vertical{width:140px;height:100px;overflow:auto;flex:none}.tall{height:300px}.spare{width:550px;flex:none}canvas{display:block;width:420px;height:70px;background:#657a6b}pre{white-space:pre-wrap}</style><script src="/builders/standalone.js" defer></script></head><body>
+<button id="first">First person</button><button id="top">Top view</button><div id="workshopRibbon"><div class="ribbon-tabs"><button role="tab">Landscape</button><button role="tab">Scenery</button><button role="tab">Furniture</button><button role="tab">Sky</button></div><div class="ribbon-panel"><div class="wide"><div class="furniture-gallery"><div class="cards">Object previews</div></div><div class="vertical"><div class="tall">Scrollable settings</div></div><div class="spare">Ribbon background</div></div></div></div><canvas id="canvas"></canvas><p id="help">Editor help</p><pre id="result">RUNNING</pre>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from './vendor/three.module.js';import {OrbitControls} from './vendor/OrbitControls.js';import {installFirstPerson} from './first-person.mjs';import {installRibbonWheel} from './ribbon-wheel.mjs';
+const checks=[],check=(name,ok)=>{checks.push({name,ok});if(!ok)throw Error(name);};
+try{
+const $=s=>document.querySelector(s),camera=new THREE.PerspectiveCamera(43,1,.03,1000);camera.position.set(10,20,30);const controls=new OrbitControls(camera,$('canvas'));controls.target.set(0,3,0);controls.update();
+const fp=installFirstPerson({camera,controls,canvas:$('canvas'),world:()=>({size:100,heights:Array(129**2).fill(3)}),button:$('#first'),help:$('#help'),invalidate:()=>{}});
+fp.enter();const position=camera.position.clone(),rotation=camera.quaternion.clone();
+for(const tab of document.querySelectorAll('[role=tab]')){tab.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true}));tab.click();check(tab.textContent+' preserves first person',fp.active&&!controls.enabled&&camera.position.equals(position)&&camera.quaternion.equals(rotation));}
+$('#top').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true}));check('explicit view control still exits',!fp.active&&controls.enabled);
+installRibbonWheel($('#workshopRibbon'));
+const panel=$('.ribbon-panel'),gallery=$('.furniture-gallery'),vertical=$('.vertical'),tabs=$('.ribbon-tabs');
+function wheel(target,delta=40,extra={}){const e=new WheelEvent('wheel',{deltaY:delta,bubbles:true,cancelable:true,...extra});target.dispatchEvent(e);return e;}
+wheel($('.spare'));check('ribbon background scrolls panel',panel.scrollLeft===40);panel.scrollLeft=0;
+wheel($('.cards'));check('preview scrolls alone',gallery.scrollLeft===40&&panel.scrollLeft===0);
+gallery.scrollLeft=gallery.scrollWidth;wheel($('.cards'));check('preview edge does not spill into ribbon',panel.scrollLeft===0);
+gallery.style.width='650px';gallery.scrollLeft=0;wheel($('.cards'));check('non-overflowing preview stays local',panel.scrollLeft===0);
+wheel($('.tall'));check('vertical settings stay local',vertical.scrollTop===40&&panel.scrollLeft===0);
+wheel(tabs.children[0]);check('tab strip scrolls horizontally',tabs.scrollLeft===40);
+const previous=panel.scrollLeft,e=wheel($('.spare'),40,{ctrlKey:true});check('browser zoom remains available',!e.defaultPrevented&&panel.scrollLeft===previous);
+const report={status:'PASS',checks};$('#result').textContent=JSON.stringify(report,null,2);document.title='PASS ribbon navigation';
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({status:'FAIL',checks,error:e.stack},null,2);}
+</script></body></html>

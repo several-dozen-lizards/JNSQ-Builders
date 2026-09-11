@@ -1,0 +1,20 @@
+<!doctype html><meta charset="utf-8"><title>Painted rock samples</title>
+<style>body{margin:0;background:#1b282d;color:#f4e5be;font:16px system-ui}header{padding:16px}main{display:grid;grid-template-columns:repeat(3,1fr)}figure{margin:8px;text-align:center}canvas{width:100%;display:block}</style>
+<header>Painted rock samples · the same sculpted surface and material used by the workshop</header><main></main>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {sculptStroke,sculptGeometry,ROCK_TYPES} from './rock-sculpt.mjs?types=1';
+import {islandMaterials} from './materials.mjs';
+import {weatherStone} from './stone-surface.mjs?types=1';
+ROCK_TYPES.forEach((name,type)=>{
+  const figure=document.createElement('figure'),caption=document.createElement('figcaption');caption.textContent=name;document.querySelector('main').append(figure);
+  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(420,280);renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));figure.append(renderer.domElement,caption);
+  const scene=new THREE.Scene();scene.background=new THREE.Color(0x1b282d);
+  const camera=new THREE.PerspectiveCamera(40,1.5,.1,100);camera.position.set(11,14,16);camera.lookAt(0,7,0);
+  scene.add(new THREE.HemisphereLight(0xe8f1ff,0x514632,2));const sun=new THREE.DirectionalLight(0xffeed4,3);sun.position.set(-8,16,10);scene.add(sun);
+  const render=()=>renderer.render(scene,camera),materials=islandMaterials(renderer,render,console.error),stone=materials.rock;stone.vertexColors=true;stone.color.setHex(0xffffff);weatherStone(stone,{neutralColor:true});
+  let points=sculptStroke([],new THREE.Vector3(-1,6,0),3.5,false,100,type);points=sculptStroke(points,new THREE.Vector3(2,7,0),2.6,false,100,type);
+  scene.add(new THREE.Mesh(sculptGeometry(points),stone));render();
+});
+</script>

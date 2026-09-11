@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script><style>body{font:14px system-ui;background:#17272c;color:white}#panel{display:none}canvas{width:400px;height:300px}pre{white-space:pre-wrap}</style><script src="/builders/standalone.js" defer></script></head><body><h1>Furniture tab focus regression checks</h1><canvas id="canvas"></canvas><div id="panel"></div><pre id="result">RUNNING</pre><script type="module">
+import * as THREE from 'three';import {installFurnitureEditor} from './furniture.mjs';
+const originalFetch=window.fetch;window.fetch=async url=>String(url)==='/api/room-workshop/catalog'?new Response(JSON.stringify({files:[],items:[]} ),{headers:{'Content-Type':'application/json'}}):originalFetch(url);
+const checks=[],check=(name,ok)=>{checks.push({name,ok});if(!ok)throw Error(name);};
+try{
+let tab='Terrain',activations=0,objects={};const canvas=document.querySelector('canvas'),scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(43,1,.03,1000);camera.position.set(0,8,20);camera.lookAt(0,0,0);camera.updateMatrixWorld();
+const editor=installFurnitureEditor({scene,camera,canvas,panel:document.querySelector('#panel'),controls:{target:new THREE.Vector3(),update(){}},objects:()=>objects,commit:()=>{},status:()=>{},invalidate:()=>{},activate:()=>{tab='Furniture';activations++;},isActive:()=>true});await editor.layer.ready;
+const rect=canvas.getBoundingClientRect();canvas.dispatchEvent(new PointerEvent('pointerdown',{button:0,clientX:rect.left+10,clientY:rect.top+10,bubbles:true,cancelable:true}));check('empty ground keeps current tab',tab==='Terrain'&&activations===0);
+document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));check('Escape keeps current tab',tab==='Terrain'&&activations===0);
+editor.select(null);editor.select('missing');check('cleared or stale selection does not activate furniture',activations===0);
+objects={chair:{id:'chair',name:'Chair',kind:'chair',position_m:[0,0],size_m:1,rot_deg:0,y_off_m:0,support_surface:'island_ground'}};editor.refresh();editor.select('chair');check('deliberate object selection opens its controls',tab==='Furniture'&&activations===1);
+tab='Sky';editor.refresh();editor.select(null);check('refresh and deselection preserve subsequent tab',tab==='Sky'&&activations===1);
+document.querySelector('#result').textContent=JSON.stringify({status:'PASS',checks},null,2);
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({status:'FAIL',checks,error:e.stack},null,2);}
+</script></body></html>

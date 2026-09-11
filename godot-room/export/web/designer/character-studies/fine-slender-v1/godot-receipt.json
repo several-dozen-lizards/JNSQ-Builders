@@ -1,0 +1,19 @@
+{
+  "blink_targets": 14,
+  "bones": 137,
+  "renderer": "gl_compatibility",
+  "shots": [
+    "face",
+    "body",
+    "blink",
+    "mouth",
+    "walk",
+    "sit"
+  ],
+  "skin_sheen": {
+    "glowy_roughness": 0.4,
+    "original_roughness": 1.0,
+    "repeat_and_restore": true,
+    "shot": "godot-glowy.png"
+  }
+}

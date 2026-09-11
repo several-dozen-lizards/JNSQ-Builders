@@ -1,0 +1,1071 @@
+{
+  "schema": "jnsq-avatar-shape-library/9",
+  "source_candidate": "10c2760ce1d346c7aac9153c0364c399",
+  "source_sha256": "3402f73e8619a7bb48d515e83486005a9da5e54e96d1f3e64315a6a3bb960f2b",
+  "heads": {
+    "broad": {
+      "label": "Broad / square",
+      "width": 0.1,
+      "length": -0.02,
+      "jaw": 0.011,
+      "chin": 0.004,
+      "cheek": 0.003,
+      "nose_width": 0.2,
+      "nose_depth": 0.002,
+      "bridge": -0.003,
+      "mouth": 0.1,
+      "eye_space": 0.002
+    },
+    "long": {
+      "label": "Long / angular",
+      "width": -0.045,
+      "length": 0.1,
+      "jaw": -0.004,
+      "chin": 0.003,
+      "cheek": 0.003,
+      "nose_width": -0.1,
+      "nose_depth": 0.009,
+      "bridge": 0.004,
+      "mouth": -0.06,
+      "eye_space": -0.001
+    },
+    "round": {
+      "label": "Short / rounded",
+      "width": 0.08,
+      "length": -0.08,
+      "jaw": -0.002,
+      "chin": -0.003,
+      "cheek": 0.007,
+      "nose_width": 0.09,
+      "nose_depth": -0.005,
+      "bridge": -0.003,
+      "mouth": 0.04,
+      "eye_space": 0.003
+    },
+    "tapered": {
+      "label": "High cheek / tapered",
+      "width": -0.015,
+      "length": 0.025,
+      "jaw": -0.008,
+      "chin": 0.001,
+      "cheek": 0.007,
+      "nose_width": -0.08,
+      "nose_depth": 0.003,
+      "bridge": 0.002,
+      "mouth": 0.08,
+      "eye_space": 0.002
+    }
+  },
+  "head_regions": [
+    "cranium",
+    "eyes",
+    "nose",
+    "cheeks",
+    "jaw_mouth"
+  ],
+  "bodies": {
+    "sturdy": {
+      "label": "Compact / substantial",
+      "rib": 0.13,
+      "waist": 0.08,
+      "pelvis": 0.07,
+      "limb": 0.12,
+      "shoulder": 0.025,
+      "leg_length": -0.025,
+      "torso_length": -0.025,
+      "arm_length": -0.025
+    },
+    "rangy": {
+      "label": "Long-limbed / narrow",
+      "rib": -0.06,
+      "waist": -0.035,
+      "pelvis": -0.035,
+      "limb": -0.05,
+      "shoulder": -0.015,
+      "leg_length": 0.09,
+      "torso_length": 0.015,
+      "arm_length": 0.055
+    },
+    "pelvic": {
+      "label": "Full hips / thighs",
+      "rib": -0.025,
+      "waist": -0.03,
+      "pelvis": 0.19,
+      "limb": 0.1,
+      "shoulder": 0,
+      "leg_length": 0,
+      "torso_length": 0,
+      "arm_length": 0
+    },
+    "shouldered": {
+      "label": "Broad shoulders / tapered",
+      "rib": 0.13,
+      "waist": -0.055,
+      "pelvis": -0.025,
+      "limb": 0.07,
+      "shoulder": 0.065,
+      "leg_length": 0.01,
+      "torso_length": 0.02,
+      "arm_length": 0.015
+    }
+  },
+  "body_regions": [
+    "torso",
+    "pelvis",
+    "arms",
+    "legs"
+  ],
+  "controls": [
+    [
+      "body_frame",
+      "Body frame",
+      "JNSQ_BodyFrame_Feminine",
+      "JNSQ_BodyFrame_Masculine"
+    ],
+    [
+      "stature",
+      "Stature",
+      "JNSQ_Stature_Short",
+      "JNSQ_Stature_Tall"
+    ],
+    [
+      "body_mass",
+      "Body mass",
+      "JNSQ_BodyMass_Light",
+      "JNSQ_BodyMass_Full"
+    ],
+    [
+      "muscularity",
+      "Muscularity",
+      "JNSQ_Muscularity_Soft",
+      "JNSQ_Muscularity_Strong"
+    ],
+    [
+      "proportions",
+      "Proportions",
+      "JNSQ_Proportions_Compact",
+      "JNSQ_Proportions_Elongated"
+    ],
+    [
+      "shoulder_width",
+      "Shoulder width",
+      "JNSQ_ShoulderWidth_Narrow",
+      "JNSQ_ShoulderWidth_Wide"
+    ],
+    [
+      "hip_width",
+      "Hip width",
+      "JNSQ_HipWidth_Narrow",
+      "JNSQ_HipWidth_Wide"
+    ],
+    [
+      "torso_length",
+      "Torso length",
+      "JNSQ_TorsoLength_Short",
+      "JNSQ_TorsoLength_Long"
+    ],
+    [
+      "arm_length",
+      "Arm length",
+      "JNSQ_ArmLength_Short",
+      "JNSQ_ArmLength_Long"
+    ],
+    [
+      "leg_length",
+      "Leg length",
+      "JNSQ_LegLength_Short",
+      "JNSQ_LegLength_Long"
+    ],
+    [
+      "head_scale",
+      "Head scale",
+      "JNSQ_HeadScale_Small",
+      "JNSQ_HeadScale_Large"
+    ],
+    [
+      "jaw_width",
+      "Jaw width",
+      "JNSQ_JawWidth_Narrow",
+      "JNSQ_JawWidth_Wide"
+    ],
+    [
+      "chin_height",
+      "Chin height",
+      "JNSQ_ChinHeight_Short",
+      "JNSQ_ChinHeight_Long"
+    ],
+    [
+      "cheekbones",
+      "Cheekbones",
+      "JNSQ_Cheekbones_Soft",
+      "JNSQ_Cheekbones_Prominent"
+    ],
+    [
+      "cheekbone_height",
+      "Cheekbone height",
+      "JNSQ_CheekboneHeight_Lower",
+      "JNSQ_CheekboneHeight_Higher"
+    ],
+    [
+      "nose_size",
+      "Nose size",
+      "JNSQ_NoseSize_Small",
+      "JNSQ_NoseSize_Large"
+    ],
+    [
+      "nose_curve",
+      "Nose curve",
+      "JNSQ_NoseCurve_Concave",
+      "JNSQ_NoseCurve_Convex"
+    ],
+    [
+      "nose_tip_angle",
+      "Nose tip angle",
+      "JNSQ_NoseTip_Down",
+      "JNSQ_NoseTip_Up"
+    ],
+    [
+      "nostril_angle",
+      "Nostril angle",
+      "JNSQ_NostrilAngle_Down",
+      "JNSQ_NostrilAngle_Up"
+    ],
+    [
+      "nostril_width",
+      "Nostril width",
+      "JNSQ_NostrilWidth_Narrow",
+      "JNSQ_NostrilWidth_Wide"
+    ],
+    [
+      "nose_projection",
+      "Nose projection",
+      "JNSQ_NoseProjection_Recessed",
+      "JNSQ_NoseProjection_Forward"
+    ],
+    [
+      "nose_vertical",
+      "Nose height",
+      "JNSQ_NoseVertical_Low",
+      "JNSQ_NoseVertical_High"
+    ],
+    [
+      "septum_angle",
+      "Septum angle",
+      "JNSQ_SeptumAngle_Low",
+      "JNSQ_SeptumAngle_High"
+    ],
+    [
+      "jaw_angle",
+      "Jaw angle",
+      "JNSQ_JawAngle_Raised",
+      "JNSQ_JawAngle_Dropped"
+    ],
+    [
+      "jaw_projection",
+      "Jaw projection",
+      "JNSQ_JawProjection_Recessed",
+      "JNSQ_JawProjection_Forward"
+    ],
+    [
+      "jaw_definition",
+      "Jaw definition",
+      "JNSQ_JawDefinition_Soft",
+      "JNSQ_JawDefinition_Angular"
+    ],
+    [
+      "chin_projection",
+      "Chin projection",
+      "JNSQ_ChinProjection_Recessed",
+      "JNSQ_ChinProjection_Prominent"
+    ],
+    [
+      "eye_size",
+      "Eye size",
+      "JNSQ_EyeSize_Small",
+      "JNSQ_EyeSize_Large"
+    ],
+    [
+      "eye_spacing",
+      "Eye spacing",
+      "JNSQ_EyeSpacing_Close",
+      "JNSQ_EyeSpacing_Wide"
+    ],
+    [
+      "mouth_width",
+      "Mouth width",
+      "JNSQ_MouthWidth_Narrow",
+      "JNSQ_MouthWidth_Wide"
+    ],
+    [
+      "ear_size",
+      "Ear size",
+      "JNSQ_EarSize_Small",
+      "JNSQ_EarSize_Large"
+    ],
+    [
+      "nasolabial_definition",
+      "Nasolabial fold definition",
+      "JNSQ_Nasolabial_Soft",
+      "JNSQ_Nasolabial_Defined"
+    ],
+    [
+      "midface_projection",
+      "Midface projection",
+      "JNSQ_Midface_Recessed",
+      "JNSQ_Midface_Projected"
+    ],
+    [
+      "philtrum_depth",
+      "Philtrum depth",
+      "JNSQ_Philtrum_Shallow",
+      "JNSQ_Philtrum_Deep"
+    ],
+    [
+      "brow_height",
+      "Brow height",
+      "JNSQ_BrowHeight_Low",
+      "JNSQ_BrowHeight_High"
+    ],
+    [
+      "brow_angle",
+      "Brow angle",
+      "JNSQ_BrowAngle_Up",
+      "JNSQ_BrowAngle_Down"
+    ],
+    [
+      "brow_projection",
+      "Brow ridge projection",
+      "JNSQ_BrowProjection_Recessed",
+      "JNSQ_BrowProjection_Prominent"
+    ],
+    [
+      "brow_width",
+      "Brow span",
+      "JNSQ_BrowWidth_Narrow",
+      "JNSQ_BrowWidth_Wide"
+    ],
+    [
+      "brow_arch",
+      "Brow arch",
+      "JNSQ_BrowArch_Flat",
+      "JNSQ_BrowArch_Arched"
+    ],
+    [
+      "brow_hair_thickness",
+      "Brow hair thickness",
+      "JNSQ_BrowHair_Thin",
+      "JNSQ_BrowHair_Thick"
+    ],
+    [
+      "brow_hair_length",
+      "Brow tail length",
+      "JNSQ_BrowHair_Short",
+      "JNSQ_BrowHair_Long"
+    ],
+    [
+      "breast_size",
+      "Breast size",
+      "JNSQ_BreastSize_Small",
+      "JNSQ_BreastSize_Large"
+    ],
+    [
+      "hip_depth",
+      "Hip fullness",
+      "JNSQ_HipDepth_Shallow",
+      "JNSQ_HipDepth_Full"
+    ],
+    [
+      "upper_lip_volume",
+      "Upper lip fullness",
+      "JNSQ_UpperLip_Thin",
+      "JNSQ_UpperLip_Full"
+    ],
+    [
+      "lower_lip_volume",
+      "Lower lip fullness",
+      "JNSQ_LowerLip_Thin",
+      "JNSQ_LowerLip_Full"
+    ],
+    [
+      "cupids_bow",
+      "Cupid’s bow",
+      "JNSQ_CupidsBow_Soft",
+      "JNSQ_CupidsBow_Defined"
+    ],
+    [
+      "eyelid_fold",
+      "Upper eyelid contour",
+      "JNSQ_EyelidFold_Rounded",
+      "JNSQ_EyelidFold_Defined"
+    ],
+    [
+      "eyelid_fold_height",
+      "Upper eyelid fold height",
+      "JNSQ_EyelidFoldHeight_Low",
+      "JNSQ_EyelidFoldHeight_High"
+    ],
+    [
+      "lower_lid_volume",
+      "Lower eyelid fullness",
+      "JNSQ_LowerLid_Slim",
+      "JNSQ_LowerLid_Full"
+    ],
+    [
+      "upper_lip_height",
+      "Upper lip height",
+      "JNSQ_UpperLipHeight_Thin",
+      "JNSQ_UpperLipHeight_Tall"
+    ],
+    [
+      "lower_lip_height",
+      "Lower lip height",
+      "JNSQ_LowerLipHeight_Thin",
+      "JNSQ_LowerLipHeight_Tall"
+    ],
+    [
+      "lower_nose_projection",
+      "Lower nose projection",
+      "JNSQ_LowerNose_Recessed",
+      "JNSQ_LowerNose_Projected"
+    ],
+    [
+      "nose_bridge_width",
+      "Nose bridge width",
+      "JNSQ_NoseBridge_Narrow",
+      "JNSQ_NoseBridge_Broad"
+    ],
+    [
+      "nose_tip_width",
+      "Nose tip width",
+      "JNSQ_NoseTip_Narrow",
+      "JNSQ_NoseTip_Broad"
+    ],
+    [
+      "nostril_flare",
+      "Nostril flare",
+      "JNSQ_NostrilFlare_Subtle",
+      "JNSQ_NostrilFlare_Flared"
+    ],
+    [
+      "jaw_corner",
+      "Jaw corner contour",
+      "JNSQ_JawCorner_Soft",
+      "JNSQ_JawCorner_Defined"
+    ],
+    [
+      "eye_openness",
+      "Eye opening",
+      "JNSQ_EyeOpening_Narrow",
+      "JNSQ_EyeOpening_Round"
+    ],
+    [
+      "eye_tilt",
+      "Inner eye corner height",
+      "JNSQ_EyeTilt_Down",
+      "JNSQ_EyeTilt_Up"
+    ],
+    [
+      "eye_angle",
+      "Eye angle",
+      "JNSQ_EyeAngle_Down",
+      "JNSQ_EyeAngle_Up"
+    ],
+    [
+      "inner_eye_fold",
+      "Inner eye fold",
+      "JNSQ_InnerEyeFold_In",
+      "JNSQ_InnerEyeFold_Out"
+    ],
+    [
+      "inner_lid_opening",
+      "Inner lid opening",
+      "JNSQ_InnerLidOpening_Low",
+      "JNSQ_InnerLidOpening_High"
+    ],
+    [
+      "outer_lid_opening",
+      "Outer lid opening",
+      "JNSQ_OuterLidOpening_Low",
+      "JNSQ_OuterLidOpening_High"
+    ],
+    [
+      "mouth_position",
+      "Mouth position",
+      "JNSQ_MouthPosition_Lower",
+      "JNSQ_MouthPosition_Higher"
+    ],
+    [
+      "lip_height",
+      "Lip height",
+      "JNSQ_LipHeight_Short",
+      "JNSQ_LipHeight_Tall"
+    ],
+    [
+      "facial_definition",
+      "Facial definition",
+      "JNSQ_FacialDefinition_Soft",
+      "JNSQ_FacialDefinition_Defined"
+    ],
+    [
+      "cheek_volume",
+      "Cheek fullness",
+      "JNSQ_CheekVolume_Sunken",
+      "JNSQ_CheekVolume_Full"
+    ],
+    [
+      "temple_definition",
+      "Temple definition",
+      "JNSQ_Temples_Full",
+      "JNSQ_Temples_Hollow"
+    ],
+    [
+      "nose_apex_angle",
+      "Very tip angle",
+      "LIB3_nose_apex_angle_Downturned",
+      "LIB3_nose_apex_angle_Upturned"
+    ],
+    [
+      "nose_tip_roundness",
+      "Tip roundness",
+      "LIB3_nose_tip_roundness_Defined",
+      "LIB3_nose_tip_roundness_Rounded"
+    ],
+    [
+      "nose_bridge_height",
+      "Bridge depth",
+      "LIB3_nose_bridge_height_Shallow",
+      "LIB3_nose_bridge_height_Prominent"
+    ],
+    [
+      "nose_asymmetry",
+      "Nose tip left / right",
+      "LIB3_nose_asymmetry_Left",
+      "LIB3_nose_asymmetry_Right"
+    ],
+    [
+      "chin_width",
+      "Chin width",
+      "LIB3_chin_width_Narrow",
+      "LIB3_chin_width_Broad"
+    ],
+    [
+      "chin_cleft",
+      "Chin cleft",
+      "LIB3_chin_cleft_Smooth",
+      "LIB3_chin_cleft_Cleft"
+    ],
+    [
+      "forehead_slope",
+      "Forehead slope",
+      "LIB3_forehead_slope_Upright",
+      "LIB3_forehead_slope_Sloped"
+    ],
+    [
+      "forehead_width",
+      "Forehead width",
+      "LIB3_forehead_width_Narrow",
+      "LIB3_forehead_width_Broad"
+    ],
+    [
+      "mouth_corner_tilt",
+      "Mouth corner tilt",
+      "LIB3_mouth_corner_tilt_Downturned",
+      "LIB3_mouth_corner_tilt_Upturned"
+    ],
+    [
+      "jaw_planes",
+      "Jaw angularity",
+      "LIB3_jaw_planes_Rounded",
+      "LIB3_jaw_planes_Angular"
+    ],
+    [
+      "cheek_planes",
+      "Cheek planes",
+      "LIB3_cheek_planes_Soft",
+      "LIB3_cheek_planes_Planar"
+    ],
+    [
+      "nose_bridge_planes",
+      "Nose bridge definition",
+      "LIB3_nose_bridge_planes_Rounded",
+      "LIB3_nose_bridge_planes_Faceted"
+    ],
+    [
+      "chin_planes",
+      "Chin front plane",
+      "LIB3_chin_planes_Rounded",
+      "LIB3_chin_planes_Flat"
+    ],
+    [
+      "anatomy_candidate",
+      "Angular anatomy study",
+      "STUDY6_anatomy_candidate_Original",
+      "STUDY6_anatomy_candidate_Sculpted"
+    ],
+    [
+      "mouth_candidate",
+      "Defined mouth study",
+      "STUDY6_mouth_candidate_Original",
+      "STUDY6_mouth_candidate_Sculpted"
+    ],
+    [
+      "head_atlas",
+      "Atlas head — broad angular",
+      "ASSET7_head_atlas_Original",
+      "ASSET7_head_atlas_Sculpted"
+    ],
+    [
+      "head_rowan",
+      "Rowan head — lean defined",
+      "ASSET7_head_rowan_Original",
+      "ASSET7_head_rowan_Sculpted"
+    ],
+    [
+      "head_ellis",
+      "Ellis head — soft broad",
+      "ASSET7_head_ellis_Original",
+      "ASSET7_head_ellis_Sculpted"
+    ],
+    [
+      "mouth_straight",
+      "Straight sculpted lips",
+      "ASSET7_mouth_straight_Original",
+      "ASSET7_mouth_straight_Sculpted"
+    ],
+    [
+      "mouth_full",
+      "Full sculpted lips",
+      "ASSET7_mouth_full_Original",
+      "ASSET7_mouth_full_Sculpted"
+    ],
+    [
+      "mouth_bow",
+      "Bow sculpted lips",
+      "ASSET7_mouth_bow_Original",
+      "ASSET7_mouth_bow_Sculpted"
+    ],
+    [
+      "character_heart",
+      "Heart structure",
+      "RANGE9_character_heart_Neutral",
+      "RANGE9_character_heart_Full"
+    ],
+    [
+      "character_oval",
+      "Long oval structure",
+      "RANGE9_character_oval_Neutral",
+      "RANGE9_character_oval_Full"
+    ],
+    [
+      "character_square",
+      "Broad square structure",
+      "RANGE9_character_square_Neutral",
+      "RANGE9_character_square_Full"
+    ],
+    [
+      "character_fine",
+      "Fine angular structure",
+      "RANGE9_character_fine_Neutral",
+      "RANGE9_character_fine_Full"
+    ],
+    [
+      "character_round",
+      "Full round structure",
+      "RANGE9_character_round_Neutral",
+      "RANGE9_character_round_Full"
+    ],
+    [
+      "character_aquiline",
+      "Aquiline structure",
+      "RANGE9_character_aquiline_Neutral",
+      "RANGE9_character_aquiline_Full"
+    ],
+    [
+      "character_age",
+      "Facial soft-tissue descent",
+      "RANGE9_character_age_Neutral",
+      "RANGE9_character_age_Full"
+    ],
+    [
+      "body_softness",
+      "Soft volume distribution",
+      "RANGE9_body_softness_Neutral",
+      "RANGE9_body_softness_Full"
+    ],
+    [
+      "body_power",
+      "Neck and upper-body volume",
+      "RANGE9_body_power_Neutral",
+      "RANGE9_body_power_Full"
+    ]
+  ],
+  "expressions": [
+    [
+      "blink_left",
+      "Left blink",
+      "JNSQ_Expr_BlinkLeft"
+    ],
+    [
+      "blink_right",
+      "Right blink",
+      "JNSQ_Expr_BlinkRight"
+    ],
+    [
+      "mouth_open",
+      "Mouth open",
+      "JNSQ_Expr_MouthOpen"
+    ],
+    [
+      "smile",
+      "Smile",
+      "JNSQ_Expr_Smile"
+    ],
+    [
+      "frown",
+      "Frown",
+      "JNSQ_Expr_Frown"
+    ],
+    [
+      "pucker",
+      "Pucker",
+      "JNSQ_Expr_Pucker"
+    ],
+    [
+      "mouth_wide",
+      "Mouth wide",
+      "JNSQ_Expr_MouthWide"
+    ]
+  ],
+  "meshes": [
+    {
+      "name": "Human",
+      "category": "body",
+      "vertices": 11072,
+      "topology_sha256": "8919f7f2fde5f80c687e2320790daa62071b7632cfa2b25a3f4315eea8ab2d2d",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.eyebrow001",
+      "category": "eyebrows",
+      "vertices": 124,
+      "topology_sha256": "2cfd4675831b68eb3719beeb542f48f03ea21bf00dd84ee345546905297dab80",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.eyelashes01",
+      "category": "eyelashes",
+      "vertices": 250,
+      "topology_sha256": "2ce25f53311bd61b26287fdba9e910774cd974b279a053d840e26bba905ae366",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.high-poly",
+      "category": "eyes",
+      "vertices": 1076,
+      "topology_sha256": "018d056895b9906ab0d0fb6dca9a76fd0a328a7a688d090ebc1d364ec8fc861f",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.male_casualsuit01",
+      "category": "clothes",
+      "vertices": 8864,
+      "topology_sha256": "dcdd705db4087bdb387e4d9f997ad52b5c413569d95fabc75ccd93475d6a3b20",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.short01",
+      "category": "hair",
+      "vertices": 3050,
+      "topology_sha256": "c335e7ba2c7b8913928f669058baf830966e4d83acd90c0ee94093d8ceec8570",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.teeth_base.001",
+      "category": "teeth",
+      "vertices": 4494,
+      "topology_sha256": "327ef583c951aab388e4bcad4095006dfa900707cfd96592159e762aafeb3bf1",
+      "keys": 177,
+      "shape_keys": 204
+    },
+    {
+      "name": "Human.tongue01.001",
+      "category": "tongue",
+      "vertices": 253,
+      "topology_sha256": "27b6ee6da46989bf844037ae1671d5b967642665c3952e62c6df9d3444495d57",
+      "keys": 177,
+      "shape_keys": 204
+    }
+  ],
+  "new_controls": [
+    "nose_apex_angle",
+    "nose_tip_roundness",
+    "nose_bridge_height",
+    "nose_asymmetry",
+    "chin_width",
+    "chin_cleft",
+    "forehead_slope",
+    "forehead_width",
+    "mouth_corner_tilt",
+    "jaw_planes",
+    "cheek_planes",
+    "nose_bridge_planes",
+    "chin_planes",
+    "anatomy_candidate",
+    "mouth_candidate",
+    "head_atlas",
+    "head_rowan",
+    "head_ellis",
+    "mouth_straight",
+    "mouth_full",
+    "mouth_bow",
+    "character_heart",
+    "character_oval",
+    "character_square",
+    "character_fine",
+    "character_round",
+    "character_aquiline",
+    "character_age",
+    "body_softness",
+    "body_power"
+  ],
+  "sculpt_audit": [
+    {
+      "target": "LIB3_nose_apex_angle_Downturned",
+      "max_m": 0.007384912395608408,
+      "outside_tip_m": 0.0
+    },
+    {
+      "target": "LIB3_nose_apex_angle_Upturned",
+      "max_m": 0.00738491239560841,
+      "outside_tip_m": 0.0
+    },
+    {
+      "target": "LIB3_nose_tip_roundness_Defined",
+      "max_m": 0.00490398232507646,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_tip_roundness_Rounded",
+      "max_m": 0.00490398232507646,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_bridge_height_Shallow",
+      "max_m": 0.007973515888350442,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_bridge_height_Prominent",
+      "max_m": 0.007973515888350442,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_asymmetry_Left",
+      "max_m": 0.005999999999999668,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_asymmetry_Right",
+      "max_m": 0.005999999999999668,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_width_Narrow",
+      "max_m": 0.006030052382263182,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_width_Broad",
+      "max_m": 0.006030052382263182,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_cleft_Smooth",
+      "max_m": 0.003602331625865638,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_cleft_Cleft",
+      "max_m": 0.003602331625865638,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_forehead_slope_Upright",
+      "max_m": 0.02231455037883132,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_forehead_slope_Sloped",
+      "max_m": 0.02231455037883132,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_forehead_width_Narrow",
+      "max_m": 0.010672042856318094,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_forehead_width_Broad",
+      "max_m": 0.010672042856318094,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_mouth_corner_tilt_Downturned",
+      "max_m": 0.004964329482097258,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_mouth_corner_tilt_Upturned",
+      "max_m": 0.004964329482097258,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_jaw_planes_Rounded",
+      "max_m": 0.007202755033371268,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_jaw_planes_Angular",
+      "max_m": 0.007202755033371268,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_cheek_planes_Soft",
+      "max_m": 0.00527456738614223,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_cheek_planes_Planar",
+      "max_m": 0.00527456738614223,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_bridge_planes_Rounded",
+      "max_m": 0.00975521911069213,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_nose_bridge_planes_Faceted",
+      "max_m": 0.00975521911069213,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_planes_Rounded",
+      "max_m": 0.012848087024687621,
+      "outside_tip_m": null
+    },
+    {
+      "target": "LIB3_chin_planes_Flat",
+      "max_m": 0.012848087024687621,
+      "outside_tip_m": null
+    }
+  ],
+  "map_hashes": {
+    "Human": {
+      "color": "501ab310b9ef6e811a618a280f839f52bf098462788335df09113e21b91a99d4",
+      "normal": "c176bc3cb34d11f61998290606efdf10e070f2a0066606da616bf9a1f2121dd1",
+      "roughness": "620333ec2c62c7491491969bf5903e157ec38bd7cc88aba475d9f5f75192b2d6"
+    },
+    "Human.eyebrow001": {
+      "color": "f4a22248ee26612e94fd8d627d57dbf74820548764013ade27801f6e00e8b624",
+      "normal": "f4a22248ee26612e94fd8d627d57dbf74820548764013ade27801f6e00e8b624"
+    },
+    "Human.eyelashes01": {
+      "color": "4008fc311fe18e180d1f5179b21b9573e13e9d13c553f8c011b0f5bc29cf7ab6"
+    },
+    "Human.high-poly": {
+      "color": "b03a8775caf1d603ff21762253f4988a8b37fa247b3dacca15683f7b92c163a8"
+    },
+    "Human.male_casualsuit01": {
+      "color": "b5fe0c82111482736ad25af2c5360b76a58b22a82085a8b6d207475a24db9e8e",
+      "normal": "2333ceef9cfd52b866f778f34dada492149b4b767cb11c1314183a8fdbd74e93"
+    },
+    "Human.short01": {
+      "color": "0c5f2da0cf5ad05f8bbe50ba1081b8ebba0848547dd27f10b140fb070ec21fcd"
+    },
+    "Human.teeth_base.001": {
+      "color": "a954c5c1529d4c571073cf2fe221d01e43b70821bf57f116db3dc6b2b747436d"
+    },
+    "Human.tongue01.001": {
+      "color": "11859a3cf6247e1d16d625f5eb8ac85eec3caaa3e8370f9b61d9e25d733b929d"
+    }
+  },
+  "control_max": {
+    "brow_height": 1.5,
+    "lower_nose_projection": 1.25
+  },
+  "study_note": "Independent character structures, soft-tissue descent and body volume. Initial art candidate.",
+  "hair_styles": [
+    {
+      "id": "short_coils",
+      "name": "Short coils · strand groom"
+    },
+    {
+      "id": "classic",
+      "name": "Original short crop"
+    },
+    {
+      "id": "swept",
+      "name": "Swept crop study"
+    },
+    {
+      "id": "afro01",
+      "name": "Rounded afro"
+    },
+    {
+      "id": "bob01",
+      "name": "Short bob"
+    },
+    {
+      "id": "braid01",
+      "name": "Long braid"
+    },
+    {
+      "id": "long01",
+      "name": "Long loose hair"
+    },
+    {
+      "id": "ponytail01",
+      "name": "Ponytail"
+    }
+  ],
+  "beard_styles": [
+    {
+      "id": "none",
+      "name": "Clean-shaven"
+    },
+    {
+      "id": "stubble",
+      "name": "Short stubble"
+    },
+    {
+      "id": "rehmanpolanski_moustache_viking",
+      "name": "Full moustache"
+    },
+    {
+      "id": "wdg_scruffy_beard",
+      "name": "Scruffy beard"
+    }
+  ],
+  "brow_styles": [
+    {
+      "id": "classic",
+      "name": "Original brows"
+    },
+    {
+      "id": "eyebrow009",
+      "name": "Tapered brows"
+    }
+  ],
+  "asset_source": {
+    "path": "scratch\\human_base_audit\\converted\\studio-v8-casual.glb",
+    "sha256": "37e693bf36adea1f10bb8e5e56601a3b040610c991ac55722aeb1477a7a9938c",
+    "note": "Previously compiled local MPFB assets; authored head and mouth fields in build_avatar_asset_overhaul_v7.py"
+  }
+}

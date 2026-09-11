@@ -1,0 +1,977 @@
+{
+  "release_basis": "maintainer source and license-check attestations; incomplete historical attribution documented below",
+  "world_models": [
+    {
+      "file": "antique_estoc.glb",
+      "source": "https://polyhaven.com/a/antique_estoc",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "armillary_sphere.glb",
+      "source": "https://www.meshy.ai/",
+      "license": "Meshy generation terms; plan not recorded",
+      "evidence": "maintainer identified Meshy; original Blender files located"
+    },
+    {
+      "file": "barrel_stove.glb",
+      "source": "https://polyhaven.com/a/barrel_stove",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "baseball_01.glb",
+      "source": "https://polyhaven.com/a/baseball_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "baseball_bat.glb",
+      "source": "https://polyhaven.com/a/baseball_bat",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "basking_rock.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "bench_vice_01.glb",
+      "source": "https://polyhaven.com/a/bench_vice_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "bolt_cutters_01.glb",
+      "source": "https://polyhaven.com/a/bolt_cutters_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "boombox.glb",
+      "source": "https://polyhaven.com/a/boombox",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "brass_candleholders.glb",
+      "source": "https://polyhaven.com/a/brass_candleholders",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "brass_diya_lantern.glb",
+      "source": "https://polyhaven.com/a/brass_diya_lantern",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "brass_goblets.glb",
+      "source": "https://polyhaven.com/a/brass_goblets",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "brass_pot_02.glb",
+      "source": "https://polyhaven.com/a/brass_pot_02",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "camera_01.glb",
+      "source": "https://polyhaven.com/a/Camera_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "carved_wooden_plate.glb",
+      "source": "https://polyhaven.com/a/carved_wooden_plate",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "cassette_player.glb",
+      "source": "https://polyhaven.com/a/cassette_player",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "chinese_cabinet.glb",
+      "source": "https://polyhaven.com/a/chinese_cabinet",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "chinese_commode.glb",
+      "source": "https://polyhaven.com/a/chinese_commode",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "chinese_console_table.glb",
+      "source": "https://polyhaven.com/a/chinese_console_table",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "chinese_screen_panels.glb",
+      "source": "https://polyhaven.com/a/chinese_screen_panels",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "chinese_tea_table.glb",
+      "source": "https://polyhaven.com/a/chinese_tea_table",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "cleaner_tin_01.glb",
+      "source": "https://polyhaven.com/a/cleaner_tin_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "coffeecart_01.glb",
+      "source": "https://polyhaven.com/a/CoffeeCart_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "coffeetable_01.glb",
+      "source": "https://polyhaven.com/a/CoffeeTable_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "collection_shelf.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "commons_couch.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "cone.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "couch.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "crowbar_01.glb",
+      "source": "https://polyhaven.com/a/crowbar_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "cup.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "desk_lamp_arm_01.glb",
+      "source": "https://polyhaven.com/a/desk_lamp_arm_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "electric_stove.glb",
+      "source": "https://polyhaven.com/a/electric_stove",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "fish_tank.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "gallinera_table.glb",
+      "source": "https://polyhaven.com/a/gallinera_table",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "gothiccabinet_01.glb",
+      "source": "https://polyhaven.com/a/GothicCabinet_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "greenchair_01.glb",
+      "source": "https://polyhaven.com/a/GreenChair_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "handsaw_wood.glb",
+      "source": "https://polyhaven.com/a/handsaw_wood",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "hanging_industrial_lamp.glb",
+      "source": "https://polyhaven.com/a/hanging_industrial_lamp",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "hanging_picture_frame_03.glb",
+      "source": "https://polyhaven.com/a/hanging_picture_frame_03",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "industrial_wall_lamp.glb",
+      "source": "https://polyhaven.com/a/industrial_wall_lamp",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "industrial_wall_sconce.glb",
+      "source": "https://polyhaven.com/a/industrial_wall_sconce",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "jug_01.glb",
+      "source": "https://polyhaven.com/a/jug_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "kay_desk.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "kay_lamp.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "kite_shield.glb",
+      "source": "https://polyhaven.com/a/kite_shield",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "korean_fire_extinguisher_01.glb",
+      "source": "https://polyhaven.com/a/korean_fire_extinguisher_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "korean_public_payphone_01.glb",
+      "source": "https://polyhaven.com/a/korean_public_payphone_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "ladder_sectioned_01.glb",
+      "source": "https://polyhaven.com/a/ladder_sectioned_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "lambis_shell.glb",
+      "source": "https://polyhaven.com/a/lambis_shell",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "lantern1.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "lightbulb_01.glb",
+      "source": "https://polyhaven.com/a/lightbulb_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "lubricant_spray.glb",
+      "source": "https://polyhaven.com/a/lubricant_spray",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "machete.glb",
+      "source": "https://polyhaven.com/a/machete",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "metal_tool_chest.glb",
+      "source": "https://polyhaven.com/a/metal_tool_chest",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "metal_trash_can.glb",
+      "source": "https://polyhaven.com/a/metal_trash_can",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "modular_chainlink_fence.glb",
+      "source": "https://polyhaven.com/a/modular_chainlink_fence",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "modular_electricity_poles.glb",
+      "source": "https://polyhaven.com/a/modular_electricity_poles",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "modular_fire_escape.glb",
+      "source": "https://polyhaven.com/a/modular_fire_escape",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "modular_metal_gutter.glb",
+      "source": "https://polyhaven.com/a/modular_metal_gutter",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "mug.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "old_tyre.glb",
+      "source": "https://polyhaven.com/a/old_tyre",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "ornate_medieval_dagger.glb",
+      "source": "https://polyhaven.com/a/ornate_medieval_dagger",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "ornate_medieval_mace.glb",
+      "source": "https://polyhaven.com/a/ornate_medieval_mace",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "ornate_war_hammer.glb",
+      "source": "https://polyhaven.com/a/ornate_war_hammer",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "painted_wooden_cabinet.glb",
+      "source": "https://polyhaven.com/a/painted_wooden_cabinet",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "painted_wooden_nightstand.glb",
+      "source": "https://polyhaven.com/a/painted_wooden_nightstand",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "plunger.glb",
+      "source": "https://polyhaven.com/a/plunger",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "pot_enamel_01.glb",
+      "source": "https://polyhaven.com/a/pot_enamel_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "power_box_01.glb",
+      "source": "https://polyhaven.com/a/power_box_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "public_desk.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "pull_chain_light_socket.glb",
+      "source": "https://polyhaven.com/a/pull_chain_light_socket",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "ratchet_wrench.glb",
+      "source": "https://polyhaven.com/a/ratchet_wrench",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "reed_desk.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "samovar1.glb",
+      "source": "https://www.meshy.ai/",
+      "license": "Meshy generation terms; plan not recorded",
+      "evidence": "maintainer identified Meshy; original Blender files located"
+    },
+    {
+      "file": "samovar2.glb",
+      "source": "https://www.meshy.ai/",
+      "license": "Meshy generation terms; plan not recorded",
+      "evidence": "maintainer identified Meshy; original Blender files located"
+    },
+    {
+      "file": "samovar3.glb",
+      "source": "https://www.meshy.ai/",
+      "license": "Meshy generation terms; plan not recorded",
+      "evidence": "maintainer identified Meshy; original Blender files located"
+    },
+    {
+      "file": "scandinavian_masonry_heater.glb",
+      "source": "https://polyhaven.com/a/scandinavian_masonry_heater",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "schoolchair_01.glb",
+      "source": "https://polyhaven.com/a/SchoolChair_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "spray_paint_bottles.glb",
+      "source": "https://polyhaven.com/a/spray_paint_bottles",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "tea_set_01.glb",
+      "source": "https://polyhaven.com/a/tea_set_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "television_01.glb",
+      "source": "https://polyhaven.com/a/Television_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "treasure_chest.glb",
+      "source": "https://polyhaven.com/a/treasure_chest",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "turntable.glb",
+      "source": null,
+      "license": "maintainer reports checking license; original terms unavailable",
+      "evidence": "maintainer license-check attestation, 2026-09-11; source name no longer recalled"
+    },
+    {
+      "file": "vintage_pocket_watch.glb",
+      "source": "https://polyhaven.com/a/vintage_pocket_watch",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "vintage_wooden_drawer_01.glb",
+      "source": "https://polyhaven.com/a/vintage_wooden_drawer_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wetfloorsign_01.glb",
+      "source": "https://polyhaven.com/a/WetFloorSign_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_axe.glb",
+      "source": "https://polyhaven.com/a/wooden_axe",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_bookshelf_worn.glb",
+      "source": "https://polyhaven.com/a/wooden_bookshelf_worn",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_bowl_01.glb",
+      "source": "https://polyhaven.com/a/wooden_bowl_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_bowl_02.glb",
+      "source": "https://polyhaven.com/a/wooden_bowl_02",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_bucket_01.glb",
+      "source": "https://polyhaven.com/a/wooden_bucket_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_candlestick.glb",
+      "source": "https://polyhaven.com/a/wooden_candlestick",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_crate_01.glb",
+      "source": "https://polyhaven.com/a/wooden_crate_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_cutting_board.glb",
+      "source": "https://polyhaven.com/a/wooden_cutting_board",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_lantern_01.glb",
+      "source": "https://polyhaven.com/a/wooden_lantern_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_spoon.glb",
+      "source": "https://polyhaven.com/a/wooden_spoon",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "wooden_stool_02.glb",
+      "source": "https://polyhaven.com/a/wooden_stool_02",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "woodenchair_01.glb",
+      "source": "https://polyhaven.com/a/WoodenChair_01",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "woodentable_02.glb",
+      "source": "https://polyhaven.com/a/wooden_table_02",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    },
+    {
+      "file": "woodentable_03.glb",
+      "source": "https://polyhaven.com/a/WoodenTable_03",
+      "license": "CC0-1.0",
+      "evidence": "maintainer reported Poly Haven; catalog ID match"
+    }
+  ],
+  "unresolved_world_models": [
+    "basking_rock.glb",
+    "collection_shelf.glb",
+    "commons_couch.glb",
+    "cone.glb",
+    "couch.glb",
+    "cup.glb",
+    "fish_tank.glb",
+    "kay_desk.glb",
+    "kay_lamp.glb",
+    "lantern1.glb",
+    "mug.glb",
+    "public_desk.glb",
+    "reed_desk.glb",
+    "turntable.glb"
+  ],
+  "avatar_sources": {
+    "core": "https://static.makehumancommunity.org/about/license.html",
+    "hair": "https://static.makehumancommunity.org/assets/assetpacks/hair01.html",
+    "beards": "https://static.makehumancommunity.org/assets/assetpacks/bodyparts05.html",
+    "wardrobe": [
+      {
+        "asset": "male_casualsuit01",
+        "name": "Casual shirt and trousers",
+        "source": "male_casualsuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "female_elegantsuit01",
+        "name": "Blouse and skirt",
+        "source": "female_elegantsuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_elegantsuit01",
+        "name": "Tailored suit",
+        "source": "male_elegantsuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_01",
+        "name": "Dress",
+        "source": "mindfront_f_dress_01",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_casualsuit02",
+        "name": "Casual outfit 2",
+        "source": "male_casualsuit02",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_casualsuit03",
+        "name": "Casual outfit 3",
+        "source": "male_casualsuit03",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_casualsuit04",
+        "name": "Casual outfit 4",
+        "source": "male_casualsuit04",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_casualsuit05",
+        "name": "Casual outfit 5",
+        "source": "male_casualsuit05",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_casualsuit06",
+        "name": "Casual outfit 6",
+        "source": "male_casualsuit06",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "female_casualsuit01",
+        "name": "Relaxed outfit 1",
+        "source": "female_casualsuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "female_casualsuit02",
+        "name": "Relaxed outfit 2",
+        "source": "female_casualsuit02",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "male_worksuit01",
+        "name": "Workwear",
+        "source": "male_worksuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "female_sportsuit01",
+        "name": "Sportswear",
+        "source": "female_sportsuit01",
+        "notices": [
+          "# This asset was explicitly released as CC0 in september 2020. The license",
+          "# text for CC0 can be found in the root of this repository.",
+          "# The copyright holders at the point of the release to CC0 were:",
+          "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
+          "# Copyright (C) 2020 Joel Palmius",
+          "# Copyright (C) 2020 Jonas Hauquier",
+          "# For more information, see homepage at http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_02",
+        "name": "Mindfront dress 2",
+        "source": "mindfront_f_dress_02",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_03",
+        "name": "Mindfront dress 3",
+        "source": "mindfront_f_dress_03",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_04",
+        "name": "Mindfront dress 4",
+        "source": "mindfront_f_dress_04",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_05",
+        "name": "Mindfront dress 5",
+        "source": "mindfront_f_dress_05",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_06",
+        "name": "Mindfront dress 6",
+        "source": "mindfront_f_dress_06",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_07",
+        "name": "Mindfront dress 7",
+        "source": "mindfront_f_dress_07",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_08",
+        "name": "Mindfront dress 8",
+        "source": "mindfront_f_dress_08",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_09",
+        "name": "Mindfront dress 9",
+        "source": "mindfront_f_dress_09",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_10",
+        "name": "Mindfront dress 10",
+        "source": "mindfront_f_dress_10",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_f_dress_11",
+        "name": "Mindfront dress 11",
+        "source": "mindfront_f_dress_11",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehumancommunity.org"
+        ]
+      },
+      {
+        "asset": "mindfront_ballet_dress_the_swan",
+        "name": "Swan ballet dress",
+        "source": "mindfront_ballet_dress_the_swan",
+        "notices": [
+          "# author Mindfront (Sweden)",
+          "# license CC BY 4.0",
+          "# homepage "
+        ]
+      },
+      {
+        "asset": "punkduck_black_cocktail_dress",
+        "name": "Black cocktail dress",
+        "source": "punkduck_black_cocktail_dress",
+        "notices": [
+          "# author punkduck",
+          "# license CC-BY 3.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      },
+      {
+        "asset": "punkduck_evening_gown",
+        "name": "Evening gown",
+        "source": "punkduck_evening_gown",
+        "notices": [
+          "# author punkduck",
+          "# license CC BY 3.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      },
+      {
+        "asset": "punkduck_figure_skating_dress",
+        "name": "Figure skating dress",
+        "source": "punkduck_figure_skating_dress",
+        "notices": [
+          "# author punkduck",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      },
+      {
+        "asset": "punkduck_medieval_dress",
+        "name": "Medieval dress",
+        "source": "punkduck_medieval_dress",
+        "notices": [
+          "# author punkduck",
+          "# license CC BY 4.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      },
+      {
+        "asset": "punkduck_middle_length_qipao",
+        "name": "Qipao",
+        "source": "punkduck_middle_length_qipao",
+        "notices": [
+          "# author punkduck",
+          "# license CC BY 3.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      },
+      {
+        "asset": "punkduck_tube_dress",
+        "name": "Tube dress",
+        "source": "punkduck_tube_dress",
+        "notices": [
+          "# author punkduck",
+          "# license CC BY 3.0",
+          "# homepage http://www.makehuman.org/"
+        ]
+      }
+    ]
+  },
+  "notes": "All current assets are retained. Historical source credits are incomplete for 14 models. Do not relabel them CC0. Meshy models credited to Meshy and the JNSQ maintainer; generation plan was not recorded. Standalone images retain their original filenames; their individual origins have not been independently reconstructed."
+}

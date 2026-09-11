@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>body{background:#17272c;color:#edf2e9;font:14px system-ui;padding:16px}button,input,select{background:#20343a;color:inherit;border:1px solid #56716c;border-radius:5px;padding:7px}button[aria-pressed=true]{background:#edcf8a;color:#17272c}label{display:block}#panel{max-width:1000px}.furniture-gallery{height:190px}dialog{background:#17272c;color:#edf2e9}pre{white-space:pre-wrap}canvas{display:none}</style><script src="/builders/standalone.js" defer></script></head><body><h1>Furniture library controls</h1><div id="panel"></div><canvas id="canvas"></canvas><pre id="result">Running</pre>
+<script type="module">
+import * as THREE from 'three';import {installFurnitureEditor} from './furniture.mjs';import {objectTypes,chooseImportTypes} from './object-types.mjs';
+const panel=document.querySelector('#panel'),checks=[];const check=(name,ok)=>{checks.push({name,ok});if(!ok)throw Error(name);};
+try{
+const editor=installFurnitureEditor({scene:new THREE.Scene(),camera:new THREE.PerspectiveCamera(),canvas:document.querySelector('#canvas'),controls:{target:new THREE.Vector3(),update(){}},panel,objects:()=>({}),commit:()=>{throw Error('Unexpected draft mutation');},status:()=>{},invalidate:()=>{}});
+const data=await editor.layer.ready;await new Promise(r=>setTimeout(r,30));
+const gallery=panel.querySelector('.furniture-gallery'),bar=panel.querySelector('.object-type-filters'),search=panel.querySelector('[data-f="search"]');
+check('All defaults to all 106 current models',gallery.querySelectorAll('button').length===data.items.length&&bar.querySelector('[data-object-type="all"]').getAttribute('aria-pressed')==='true');
+const wheel=new WheelEvent('wheel',{deltaY:40,bubbles:true,cancelable:true});gallery.dispatchEvent(wheel);check('small wheel scrolls horizontally',gallery.scrollLeft>0&&wheel.defaultPrevented);
+for(const type of [...bar.children].map(b=>b.dataset.objectType).filter(t=>t!=='all')){bar.querySelector(`[data-object-type="${type}"]`).click();check(type+' filter',gallery.querySelectorAll('button').length===data.items.filter(i=>objectTypes(i).includes(type)).length);}
+search.value='zz_nonexistent';search.dispatchEvent(new Event('input'));check('empty search disables Add',!gallery.querySelector('button')&&panel.querySelector('[data-f="add"]').disabled);
+search.value='';search.dispatchEvent(new Event('input'));bar.querySelector('[data-object-type="seating"]').click();
+const pending=chooseImportTypes({name:'shelf.glb'}),dialog=document.querySelector('dialog.object-import-types');for(const input of dialog.querySelectorAll('input'))input.checked=['storage','shelves'].includes(input.value);dialog.querySelector('.primary').click();check('multiple import types',(await pending).join(',')==='storage,shelves');
+const cancellation=chooseImportTypes({name:'cancel.glb'});document.querySelector('dialog.object-import-types').close();check('cancel returns no import',await cancellation===null);
+const result={status:'PASS',checks};document.querySelector('#result').textContent=JSON.stringify(result,null,2);await fetch('/capture',{method:'POST',body:JSON.stringify(result)});
+}catch(e){const result={status:'FAIL',checks,error:e.stack};document.querySelector('#result').textContent=JSON.stringify(result,null,2);await fetch('/capture',{method:'POST',body:JSON.stringify(result)});}
+</script></body></html>

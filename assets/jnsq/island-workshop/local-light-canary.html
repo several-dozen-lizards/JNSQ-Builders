@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"><title>Local light check</title>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>body{background:#17211c;color:#eee;font:15px system-ui}canvas{width:480px;height:320px}#views{display:flex}#panel{max-width:600px}</style>
+<h1>Local lights · same floor, light off and on</h1><div id="views"></div><pre id="result">Running</pre><div id="panel"></div>
+<script type="module">
+import * as THREE from 'three';
+import {installFurnitureEditor} from './furniture.mjs';
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1.5,.1,100);camera.position.set(5,5,7);camera.lookAt(0,0,0);
+const renderer=new THREE.WebGLRenderer({preserveDrawingBuffer:true});renderer.setSize(480,320);
+scene.add(new THREE.AmbientLight(0xffffff,.04));
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(12,12),new THREE.MeshStandardMaterial({color:0xaaaaaa}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+let objects={light:{id:'light',name:'Test local light',kind:'local_light',capability:'light',position_m:[0,0],size_m:.2,rot_deg:0,y_off_m:1.2,support_surface:'free',power:0,light_settings:{color:'#ff8833',intensity:20,range_m:4,height_m:0}}};
+const editor=installFurnitureEditor({scene,camera,canvas:renderer.domElement,controls:{target:new THREE.Vector3(),update(){}},panel:document.getElementById('panel'),objects:()=>objects,commit:next=>{objects=next;},invalidate:()=>{},status:()=>{}});
+editor.refresh();editor.select('light');
+function capture(label){renderer.render(scene,camera);const c=document.createElement('canvas');c.width=480;c.height=320;const ctx=c.getContext('2d');ctx.drawImage(renderer.domElement,0,0);const p=ctx.getImageData(0,0,480,320).data;let sum=0;for(let i=0;i<p.length;i+=4)sum+=p[i]+p[i+1]+p[i+2];const box=document.createElement('div');box.append(label,c);document.getElementById('views').append(box);return sum;}
+const off=capture('Off');document.querySelector('[data-f="lightOn"]').click();const on=capture('On');
+const lamp=editor.layer.entries.get('light').light;
+document.getElementById('result').textContent=JSON.stringify({pass:on>off*1.5,pixelRatio:on/off,range:lamp.distance,intensity:lamp.intensity,colour:lamp.color.getHexString(),power:objects.light.power},null,2);
+</script>

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "scopeCases": 18,
+  "faceBodyCombinations": 36,
+  "oldGeometryPreserved": true,
+  "anchorSum": 0.9999999999999999,
+  "largestCoordinateChangeM": 0.2552739381790161,
+  "opticalAssemblyRigid": true,
+  "limits": "Numerical checks do not establish eyelid closure, clothing clearance, or animation quality."
+}

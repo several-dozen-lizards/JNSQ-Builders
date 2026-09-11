@@ -1,0 +1,207 @@
+{
+  "source": "https://static.makehumancommunity.org/assets/assetpacks/hair01.html",
+  "license": "CC0",
+  "sha256": "49445d69848a313ec41a9970f6a0fe4bcf925c9f1c6ef40a76f119c2e07940c9",
+  "hair": [
+    {
+      "id": "cortu_shaggy_green_hair",
+      "name": "Shaggy Green Hair",
+      "author": "cortu",
+      "url": "/3d/designer/extra-hair/cortu_shaggy_green_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/cortu_shaggy_green_hair.png",
+      "bytes": 775161
+    },
+    {
+      "id": "cortu_short_messy_hair",
+      "name": "Short Messy Hair",
+      "author": "cortu",
+      "url": "/3d/designer/extra-hair/cortu_short_messy_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/cortu_short_messy_hair.png",
+      "bytes": 928888
+    },
+    {
+      "id": "cortu_straight_bangs",
+      "name": "Straight Bangs",
+      "author": "cortu",
+      "url": "/3d/designer/extra-hair/cortu_straight_bangs.zip",
+      "thumbnail": "/3d/designer/extra-hair/cortu_straight_bangs.png",
+      "bytes": 671468
+    },
+    {
+      "id": "cortu_strawberry_cloud_hair",
+      "name": "Strawberry Cloud Hair",
+      "author": "cortu",
+      "url": "/3d/designer/extra-hair/cortu_strawberry_cloud_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/cortu_strawberry_cloud_hair.png",
+      "bytes": 1212001
+    },
+    {
+      "id": "culturalibre_hair_01",
+      "name": "Hair 01",
+      "author": "culturalibre",
+      "url": "/3d/designer/extra-hair/culturalibre_hair_01.zip",
+      "thumbnail": "/3d/designer/extra-hair/culturalibre_hair_01.png",
+      "bytes": 6087389
+    },
+    {
+      "id": "culturalibre_hair_02",
+      "name": "Hair 02",
+      "author": "culturalibre",
+      "url": "/3d/designer/extra-hair/culturalibre_hair_02.zip",
+      "thumbnail": "/3d/designer/extra-hair/culturalibre_hair_02.png",
+      "bytes": 4497863
+    },
+    {
+      "id": "culturalibre_hair_05",
+      "name": "Hair 05",
+      "author": "culturalibre",
+      "url": "/3d/designer/extra-hair/culturalibre_hair_05.zip",
+      "thumbnail": "/3d/designer/extra-hair/culturalibre_hair_05.png",
+      "bytes": 143857
+    },
+    {
+      "id": "culturalibre_hair_06",
+      "name": "Hair 06",
+      "author": "culturalibre",
+      "url": "/3d/designer/extra-hair/culturalibre_hair_06.zip",
+      "thumbnail": "/3d/designer/extra-hair/culturalibre_hair_06.png",
+      "bytes": 659094
+    },
+    {
+      "id": "elvs_double_mh_braid",
+      "name": "Double Braid",
+      "author": "elvs",
+      "url": "/3d/designer/extra-hair/elvs_double_mh_braid.zip",
+      "thumbnail": "/3d/designer/extra-hair/elvs_double_mh_braid.png",
+      "bytes": 1759174
+    },
+    {
+      "id": "elvs_french_braid_variation",
+      "name": "French Braid Variation",
+      "author": "elvs",
+      "url": "/3d/designer/extra-hair/elvs_french_braid_variation.zip",
+      "thumbnail": "/3d/designer/extra-hair/elvs_french_braid_variation.png",
+      "bytes": 3546957
+    },
+    {
+      "id": "elvs_reverse_french_braid_bun",
+      "name": "Reverse French Braid Bun",
+      "author": "elvs",
+      "url": "/3d/designer/extra-hair/elvs_reverse_french_braid_bun.zip",
+      "thumbnail": "/3d/designer/extra-hair/elvs_reverse_french_braid_bun.png",
+      "bytes": 3606665
+    },
+    {
+      "id": "elvs_unkempt_french_braid",
+      "name": "Unkempt French Braid",
+      "author": "elvs",
+      "url": "/3d/designer/extra-hair/elvs_unkempt_french_braid.zip",
+      "thumbnail": "/3d/designer/extra-hair/elvs_unkempt_french_braid.png",
+      "bytes": 2310806
+    },
+    {
+      "id": "faydaen_hair_1",
+      "name": "Hair 1",
+      "author": "faydaen",
+      "url": "/3d/designer/extra-hair/faydaen_hair_1.zip",
+      "thumbnail": "/3d/designer/extra-hair/faydaen_hair_1.png",
+      "bytes": 556260
+    },
+    {
+      "id": "learning_anime_hair",
+      "name": "Anime Hair",
+      "author": "learning",
+      "url": "/3d/designer/extra-hair/learning_anime_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/learning_anime_hair.png",
+      "bytes": 2267757
+    },
+    {
+      "id": "littleright_bobcut_hair",
+      "name": "Bobcut Hair",
+      "author": "littleright",
+      "url": "/3d/designer/extra-hair/littleright_bobcut_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/littleright_bobcut_hair.png",
+      "bytes": 431881
+    },
+    {
+      "id": "o4saken_long01",
+      "name": "Long01",
+      "author": "o4saken",
+      "url": "/3d/designer/extra-hair/o4saken_long01.zip",
+      "thumbnail": "/3d/designer/extra-hair/o4saken_long01.png",
+      "bytes": 8173789
+    },
+    {
+      "id": "rehmanpolanski_hair_bun_brown",
+      "name": "Hair Bun Brown",
+      "author": "rehmanpolanski",
+      "url": "/3d/designer/extra-hair/rehmanpolanski_hair_bun_brown.zip",
+      "thumbnail": "/3d/designer/extra-hair/rehmanpolanski_hair_bun_brown.png",
+      "bytes": 4445458
+    },
+    {
+      "id": "sonntag78_blond_with_headband",
+      "name": "Blond With Headband",
+      "author": "sonntag78",
+      "url": "/3d/designer/extra-hair/sonntag78_blond_with_headband.zip",
+      "thumbnail": "/3d/designer/extra-hair/sonntag78_blond_with_headband.png",
+      "bytes": 30422170
+    },
+    {
+      "id": "sonntag78_junglebook_hair",
+      "name": "Junglebook Hair",
+      "author": "sonntag78",
+      "url": "/3d/designer/extra-hair/sonntag78_junglebook_hair.zip",
+      "thumbnail": "/3d/designer/extra-hair/sonntag78_junglebook_hair.png",
+      "bytes": 5420837
+    },
+    {
+      "id": "toigo_blunt_bob",
+      "name": "Blunt Bob",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_blunt_bob.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_blunt_bob.png",
+      "bytes": 26343835
+    },
+    {
+      "id": "toigo_blunt_bob_with_bangs",
+      "name": "Blunt Bob With Bangs",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_blunt_bob_with_bangs.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_blunt_bob_with_bangs.png",
+      "bytes": 24183090
+    },
+    {
+      "id": "toigo_curled_under_bob",
+      "name": "Curled Under Bob",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_curled_under_bob.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_curled_under_bob.png",
+      "bytes": 26411408
+    },
+    {
+      "id": "toigo_curled_under_bob_with_bangs",
+      "name": "Curled Under Bob With Bangs",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_curled_under_bob_with_bangs.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_curled_under_bob_with_bangs.png",
+      "bytes": 29499404
+    },
+    {
+      "id": "toigo_inverted_bob",
+      "name": "Inverted Bob",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_inverted_bob.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_inverted_bob.png",
+      "bytes": 23670513
+    },
+    {
+      "id": "toigo_inverted_bob_with_bangs",
+      "name": "Inverted Bob With Bangs",
+      "author": "toigo",
+      "url": "/3d/designer/extra-hair/toigo_inverted_bob_with_bangs.zip",
+      "thumbnail": "/3d/designer/extra-hair/toigo_inverted_bob_with_bangs.png",
+      "bytes": 18567864
+    }
+  ]
+}

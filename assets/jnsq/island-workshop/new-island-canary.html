@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{font:16px system-ui;background:#17272c;color:#edf2e9}dialog{background:#17272c;color:#edf2e9;width:500px}button{padding:10px;margin:5px}pre{white-space:pre-wrap}</style><script src="/builders/standalone.js" defer></script></head><body><h1>New island dialog checks</h1><pre id="result">RUNNING</pre><script type="module">
+import {promptNewIsland} from './new-island.mjs';
+const checks=[],check=(name,ok)=>{checks.push({name,ok});if(!ok)throw Error(name);},tick=()=>new Promise(r=>setTimeout(r,0));
+let saves=0,creates=0;
+const open=(save=async()=>{saves++;return true;})=>promptNewIsland({name:'My current world',save,create:()=>{creates++;},errorMessage:()=>'Save failed: connection unavailable'});
+const button=text=>[...document.querySelectorAll('dialog button')].find(b=>b.textContent===text);
+try{
+let done=open();button('Cancel').click();await done;check('Cancel leaves current world untouched',saves===0&&creates===0);
+done=open();button('Discard changes & new').click();await done;check('Discard starts fresh without saving',saves===0&&creates===1);
+done=open();button('Save & new').click();await done;check('Save completes before fresh world',saves===1&&creates===2);
+done=open(async()=>false);button('Save & new').click();await tick();check('Failed save keeps modal and current world',creates===2&&document.querySelector('dialog')?.open&&document.querySelector('[role=alert]').textContent.includes('Save failed'));button('Cancel').click();await done;
+let release;done=open(()=>new Promise(r=>release=r));button('Save & new').click();await tick();const escape=new Event('cancel',{cancelable:true});document.querySelector('dialog').dispatchEvent(escape);check('Pending save blocks duplicate actions and Escape',escape.defaultPrevented&&[...document.querySelectorAll('dialog button')].every(b=>b.disabled));check('Pending save has not reset world',creates===2);release(true);await done;check('Successful pending save resets once',creates===3);
+document.querySelector('#result').textContent=JSON.stringify({status:'PASS',checks},null,2);
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({status:'FAIL',checks,error:e.stack},null,2);}
+</script></body></html>

@@ -1,0 +1,148 @@
+[
+  {
+    "id": "heart",
+    "name": "Heart / graceful",
+    "fine": {
+      "character_heart": 1,
+      "body_frame": 0.18,
+      "body_mass": 0.38,
+      "muscularity": 0.28,
+      "shoulder_width": 0.36,
+      "hip_width": 0.61,
+      "breast_size": 0.57
+    }
+  },
+  {
+    "id": "oval",
+    "name": "Oval / statuesque",
+    "fine": {
+      "character_oval": 1,
+      "body_frame": 0.22,
+      "stature": 0.67,
+      "body_mass": 0.43,
+      "muscularity": 0.42,
+      "shoulder_width": 0.46,
+      "hip_width": 0.6,
+      "breast_size": 0.57
+    }
+  },
+  {
+    "id": "square",
+    "name": "Square / powerful",
+    "fine": {
+      "character_square": 0.88,
+      "body_frame": 0.92,
+      "body_mass": 0.75,
+      "muscularity": 0.88,
+      "shoulder_width": 0.84,
+      "hip_width": 0.58,
+      "body_power": 0.9,
+      "stature": 0.65,
+      "breast_size": 0.3
+    }
+  },
+  {
+    "id": "fine",
+    "name": "Fine / slender",
+    "fine": {
+      "character_fine": 0.88,
+      "body_frame": 0.68,
+      "body_mass": 0.18,
+      "muscularity": 0.27,
+      "shoulder_width": 0.32,
+      "hip_width": 0.36,
+      "stature": 0.56,
+      "breast_size": 0.25
+    }
+  },
+  {
+    "id": "round",
+    "name": "Round / soft",
+    "fine": {
+      "character_round": 1,
+      "body_frame": 0.38,
+      "body_mass": 0.78,
+      "muscularity": 0.28,
+      "body_softness": 0.91,
+      "hip_width": 0.69,
+      "shoulder_width": 0.49,
+      "breast_size": 0.65
+    }
+  },
+  {
+    "id": "aquiline",
+    "name": "Aquiline / elder",
+    "fine": {
+      "character_aquiline": 0.82,
+      "character_age": 0.85,
+      "body_frame": 0.28,
+      "body_mass": 0.3,
+      "muscularity": 0.21,
+      "stature": 0.39,
+      "shoulder_width": 0.43,
+      "breast_size": 0.4
+    }
+  },
+  {
+    "id": "elder-soft",
+    "name": "Elder / soft",
+    "fine": {
+      "character_round": 0.85,
+      "character_age": 1,
+      "body_frame": 0.25,
+      "body_mass": 0.72,
+      "body_softness": 0.83,
+      "muscularity": 0.24,
+      "stature": 0.43,
+      "hip_width": 0.64,
+      "breast_size": 0.55
+    }
+  },
+  {
+    "id": "elder-broad",
+    "name": "Elder / broad",
+    "fine": {
+      "character_square": 0.82,
+      "character_age": 0.97,
+      "body_frame": 0.86,
+      "body_mass": 0.6,
+      "body_power": 0.73,
+      "muscularity": 0.48,
+      "shoulder_width": 0.73,
+      "stature": 0.58,
+      "breast_size": 0.25
+    }
+  },
+  {
+    "id": "fine-graceful",
+    "name": "Fine / graceful",
+    "fine": {
+      "character_fine": 0.72,
+      "character_heart": 0.7,
+      "body_frame": 0.18,
+      "body_mass": 0.28,
+      "muscularity": 0.24,
+      "shoulder_width": 0.32,
+      "hip_width": 0.53,
+      "stature": 0.53,
+      "breast_size": 0.52
+    }
+  },
+  {
+    "id": "broad-soft",
+    "name": "Broad / soft",
+    "fine": {
+      "character_square": 0.68,
+      "character_round": 0.78,
+      "body_frame": 0.83,
+      "body_mass": 0.85,
+      "body_softness": 0.9,
+      "body_power": 0.67,
+      "muscularity": 0.4,
+      "shoulder_width": 0.68,
+      "hip_width": 0.66,
+      "stature": 0.59,
+      "breast_size": 0.27
+    }
+  }
+]

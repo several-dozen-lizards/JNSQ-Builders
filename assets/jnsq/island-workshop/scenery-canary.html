@@ -1,0 +1,62 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Scenery surface comparison</title>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>body{background:#17251f;color:#e7eee7;font:14px system-ui;margin:20px}#images{display:grid;grid-template-columns:480px 480px;gap:12px}figure{margin:0}canvas{width:480px;height:320px}pre{white-space:pre-wrap}</style><script src="/builders/standalone.js" defer></script></head>
+<body><h1>Scenery surfaces · before / after</h1><p>Identical geometry, camera and lights. Left: original. Right: surface pass.</p><div id="images"></div><pre id="result">RUNNING</pre>
+<script>window.addEventListener('error',e=>{document.querySelector('#result').textContent='FAIL '+e.message;});</script><script type="module">
+import * as THREE from './vendor/three.module.js';
+import {createFlora as beforeFlora} from './__before/flora-render.mjs';
+import {createFlora} from './flora-render.mjs';
+import {islandMaterials} from './materials.mjs';
+import {createSunlight} from './sunlight.mjs';
+import {daylight} from './daylight.mjs';
+import {weatherProfile} from './weather.mjs';
+const failures=[],reports=[];const error=console.error;console.error=(...a)=>{failures.push(a.join(' '));error(...a);};
+document.querySelector('#result').textContent='MODULES LOADED';
+try{
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,320);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const loaded=new Promise(resolve=>THREE.DefaultLoadingManager.onLoad=resolve);
+const natural=islandMaterials(renderer,()=>{},message=>failures.push(message));document.querySelector('#result').textContent='LOADING TEXTURES';await loaded;
+const variants=[beforeFlora(natural),createFlora(natural)];
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x72817a);scene.fog=new THREE.FogExp2(0x72817a,.001);
+scene.add(new THREE.HemisphereLight(0xdce9ff,0x615943,1.1));const sun=new THREE.DirectionalLight(0xffead1,3);sun.position.set(-6,9,8);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:.1,far:60});sun.shadow.normalBias=.02;scene.add(sun);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:0x807666,roughness:1}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const camera=new THREE.PerspectiveCamera(38,1.5,.03,500),solar=createSunlight(scene),light=daylight(10);
+const gl=renderer.getContext(),ext=gl.getExtension('EXT_disjoint_timer_query_webgl2');
+for(const kind of ['banana-detail','woodland_fern','bare','river_rock']){
+ const pair=[];
+ for(let v=0;v<2;v++){
+  const group=variants[v].object(kind==='banana-detail'?'banana':kind);group.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});scene.add(group);
+  const box=new THREE.Box3().setFromObject(group),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),span=Math.max(size.x,size.y,size.z);
+  camera.position.copy(center).add(new THREE.Vector3(.8,.38,1).normalize().multiplyScalar(span*1.65));camera.lookAt(center);
+  if(kind==='banana-detail'){
+    const g=group.children.find(o=>o.material.vertexColors&&o.material.side===THREE.DoubleSide).geometry,bounds=new THREE.Box3(),normal=new THREE.Vector3();
+    for(let i=0;i<108;i++){bounds.expandByPoint(new THREE.Vector3().fromBufferAttribute(g.attributes.position,i));normal.add(new THREE.Vector3().fromBufferAttribute(g.attributes.normal,i));}
+    normal.normalize();if(normal.y<0)normal.negate();const focus=bounds.getCenter(new THREE.Vector3());
+    camera.position.copy(focus).addScaledVector(normal,bounds.getSize(new THREE.Vector3()).length()*1.5);camera.lookAt(focus);
+  }
+  solar.update(0,light,weatherProfile('clear'),false,{});renderer.render(scene,camera);gl.finish();
+  const figure=document.createElement('figure'),caption=document.createElement('figcaption'),canvas=document.createElement('canvas');canvas.width=480;canvas.height=320;canvas.getContext('2d').drawImage(renderer.domElement,0,0);caption.textContent=kind+' · '+(v?'surface pass':'original');figure.append(caption,canvas);document.querySelector('#images').append(figure);
+  pair.push({calls:renderer.info.render.calls,triangles:renderer.info.render.triangles});if(gl.getError())failures.push('GL error '+kind);
+  scene.remove(group);
+ }
+ if(JSON.stringify(pair[0])!==JSON.stringify(pair[1]))failures.push(kind+' changed draw/triangle budget');reports.push({kind,before:pair[0],after:pair[1]});
+}
+// Interleaved GPU timing on the same 100-specimen instanced foliage workload.
+const groups=variants.map(flora=>{const group=new THREE.Group();for(const part of flora.parts('banana',0,'far')){const m=new THREE.InstancedMesh(part.geometry,part.material,100),matrix=new THREE.Matrix4();for(let i=0;i<100;i++){matrix.makeRotationY(i*2.399);matrix.setPosition((i%10-4.5)*3,0,(Math.floor(i/10)-4.5)*3);m.setMatrixAt(i,matrix);}m.receiveShadow=true;group.add(m);}return group;});
+camera.position.set(22,18,30);camera.lookAt(0,2,0);renderer.shadowMap.enabled=false;
+for(const group of groups){scene.add(group);solar.update(0,light,weatherProfile('clear'),false,{});renderer.render(scene,camera);gl.finish();scene.remove(group);}
+const timings=[[],[]];
+if(ext)for(let i=0;i<10;i++){
+ const which=i%2,group=groups[which];scene.add(group);const query=gl.createQuery();
+ gl.beginQuery(ext.TIME_ELAPSED_EXT,query);for(let frame=0;frame<4;frame++)renderer.render(scene,camera);gl.endQuery(ext.TIME_ELAPSED_EXT);gl.finish();
+ for(let attempts=0;attempts<2000&&!gl.getQueryParameter(query,gl.QUERY_RESULT_AVAILABLE);attempts++)await new Promise(r=>setTimeout(r,10));
+ if(gl.getQueryParameter(query,gl.QUERY_RESULT_AVAILABLE)&&!gl.getParameter(ext.GPU_DISJOINT_EXT))timings[which].push(gl.getQueryParameter(query,gl.QUERY_RESULT)/4e6);
+ gl.deleteQuery(query);scene.remove(group);
+}
+const median=a=>a.length?[...a].sort((x,y)=>x-y)[Math.floor(a.length/2)]:null;
+const before=median(timings[0]),after=median(timings[1]);
+document.querySelector('#result').textContent=JSON.stringify({status:failures.length?'FAIL':'PASS',reports,failures,gpuTiming:{beforeMs:before,afterMs:after,ratio:before?after/before:null,samples:timings},textureBytesWithMipmaps:Math.ceil(256*256*4*4/3)},null,2);
+document.title=failures.length?'FAIL scenery':'PASS scenery';renderer.dispose();
+}catch(e){document.querySelector('#result').textContent='FAIL '+e.stack;document.title='FAIL scenery';}
+</script></body></html>

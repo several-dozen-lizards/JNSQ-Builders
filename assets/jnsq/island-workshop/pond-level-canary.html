@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>Pond bank preview</title>
+<style>body{margin:20px;background:#182924;color:#eef5eb;font:15px system-ui}main{display:flex;gap:12px}figure{margin:0;flex:1;min-width:0}canvas{width:100%;height:auto}pre{white-space:pre-wrap}</style>
+<h1>Pond water follows the lowest bank</h1><main></main><pre id="result">Rendering…</pre>
+<script type="module">
+import * as T from './vendor/three.module.js';
+import {addPond} from './ponds.mjs';
+import {settlePonds} from './pond-level.mjs';
+import {heightAt,sculpt} from './terrain.mjs';
+import {pondMesh,pondMaterial} from './pond-render.mjs';
+const w={size:100,heights:Array(129**2).fill(8),features:[],objects:[]};
+const outline=[{x:-12,z:-10},{x:9,z:-12},{x:14,z:2},{x:7,z:12},{x:-11,z:8}];
+addPond(w,outline,1);const original=[...w.heights];
+const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,360);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;
+const material=pondMaterial({value:0}),camera=new T.PerspectiveCamera(45,4/3,.1,200);camera.position.set(27,38,39);camera.lookAt(0,6,0);const stats=[];
+for(const [label,drop] of [['Full basin',0],['Lower bank · lower water',.55],['Bank restored · filled again',0]]){
+ w.heights=[...original];if(drop)sculpt(w,0,-11,5,drop,'lower');settlePonds(w);
+ const scene=new T.Scene();scene.background=new T.Color(0xa7c4c8);scene.add(new T.HemisphereLight(0xe7f3ff,0x847c56,2));const sun=new T.DirectionalLight(0xffead0,2.5);sun.position.set(-20,40,30);scene.add(sun);
+ const g=new T.PlaneGeometry(50,50,128,128);g.rotateX(-Math.PI/2);const p=g.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,heightAt(w,p.getX(i),p.getZ(i)));g.computeVertexNormals();scene.add(new T.Mesh(g,new T.MeshStandardMaterial({color:0x7a8350,roughness:1})));
+ scene.add(pondMesh(w,w.features[0],material));renderer.render(scene,camera);
+ const fig=document.createElement('figure'),caption=document.createElement('figcaption'),canvas=document.createElement('canvas');canvas.width=480;canvas.height=360;canvas.getContext('2d').drawImage(renderer.domElement,0,0);caption.textContent=label;fig.append(caption,canvas);document.querySelector('main').append(fig);
+ stats.push({label,waterHeight:w.features[0].points[0].y});g.dispose();
+}
+document.querySelector('#result').textContent=JSON.stringify(stats,null,2);renderer.dispose();
+</script>

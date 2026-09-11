@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8"><title>JNSQ lighting render check</title>
+<style>body{background:#16231e;color:#e7eee7;font:14px system-ui;margin:20px}#images{display:grid;grid-template-columns:repeat(2,480px);gap:12px}figure{margin:0}canvas{width:480px;height:300px}pre{white-space:pre-wrap}</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script><script src="/builders/standalone.js" defer></script></head><body><h1>Shared world lighting · rendered checks</h1><p>Same geometry and camera across daylight, weather and surroundings. No saved worlds are changed.</p><div id="images"></div><pre id="result">RUNNING</pre>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+import {createWorldLighting} from './world-lighting.mjs';
+import {createAtmosphere} from './atmosphere.mjs?realism=1';
+import {createSkyIllumination} from './sky-illumination.mjs';
+import {daylight} from './daylight.mjs';
+const failures=[],reports=[];const originalError=console.error;console.error=(...args)=>{failures.push(args.join(' '));originalError(...args);};
+window.addEventListener('error',e=>failures.push(e.message));
+try{
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(480,300);renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(48,1.6,.1,12000);camera.position.set(17,8,22);camera.lookAt(0,2,0);
+const controls={target:new THREE.Vector3(0,2,0),enabled:true};
+const texture=new THREE.DataTexture(new Uint8Array([140,145,130,255]),1,1);texture.needsUpdate=true;
+const rock=new THREE.MeshStandardMaterial({map:texture,color:0xc5c9bf,roughness:.85});
+const rig=createWorldLighting({scene,renderer,camera,controls,naturalMaterials:{setSpace(){}}});
+const atmosphere=createAtmosphere(scene,rock,rig.sunlight.uniforms),probe=createSkyIllumination(renderer,scene,atmosphere);
+function mesh(geometry,material,x,y,z){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;scene.add(m);return m;}
+mesh(new THREE.BoxGeometry(200,.4,200),new THREE.MeshStandardMaterial({color:0x72795a,roughness:.95}),0,-.2,0);
+for(const [x,roughness,metalness,color] of [[-5,.7,0,0xb4a595],[0,.2,1,0xc7c7c7],[5,.08,0,0x2c6460]])mesh(new THREE.SphereGeometry(2,40,24),new THREE.MeshStandardMaterial({roughness,metalness,color}),x,2,0);
+mesh(new THREE.BoxGeometry(2,7,2),rock,-8,3.5,-6);mesh(new THREE.BoxGeometry(2,7,2),rock,8,3.5,-6);mesh(new THREE.BoxGeometry(18,1,4),rock,0,7,-6);
+for(let i=0;i<8;i++)mesh(new THREE.ConeGeometry(4+i,10+i*2,6),rock,-28+i*9,5+i,-50-i*30);
+rig.setQuality('balanced');const preparation=probe.preparation;
+// This finite render test waits synchronously for linking so headless virtual
+// time cannot expire while the GPU is still compiling the asynchronous probe.
+for(const program of renderer.info.programs)renderer.getContext().getProgramParameter(program.program,renderer.getContext().LINK_STATUS);
+await preparation;
+const state={environment:'ocean',weather:'clear',strength:1,landBrightness:1,lightingColor:'#ffffff',cloudShadows:true,sunRays:true,water:{surface:'none'}};
+for(const [name,hour,weather,environment,quality] of [['Clear daylight',12,'clear','ocean','balanced'],['Low sun',17,'scattered','ocean','balanced'],['Low mist',10,'fog','ocean','balanced'],['Moonlight',0,'clear','ocean','balanced'],['Airless',12,'fog','space','balanced'],['Cavern',12,'clear','cavern','balanced'],['Lightweight',12,'clear','ocean','low'],['High detail',12,'clear','ocean','high']]){
+  state.weather=weather;state.environment=environment;rig.setQuality(quality);
+  const light=daylight(hour),start=performance.now(),lighting=rig.update(light,state,0,160);atmosphere.update(camera,0,light,state);probe.update(light,state,lighting);rig.update(light,state,0,160);renderer.render(scene,camera);
+  const gl=renderer.getContext(),pixels=new Uint8Array(480*300*4);gl.readPixels(0,0,480,300,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+  const colors=new Set();for(let i=0;i<pixels.length;i+=128)colors.add(pixels[i]+','+pixels[i+1]+','+pixels[i+2]);
+  const error=gl.getError();if(error||colors.size<20)failures.push(name+': GL '+error+', distinct samples '+colors.size);
+  if(environment==='space'&&scene.fog.density!==0)failures.push('Airless scene has fog');
+  if((quality==='low'||environment==='cavern')&&scene.environment)failures.push('Fallback retained sky map');
+  const figure=document.createElement('figure'),caption=document.createElement('figcaption'),canvas=document.createElement('canvas');canvas.width=480;canvas.height=300;canvas.getContext('2d').drawImage(renderer.domElement,0,0);caption.textContent=name;figure.append(caption,canvas);document.querySelector('#images').append(figure);
+  reports.push({name,colors:colors.size,glError:error,environment:!!scene.environment,firstFrameMs:Math.round(performance.now()-start),shadowTexel:rig.sun.shadow.camera.right*2/rig.sun.shadow.mapSize.x});
+}
+probe.dispose();rig.dispose();renderer.dispose();
+document.querySelector('#result').textContent=JSON.stringify({status:failures.length?'FAIL':'PASS',reports,failures},null,2);document.title=failures.length?'FAIL lighting':'PASS lighting';
+}catch(e){document.querySelector('#result').textContent='FAIL '+e.stack;document.title='FAIL lighting';}
+</script></body></html>

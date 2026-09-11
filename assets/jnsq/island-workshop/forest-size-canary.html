@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>Forest size preview</title>
+<style>body{margin:20px;background:#192720;color:#edf4e9;font:16px system-ui}main{display:flex;gap:16px}canvas{width:100%;height:auto}figure{margin:0;min-width:0;flex:1;max-width:560px}pre{white-space:pre-wrap}</style>
+<h1>Generated woodland · canopy size</h1><main></main><pre id="result">Rendering…</pre>
+<script type="module">
+import * as T from './vendor/three.module.js';
+import {generate,scatter} from './terrain.mjs';
+import {createFlora} from './flora-render.mjs';
+import {islandMaterials} from './materials.mjs';
+const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(560,420);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;
+const loaded=new Promise(resolve=>T.DefaultLoadingManager.onLoad=resolve),flora=createFlora(islandMaterials(renderer,()=>{},()=>{}));await loaded;
+const w=generate('meadow',42,100);w.heights.fill(4);scatter(w,.55,['woodland'],42,[],.5);
+const selected=w.objects.filter(o=>Math.abs(o.x)<20&&Math.abs(o.z)<15);
+const camera=new T.PerspectiveCamera(48,560/420,.1,300);camera.position.set(42,29,57);camera.lookAt(0,8,0);
+const stats=[];
+for(const enlarged of [false,true]){
+ const scene=new T.Scene();scene.background=new T.Color(0xadc8ce);scene.add(new T.HemisphereLight(0xe3efff,0x737454,2));const sun=new T.DirectionalLight(0xffeccd,3);sun.position.set(-20,40,30);scene.add(sun);
+ const ground=new T.Mesh(new T.PlaneGeometry(180,180),new T.MeshStandardMaterial({color:0x69734a}));ground.rotation.x=-Math.PI/2;scene.add(ground);
+ let tallest=0;
+ for(const o of selected){const g=flora.object(o.kind);let lo=0,hi=1;for(let k=0;k<35;k++){const u=(lo+hi)/2;if(.7+.9*u+1.35*u**3<o.scale)lo=u;else hi=u;}g.scale.setScalar(enlarged?o.scale:.7+.9*(lo+hi)/2);g.position.set(o.x,0,o.z);g.rotation.y=o.rotation;scene.add(g);tallest=Math.max(tallest,new T.Box3().setFromObject(g).max.y);}
+ renderer.render(scene,camera);const canvas=document.createElement('canvas');canvas.width=560;canvas.height=420;canvas.getContext('2d').drawImage(renderer.domElement,0,0);const fig=document.createElement('figure'),caption=document.createElement('figcaption');caption.textContent=enlarged?'New generation · varied canopy':'Previous size range';fig.append(caption,canvas);document.querySelector('main').append(fig);stats.push({version:caption.textContent,trees:selected.length,tallestMetres:+tallest.toFixed(1),triangles:renderer.info.render.triangles});
+}
+document.querySelector('#result').textContent=JSON.stringify({stats,generatedTrees:w.objects.length,aboveDoubleSize:w.objects.filter(o=>o.scale>2).length,largestScale:Math.max(...w.objects.map(o=>o.scale))},null,2);
+</script>

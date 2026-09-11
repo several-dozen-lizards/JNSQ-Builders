@@ -1,0 +1,541 @@
+{
+  "schema": "jnsq-avatar-starters/1",
+  "starters": [
+    {
+      "name": "Editable human range",
+      "candidate_id": "55e7b9b4b4b640f2a00f6bf0077956b8",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v6)",
+      "candidate_id": "8e50487eca26414d89908dcbdfd5a69f",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v5)",
+      "candidate_id": "47d050b3e812480881719423db5c5377",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v4)",
+      "candidate_id": "b92f04e7251646e99f02f4d30fe0a2ec",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v3)",
+      "candidate_id": "1768c2d6e7af4e419a5e76cab1594e58",
+      "group": "Character range",
+      "appearance": {
+        "eyebrows": "eyebrow009",
+        "hairstyle": "short01",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v2)",
+      "candidate_id": "639ae97af6cc460ea9a04d71d8295773",
+      "group": "Character range",
+      "appearance": {
+        "eyebrows": "eyebrow009",
+        "hairstyle": "short01",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (original)",
+      "candidate_id": "05a16eb70cca452a89cced24f7994ecc",
+      "group": "Character range",
+      "appearance": {
+        "eyebrows": "eyebrow009",
+        "hairstyle": "short01",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Casual shirt and trousers",
+      "candidate_id": "10c2760ce1d346c7aac9153c0364c399",
+      "group": "Everyday",
+      "asset": "male_casualsuit01"
+    },
+    {
+      "name": "Blouse and skirt",
+      "candidate_id": "bf8a4334be4a44b39dc6ea9313e18f30",
+      "group": "Tailored",
+      "asset": "female_elegantsuit01"
+    },
+    {
+      "name": "Tailored suit",
+      "candidate_id": "2627e4e1d71447a88372ebab92df6365",
+      "group": "Tailored",
+      "asset": "male_elegantsuit01"
+    },
+    {
+      "name": "Dress",
+      "candidate_id": "8ccfa7f5bb11449bb58a35f86f0863ff",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_01"
+    },
+    {
+      "name": "Casual outfit 2",
+      "candidate_id": "842d798070a94f3c8e7d0573ab30ec28",
+      "group": "Everyday",
+      "asset": "male_casualsuit02"
+    },
+    {
+      "name": "Casual outfit 3",
+      "candidate_id": "c8c57be9302f4d19a24b562270f114b8",
+      "group": "Everyday",
+      "asset": "male_casualsuit03"
+    },
+    {
+      "name": "Casual outfit 4",
+      "candidate_id": "995bdf076a824a5c8922690ac0873ba7",
+      "group": "Everyday",
+      "asset": "male_casualsuit04"
+    },
+    {
+      "name": "Casual outfit 5",
+      "candidate_id": "720b2bfa92014e2f9d9545f5858c1bbc",
+      "group": "Everyday",
+      "asset": "male_casualsuit05"
+    },
+    {
+      "name": "Casual outfit 6",
+      "candidate_id": "1b5daac7159b4ef89a398e0a40aec3aa",
+      "group": "Everyday",
+      "asset": "male_casualsuit06"
+    },
+    {
+      "name": "Relaxed outfit 1",
+      "candidate_id": "76222c66386c476f9a83e63315d0ce48",
+      "group": "Everyday",
+      "asset": "female_casualsuit01"
+    },
+    {
+      "name": "Relaxed outfit 2",
+      "candidate_id": "7971f5975b894e53a3d4c9f4413916fa",
+      "group": "Everyday",
+      "asset": "female_casualsuit02"
+    },
+    {
+      "name": "Workwear",
+      "candidate_id": "39ccca996a0a4b89a5cd47b903acd6f5",
+      "group": "Everyday",
+      "asset": "male_worksuit01"
+    },
+    {
+      "name": "Sportswear",
+      "candidate_id": "01e76d792ce5469cb53c74833940c17b",
+      "group": "Sport and costume",
+      "asset": "female_sportsuit01"
+    },
+    {
+      "name": "Mindfront dress 2",
+      "candidate_id": "a5f973fb968d466c81bbdcf1cd32db28",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_02"
+    },
+    {
+      "name": "Mindfront dress 3",
+      "candidate_id": "ec2f463d516a49d49248a2e35cd92c0a",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_03"
+    },
+    {
+      "name": "Mindfront dress 4",
+      "candidate_id": "38f4744b4ae1452fb39958e3f8f55de8",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_04"
+    },
+    {
+      "name": "Mindfront dress 5",
+      "candidate_id": "4e9369214dab4a9a9b646682965e4b9b",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_05"
+    },
+    {
+      "name": "Mindfront dress 6",
+      "candidate_id": "f754017c618f4eaf97ff2ee335cb2dd1",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_06"
+    },
+    {
+      "name": "Mindfront dress 7",
+      "candidate_id": "84b7784eac444375832f4d14ebcb8471",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_07"
+    },
+    {
+      "name": "Mindfront dress 8",
+      "candidate_id": "8b5c20adc0554ad3a16f8ed29a5515ca",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_08"
+    },
+    {
+      "name": "Mindfront dress 9",
+      "candidate_id": "2c35af542fbd4c739ab0482a3ca98b13",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_09"
+    },
+    {
+      "name": "Mindfront dress 10",
+      "candidate_id": "5e5830caa4d24a5198bd27ab855d9870",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_10"
+    },
+    {
+      "name": "Mindfront dress 11",
+      "candidate_id": "d128538c07dc4559ab8bdde851b444d6",
+      "group": "Dresses",
+      "asset": "mindfront_f_dress_11"
+    },
+    {
+      "name": "Swan ballet dress",
+      "candidate_id": "f0be40b2ce4a44328b1567dc1fee3f91",
+      "group": "Sport and costume",
+      "asset": "mindfront_ballet_dress_the_swan"
+    },
+    {
+      "name": "Black cocktail dress",
+      "candidate_id": "5004f78846e34659b9289af268a5b6b3",
+      "group": "Dresses",
+      "asset": "punkduck_black_cocktail_dress"
+    },
+    {
+      "name": "Evening gown",
+      "candidate_id": "f4a7e606b1a74c37a228920ee952eb2b",
+      "group": "Dresses",
+      "asset": "punkduck_evening_gown"
+    },
+    {
+      "name": "Figure skating dress",
+      "candidate_id": "cd22f941cebe49cdbc93bd9f7a3f59f3",
+      "group": "Sport and costume",
+      "asset": "punkduck_figure_skating_dress"
+    },
+    {
+      "name": "Medieval dress",
+      "candidate_id": "910e5c6dd0454cf8a19f10fba0efd175",
+      "group": "Sport and costume",
+      "asset": "punkduck_medieval_dress"
+    },
+    {
+      "name": "Qipao",
+      "candidate_id": "f8d95452e5d5488c8127ce777d943b32",
+      "group": "Dresses",
+      "asset": "punkduck_middle_length_qipao"
+    },
+    {
+      "name": "Tube dress",
+      "candidate_id": "ffc59bf07e184cc1b111c927140390c7",
+      "group": "Dresses",
+      "asset": "punkduck_tube_dress"
+    },
+    {
+      "name": "Separates — top 2, trousers 2",
+      "candidate_id": "dfa716cfb5f2449a96b3db8d4ba0706b",
+      "group": "Mix and match",
+      "top": "2",
+      "bottom": "2",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 2, trousers 3",
+      "candidate_id": "3bf72981ad2f4857bd0b2a5a7bfdfb67",
+      "group": "Mix and match",
+      "top": "2",
+      "bottom": "3",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 2, trousers 4",
+      "candidate_id": "eccb2cbd0b8e4dba9b23d90504d6cb46",
+      "group": "Mix and match",
+      "top": "2",
+      "bottom": "4",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 2, trousers 5",
+      "candidate_id": "2de63cc1fddf4f9d80f4a03513170d96",
+      "group": "Mix and match",
+      "top": "2",
+      "bottom": "5",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 2, trousers 6",
+      "candidate_id": "9977be62f91a46f7bdd51ad18c176aee",
+      "group": "Mix and match",
+      "top": "2",
+      "bottom": "6",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 3, trousers 2",
+      "candidate_id": "978517612b274221a3f0431b054ab967",
+      "group": "Mix and match",
+      "top": "3",
+      "bottom": "2",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 3, trousers 3",
+      "candidate_id": "207863774e1e463796ed142813675fbd",
+      "group": "Mix and match",
+      "top": "3",
+      "bottom": "3",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 3, trousers 4",
+      "candidate_id": "9e0ee2843d214c55b335df7c02b4732c",
+      "group": "Mix and match",
+      "top": "3",
+      "bottom": "4",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 3, trousers 5",
+      "candidate_id": "1f6d5c1158de42d18100ab3fab02ee82",
+      "group": "Mix and match",
+      "top": "3",
+      "bottom": "5",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 3, trousers 6",
+      "candidate_id": "cc33f46e44534bde9034fc2e99306da4",
+      "group": "Mix and match",
+      "top": "3",
+      "bottom": "6",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 4, trousers 2",
+      "candidate_id": "bf50266e408f48d991cccce261511c15",
+      "group": "Mix and match",
+      "top": "4",
+      "bottom": "2",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 4, trousers 3",
+      "candidate_id": "4828f37f039b48d3b1357356aa4486ea",
+      "group": "Mix and match",
+      "top": "4",
+      "bottom": "3",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 4, trousers 4",
+      "candidate_id": "5aa958f632bf4b6d8582e81d1f3798a8",
+      "group": "Mix and match",
+      "top": "4",
+      "bottom": "4",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 4, trousers 5",
+      "candidate_id": "3af528b6b748465a8cd07a29ebcc4a8e",
+      "group": "Mix and match",
+      "top": "4",
+      "bottom": "5",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 4, trousers 6",
+      "candidate_id": "0a7b41d1f79d4c3ab2e481de4943b78d",
+      "group": "Mix and match",
+      "top": "4",
+      "bottom": "6",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 5, trousers 2",
+      "candidate_id": "c174265aac2944ceac0a040a64e72e71",
+      "group": "Mix and match",
+      "top": "5",
+      "bottom": "2",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 5, trousers 3",
+      "candidate_id": "a6565d3a39cb4ef18be9f806e989ea1e",
+      "group": "Mix and match",
+      "top": "5",
+      "bottom": "3",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 5, trousers 4",
+      "candidate_id": "dca98194cbb7496abae492e13cc73cdf",
+      "group": "Mix and match",
+      "top": "5",
+      "bottom": "4",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 5, trousers 5",
+      "candidate_id": "9a3ad5bafa244c51bde6ecee5fd26cdd",
+      "group": "Mix and match",
+      "top": "5",
+      "bottom": "5",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 5, trousers 6",
+      "candidate_id": "31fc768704dd46d1b87c6f4eca12d26d",
+      "group": "Mix and match",
+      "top": "5",
+      "bottom": "6",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 6, trousers 2",
+      "candidate_id": "392d6e1a4d55414bb5d137002759665c",
+      "group": "Mix and match",
+      "top": "6",
+      "bottom": "2",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 6, trousers 3",
+      "candidate_id": "2dbf4531840749c484906d02430222bf",
+      "group": "Mix and match",
+      "top": "6",
+      "bottom": "3",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 6, trousers 4",
+      "candidate_id": "927b6e0da1e4440eb6d541857e813dda",
+      "group": "Mix and match",
+      "top": "6",
+      "bottom": "4",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 6, trousers 5",
+      "candidate_id": "add66e0028ad467c9d5a995e3c20c422",
+      "group": "Mix and match",
+      "top": "6",
+      "bottom": "5",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Separates — top 6, trousers 6",
+      "candidate_id": "657c5f4d16f24bac9c714ad9c2f68330",
+      "group": "Mix and match",
+      "top": "6",
+      "bottom": "6",
+      "pieces": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "name": "Fine / slender — developed character",
+      "candidate_id": "999d96bb0ed24f8eb82172ebec787cdd",
+      "group": "Developed characters",
+      "fixed_shape": true,
+      "appearance": {
+        "eyebrows": "eyebrow009",
+        "hairstyle": "short01",
+        "beard": "none"
+      }
+    }
+  ]
+}

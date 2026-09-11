@@ -1,0 +1,31 @@
+{
+  "source_sha256": "f8a3461c974021963e1dda545283c1cce7dcd8eadcf45bf39a90296fb55f4ab2",
+  "source_unchanged": true,
+  "preset": {
+    "id": "fine",
+    "name": "Fine / slender",
+    "fine": {
+      "character_fine": 0.88,
+      "body_frame": 0.68,
+      "body_mass": 0.18,
+      "muscularity": 0.27,
+      "shoulder_width": 0.32,
+      "hip_width": 0.36,
+      "stature": 0.56,
+      "breast_size": 0.25
+    }
+  },
+  "hair_vertices": 95735,
+  "hair_triangles": 164304,
+  "retained_expressions": [
+    "JNSQ_Expr_BlinkLeft",
+    "JNSQ_Expr_BlinkRight",
+    "JNSQ_Expr_Frown",
+    "JNSQ_Expr_MouthOpen",
+    "JNSQ_Expr_MouthWide",
+    "JNSQ_Expr_Pucker",
+    "JNSQ_Expr_Smile"
+  ],
+  "rig_bones": 137,
+  "status": "candidate; runtime and motion validation pending"
+}
