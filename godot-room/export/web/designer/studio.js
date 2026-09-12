@@ -281,13 +281,13 @@ let fittedOutfit='';
 let accessoryBusy=false;
 let extraHairItems=[],availableHairstyles=new Set();
 function mergeHairChoices(){
-  for(const item of extraHairItems){const existing=[...$('hairstyle').options].find(o=>o.value===item.id);if(existing){existing.disabled=false;existing.textContent=item.name;continue;}
-    const option=document.createElement('option');option.value=item.id;option.textContent=item.name;$('hairstyle').append(option);
+  for(const item of extraHairItems){const existing=[...$('hairstyle').options].find(o=>o.value===item.id);if(existing){existing.disabled=!!window.JNSQ_STANDALONE&&!availableHairstyles.has(item.id);existing.textContent=item.name;continue;}
+    const option=document.createElement('option');option.value=item.id;option.disabled=!!window.JNSQ_STANDALONE&&!availableHairstyles.has(item.id);option.textContent=item.name;$('hairstyle').append(option);
   }
   $('hairstyle').value=appearanceState.hairstyle;
 }
 Promise.all(['/3d/designer/masculine-hair/index.json','/3d/designer/extra-hair/index.json'].map(url=>json(url).catch(error=>{studioStatus('Some hairstyles are unavailable: '+error.message,true);return {hair:[]};}))).then(catalogs=>{extraHairItems=catalogs.flatMap(data=>data.hair);mergeHairChoices();});
-const hairHelp=document.createElement('p');hairHelp.className='quiet';hairHelp.setAttribute('role','status');hairHelp.textContent='All hairstyles are in this list. Additional styles fit locally on first use, then apply automatically. Cached combinations open faster.';
+const hairHelp=document.createElement('p');hairHelp.className='quiet';hairHelp.setAttribute('role','status');hairHelp.textContent='Browse every included hairstyle. Prepared styles work directly; fitting additional styles requires the separate Blender/MPFB authoring tools.';
 $('hairstyle').parentElement.after(hairHelp);
 $('hairstyle').onchange=async()=>{
   const selected=$('hairstyle').value,previous=appearanceState.hairstyle;
@@ -335,7 +335,7 @@ function updateHairPreviewDialog(){
   const current=item?.id===appearanceState.hairstyle;
   $('tryHairPreview').disabled=!item||item.disabled||$('hairstyle').disabled||!activeCandidate||current;
   $('tryHairPreview').textContent=current?'On your avatar':'Try on avatar';
-  $('hairPreviewNote').textContent=!item||item.disabled?'This style is unavailable for the current model.':
+  $('hairPreviewNote').textContent=!item||item.disabled?(window.JNSQ_STANDALONE?'This style needs the separate Blender/MPFB fitting tools. Its source asset and preview are included.':'This style is unavailable for the current model.'):
     !activeCandidate?'Choose a starting model to try this style.':
     $('hairstyle').disabled?'An accessory is being prepared. You can keep browsing while it finishes.':
     current?'This is your current hairstyle.':item.id==='none'?'Try your avatar without hair.':
