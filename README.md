@@ -22,3 +22,5 @@ and a clean dependency installation. Preview status means bugs may remain.
 ## 0.1.1 preview
 
 Current editor/model snapshot from 2026-09-12. Includes new wardrobe exchange, face/neck controls, world lighting/water, first-person editing, navigation and updated fish tank. Existing 0.1.0 installations can use the 343 MB update ZIP; full downloads automatically reuse the original asset packs. See UPDATE_NOTES.md.
+
+Latest release: **0.1.2 preview**, including the final September 12 grass, terrain, rock and stone-surface changes. The download page provides fresh installation and existing-installation update paths.
