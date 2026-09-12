@@ -81,7 +81,7 @@ export function islandMaterials(renderer,invalidate,reportError){
       float erosion=landNoise(vLandPosition.xz*.7+vec2(vLandPosition.y*.08));
       rc*=.83+erosion*.28+strata*.075-fracture*.15;
       float fineSoil=soilDetail.r;
-      float relief=(strata*.065-fracture*.09+erosion*.1)*rw+(tufts*.052+patches*.035+fineSoil*.012)*gw+fineSoil*.009*sw;
+      float relief=(strata*.08-fracture*.14+erosion*.13)*rw+(tufts*.085+patches*.045+fineSoil*.012)*gw+fineSoil*.009*sw;
       // Reuse photographed grain with distinct mineral, organic and snow profiles.
       float grit=soilDetail.g;
       float cells=soilBroad.g;
@@ -113,7 +113,7 @@ export function islandMaterials(renderer,invalidate,reportError){
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
       vec2 gd=texture2D(grass_normal,uvGround).xy*2.0-1.0,sd=texture2D(dirt_normal,uvGround*.85).xy*2.0-1.0;
       float earthMix=smoothstep(.53,.78,patches)*.58;
-      vec3 detail=vec3(mix(gd,sd,earthMix).x,0,mix(gd,sd,earthMix).y)*gw*.25+vec3(sd.x,0,sd.y)*sw*.16+triDetail(rock_normal,uvRock,tw)*rw*.55;
+      vec3 detail=vec3(mix(gd,sd,earthMix).x,0,mix(gd,sd,earthMix).y)*gw*.38+vec3(sd.x,0,sd.y)*sw*.16+triDetail(rock_normal,uvRock,tw)*rw*.8;
       detail-=landN*dot(detail,landN);
       normal=normalize(mat3(viewMatrix)*normalize(landN+detail));`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <lights_physical_fragment>',`vec3 reliefX=dFdx(-vViewPosition),reliefY=dFdy(-vViewPosition);
@@ -122,7 +122,7 @@ export function islandMaterials(renderer,invalidate,reportError){
       normal=normalize(max(abs(reliefDet),1e-8)*normal-sign(reliefDet)*(dFdx(relief)*reliefRX+dFdy(relief)*reliefRY));
       #include <lights_physical_fragment>`);
   };
-  terrain.customProgramCacheKey=()=> 'jnsq-natural-terrain-surfaces-v4';
+  terrain.customProgramCacheKey=()=> 'jnsq-natural-terrain-surfaces-v5';
   function prop(kind,scale){const t=textures[kind];return new THREE.MeshStandardMaterial({map:t.albedo,normalMap:t.normal,roughnessMap:t.rough,roughness:1,normalScale:new THREE.Vector2(scale,scale)});}
   function setStyle(style){
     grassTint.value.set(...({meadow:[.66,1.05,.72],highland:[.74,.96,.78],craggy:[.82,.95,.77],tropical:[.58,1.13,.72],woodland:[.71,.96,.54],desert:[1.55,1.02,.45],savanna:[1.3,1.13,.48],rainforest:[.43,.90,.58],enchanted:[.57,.87,.93],alien:[.85,.57,1.2],fungi:[.85,.69,.94]}[style]||[.74,.96,.78]));

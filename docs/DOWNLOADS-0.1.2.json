@@ -1,0 +1,136 @@
+{
+  "version": "0.1.2",
+  "archives": [
+    {
+      "name": "JNSQ-Builders-0.1.0-application-01.zip",
+      "bytes": 617917552,
+      "sha256": "964ba27fe67099a31e8b7fa688afdf52745e7d161064ad9d4d3247f9f55aa543",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-application-01.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-01.zip",
+      "bytes": 563107402,
+      "sha256": "b3704247c0207c3d5b9c458afda1cd963ab6e6166cfa85e395975c7cd534c65b",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-01.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-02.zip",
+      "bytes": 583136861,
+      "sha256": "12820df0b89ce7ab14cff02cda8500b5ac1faad4ae5f101f18da4276918d5a44",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-02.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-03.zip",
+      "bytes": 543637873,
+      "sha256": "ae787b056b47c1ac86bbd7de986b3c83cce6ff0d4478254e4d6440332681b537",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-03.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-04.zip",
+      "bytes": 565536446,
+      "sha256": "5a371505fb5e3912bdc2537017edcd083edea60b47d253cefa5b5a329add2058",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-04.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-05.zip",
+      "bytes": 602376630,
+      "sha256": "9583f499eba7f037c4c519f93631802c5c99609da86e3609aca15e275608fb5f",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-05.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-06.zip",
+      "bytes": 561883690,
+      "sha256": "5ed32994dab7c876f93a400a911abc45581fa1696569ff1b99aa1db52cb73f12",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-06.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-07.zip",
+      "bytes": 593286427,
+      "sha256": "8dea4097c251d5dd9e7d44537561b5e2d832933ff606639dbfb559483b4fbf82",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-07.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-08.zip",
+      "bytes": 572598783,
+      "sha256": "af21c33c7642cd5e867974ce65702a0b1646d6e5765e70501ee66058467458a6",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-08.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-09.zip",
+      "bytes": 582072654,
+      "sha256": "ba3e5568e2df0cd65be4874f084beddf16dc2ccd579d4ccf547ee361e577b3fd",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-09.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-avatars-10.zip",
+      "bytes": 239171356,
+      "sha256": "f552124a0eb4780c365a5e38d97c7a1edb029f65ff313e4a2d3042cb8e505b7f",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-avatars-10.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-01.zip",
+      "bytes": 1475343820,
+      "sha256": "a36abdd39d02ccf0edb781ed0d0b3bef4899b18a4bfbc96db79d0cd91d27bcc9",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-01.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-02.zip",
+      "bytes": 1473828772,
+      "sha256": "d466871b522520a1670388cd0c7527b3e124ea12accbd3e7d9bc13b1067b8eac",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-02.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-03.zip",
+      "bytes": 1184557960,
+      "sha256": "25b1367c86b97235beb02427dfa106fe42285343533fe2584bd9c1ceb01af7b7",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-03.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-04.zip",
+      "bytes": 1345497648,
+      "sha256": "41a0f9c850bc3ae1bc531ce7f0bf9a3520181ccc3ce11bb07ceed8e067862f49",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-04.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-05.zip",
+      "bytes": 1481880645,
+      "sha256": "5434359ee720a1cfc5447839946d5555e39023e296b64fb3afb49871d369b249",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-05.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-06.zip",
+      "bytes": 1474265329,
+      "sha256": "81e17982fedf104c41db621366959bed466536a9655a592022e23e404f5e8be4",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-06.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-07.zip",
+      "bytes": 1249793453,
+      "sha256": "d39ee0893e39164e66ed46856e5fe183913e2f58e2cf863e2f1cebd5d31f98a8",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-07.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-08.zip",
+      "bytes": 1359425001,
+      "sha256": "921bfb450f687a181d6bcf20f26cf445231362d5bb3ccad710850600146ca6ea",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-08.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.0-world-09.zip",
+      "bytes": 1456428699,
+      "sha256": "58b34411877ee301b55187f18ff0065a79f5aad07f89fe8b2690a5233a2a9529",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/JNSQ-Builders-0.1.0-world-09.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.1-update-01.zip",
+      "bytes": 342629966,
+      "sha256": "37f616bed5c287afb280d8bf25a68313835ee7f170d5d506efcb9b043b9f340a",
+      "url": "https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.1-preview/JNSQ-Builders-0.1.1-update-01.zip"
+    },
+    {
+      "name": "JNSQ-Builders-0.1.2-update-01.zip",
+      "bytes": 106137,
+      "sha256": "eb343941f33192399419b775e17eaf7bbec5610d98155372ac1e4714c9d2b347"
+    }
+  ]
+}

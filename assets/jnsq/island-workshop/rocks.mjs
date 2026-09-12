@@ -15,16 +15,23 @@ export function makeRock(kind,variant=0){
       p.setXYZ(i,x+a*sx*noise,y+b*sy*noise,z+c*sz*noise);
     }
     g.computeVertexNormals();
-    if(round){
-      // Average only coincident vertices of naturally rounded stones. Positions,
-      // faces and sharp authored slate/basalt edges are unchanged.
+    if(kind!=='slate_rock'){
+      // Smooth tessellation while retaining sharp fractures. Positions and
+      // faces stay unchanged, including the authored slate/basalt edges.
       const normals=g.attributes.normal,groups=new Map();
       for(let i=0;i<p.count;i++){
         const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e5)).join(',');
         if(!groups.has(key))groups.set(key,{normal:new THREE.Vector3(),indices:[]});
         const group=groups.get(key);group.normal.add(new THREE.Vector3().fromBufferAttribute(normals,i));group.indices.push(i);
       }
-      for(const group of groups.values()){group.normal.normalize();for(const i of group.indices)normals.setXYZ(i,group.normal.x,group.normal.y,group.normal.z);}
+      for(const group of groups.values()){
+        const faces=group.indices.map(i=>new THREE.Vector3().fromBufferAttribute(normals,i));
+        for(let j=0;j<group.indices.length;j++){
+          const blended=new THREE.Vector3();
+          for(const face of faces)if(round||face.dot(faces[j])>.5)blended.add(face);
+          blended.normalize();normals.setXYZ(group.indices[j],blended.x,blended.y,blended.z);
+        }
+      }
     }
     pieces.push(g);
   }

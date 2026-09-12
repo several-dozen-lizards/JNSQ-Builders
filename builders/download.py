@@ -7,7 +7,7 @@ import shutil
 import urllib.request
 import zipfile
 
-BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.1-preview/'
+BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.2-preview/'
 
 
 def digest(path):

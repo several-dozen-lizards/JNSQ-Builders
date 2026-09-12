@@ -38,9 +38,9 @@ export function createGroundCover(scene,invalidate,mount=null){
   // Overlapping fans with arched tips give a soft clump silhouette, rather
   // than five isolated straight spikes. Keep a single instanced draw call.
   for(let i=0;i<9;i++){
-    const a=i*2.399,r=.08+(i%3)*.05,x=Math.cos(a)*r,z=Math.sin(a)*r,wx=Math.cos(a+1.57)*.044,wz=Math.sin(a+1.57)*.044;
-    const crown=.76+(i%4)*.08,bend=.16+(i%3)*.03;
-    const points=[[x-wx,0,z-wz],[x+wx,0,z+wz],[x+wx*.85+Math.cos(a)*.09,crown*.72,z+wz*.85+Math.sin(a)*.09],[x-wx*.85+Math.cos(a)*.09,crown*.72,z-wz*.85+Math.sin(a)*.09],[x+Math.cos(a)*bend,crown,z+Math.sin(a)*bend]];
+    const a=i*2.399,r=.06+(i%3)*.07,x=Math.cos(a)*r,z=Math.sin(a)*r,wx=Math.cos(a+1.57)*.027,wz=Math.sin(a+1.57)*.027;
+    const crown=.52+(i*7%9)*.068,bend=.20+(i%4)*.09;
+    const points=[[x-wx,0,z-wz],[x+wx,0,z+wz],[x+wx*.58+Math.cos(a)*bend*.35,crown*.78,z+wz*.58+Math.sin(a)*bend*.35],[x-wx*.58+Math.cos(a)*bend*.35,crown*.78,z-wz*.58+Math.sin(a)*bend*.35],[x+Math.cos(a)*bend,crown*.94,z+Math.sin(a)*bend]];
     for(const index of [0,1,2,0,2,3,3,2,4]){positions.push(...points[index]);const t=points[index][1];uvs.push([0,1,1,0,.5][index],t/crown);colours.push(.58+t*.27,.60+t*.28,.40+t*.28);}
   }
   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colours,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.computeVertexNormals();
@@ -66,13 +66,14 @@ export function createGroundCover(scene,invalidate,mount=null){
     s.fragmentShader=s.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
       vec4 blade=texture2D(groundSurface,bladeUV);
       float tip=smoothstep(.72,1.,bladeUV.y);
-      diffuseColor.rgb*=.91+blade.b*.18;
+      float bladeFold=1.-abs(bladeUV.x*2.-1.);
+      diffuseColor.rgb*=(.82+blade.b*.18+bladeFold*.12)*mix(.72,1.08,smoothstep(0.,.75,bladeUV.y));
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(1.12,1.02,.77),tip*(.12+blade.a*.22));
       roughnessFactor=.86+blade.a*.12;`);
     s.fragmentShader=s.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
       if(grassDistance>=140.)discard;`);
   };
-  material.customProgramCacheKey=()=> 'jnsq-ground-cover-v3';
+  material.customProgramCacheKey=()=> 'jnsq-ground-cover-v4';
   const coverGeometry={grass:geometry,leaves:leafCarpetGeometry(),flowers:leafCarpetGeometry(true)};
   function rebuild(world){
     lastWorld=world;for(const mesh of meshes){scene.remove(mesh);mesh.dispose();}meshes=[];if(!enabled)return;
