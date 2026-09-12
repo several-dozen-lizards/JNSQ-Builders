@@ -3,6 +3,26 @@
   "starters": [
     {
       "name": "Editable human range",
+      "candidate_id": "4a90a33cc2f54f8caffb82b4076dd9c1",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v8)",
+      "candidate_id": "c8569fe201324413a0dbc99356f8fd21",
+      "group": "Character range",
+      "appearance": {
+        "hairstyle": "short01",
+        "eyebrows": "eyebrow009",
+        "beard": "none"
+      }
+    },
+    {
+      "name": "Editable human range (v7)",
       "candidate_id": "55e7b9b4b4b640f2a00f6bf0077956b8",
       "group": "Character range",
       "appearance": {

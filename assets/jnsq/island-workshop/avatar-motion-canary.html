@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Kay · island animation check</title>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>
+  body{margin:0;background:#d6dfe4;color:#17252d;font:16px system-ui}canvas{display:block;width:100vw;height:100vh}
+  aside{position:fixed;top:16px;left:16px;max-width:480px;padding:16px;background:#fffffff0;border-radius:12px}h1{font-size:20px;margin:0 0 8px}p{margin:8px 0}button{font:inherit;padding:6px 12px;margin:3px}#status{font-size:13px}
+</style>
+<aside><h1>Kay · island animation check</h1><p>Local render using the island’s animation driver.</p>
+<button id="stand">Standing</button><button id="walk">Walking</button><button id="front">Front</button><button id="side">Side</button><button id="pause">Pause</button>
+<p id="status">Loading Kay’s installed body…</p></aside>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+import {GLTFLoader} from './vendor/GLTFLoader.js';
+import {createGait} from './visitor-gait.mjs';
+import {alignAvatarFacing} from './avatar-facing.mjs';
+const status=document.querySelector('#status');
+try{
+  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);document.body.append(renderer.domElement);
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.5;
+  const scene=new THREE.Scene();scene.background=new THREE.Color('#d6dfe4');
+  scene.add(new THREE.HemisphereLight(0xffffff,0x607080,2));
+  const key=new THREE.DirectionalLight(0xffeedd,3);key.position.set(-3,6,-4);scene.add(key);
+  const fill=new THREE.DirectionalLight(0xcadfff,1.5);fill.position.set(4,3,2);scene.add(fill);
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0xa1b0ba,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=21;scene.add(floor);
+  const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.01,300),root=new THREE.Group();scene.add(root);
+  const [gltf,clip,idle]=await Promise.all([new GLTFLoader().loadAsync('/avatars/kay.glb'),fetch('/api/world-walk-clip').then(r=>r.json()),fetch('./visitor-idle.json').then(r=>r.json())]);
+  alignAvatarFacing(gltf.scene);const bounds=new THREE.Box3().setFromObject(gltf.scene);gltf.scene.position.y-=bounds.min.y;
+  root.add(gltf.scene);root.position.y=21;root.updateMatrixWorld(true);
+  const driver=createGait(gltf.scene,root,clip,()=>21,idle);
+  let moving=false,paused=false,side=false,last=performance.now(),elapsed=0;
+  document.querySelector('#stand').onclick=()=>moving=false;document.querySelector('#walk').onclick=()=>moving=true;
+  document.querySelector('#front').onclick=()=>side=false;document.querySelector('#side').onclick=()=>side=true;
+  document.querySelector('#pause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Resume':'Pause';};
+  addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
+  function render(now){
+    requestAnimationFrame(render);const delta=paused?0:(now-last)/1000;last=now;elapsed+=delta;
+    if(moving)root.position.z-=1.2*delta;driver.update(moving,delta);
+    camera.position.copy(root.position).add(side?new THREE.Vector3(-4,1.25,-.3):new THREE.Vector3(-.15,1.25,-4));camera.lookAt(root.position.clone().add(new THREE.Vector3(0,1,0)));
+    status.textContent=`${moving?'Walking':'Standing'} · ${driver.mappedBones} joints · ${elapsed.toFixed(1)} s${paused?' · paused':''}`;
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(render);
+}catch(error){status.textContent=error.stack||String(error);}
+</script>
+</html>

@@ -67,6 +67,14 @@ def install(app, repo, candidate_root, *, standalone=False):
     def starters():
         return json.loads((Path(repo) / 'room/avatar_starters.json').read_text(encoding='utf-8'))
 
+    @router.post('/wardrobe/{candidate_id}')
+    def change_wardrobe(candidate_id: str, values: dict):
+        from core.avatar_wardrobe import change
+        try:
+            return change(repo,root,candidate_root(),candidate_id,values.get('outfit_id'))
+        except (BodyPackageError,ValueError,KeyError,StopIteration) as exc:
+            return JSONResponse({'error':str(exc) or 'This model does not contain a compatible fitted outfit.'},status_code=422)
+
     @router.post('/accessories/{category}')
     async def accessory(category: str, request: Request, outfit: str = 'male_casualsuit01'):
         if standalone:

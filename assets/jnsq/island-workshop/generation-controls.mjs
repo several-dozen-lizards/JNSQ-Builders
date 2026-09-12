@@ -24,7 +24,7 @@ export function installGenerationControls(){
   }
   const land=picker('landforms','landformMix','Landforms',['hills'],'Choose a landform');
   $('style').hidden=true;document.querySelector('label[for="style"]').hidden=true;$('style').after(land.label,land.box);
-  const landHint=document.createElement('p');landHint.textContent='Choose one shape or blend several. Plants and rocks are selected separately under Scenery.';land.box.after(landHint);
+  const landHint=document.createElement('p');landHint.textContent='Choose one shape or blend several. Plants and rocks are selected separately under Plant communities.';land.box.after(landHint);
   const cliffs=$('generateCliffs');cliffs.checked=false;cliffs.closest('label').hidden=true;
   const plants=installPlantLayerControls(saved,()=>{updateSummary();saveSettings();});pickers.communities=plants;
   const rocks=picker('rocks','rockMix','Rocks & crystals',['rock','river_rock','slate_rock'],'No rocks');
@@ -41,13 +41,15 @@ export function installGenerationControls(){
   const landscapeSettings=document.createElement('div');landscapeSettings.id='generationCoverageControls';
   const landCoverage=slider('generationCoverage','Scenery coverage',landscapeSettings);
   const landClusters=slider('generationClustering','Scenery clustering',landscapeSettings);
-  const treeHeight=slider('maxTreeHeight','Max tree height',landscapeSettings);
+  const treeSettings=document.createElement('div');treeSettings.id='treeHeightControls';
+  const treeHeight=slider('maxTreeHeight','Max tree height',treeSettings);
   treeHeight.min=5;treeHeight.max=120;treeHeight.step=1;treeHeight.value=Number.isFinite(saved.maxTreeHeight)?saved.maxTreeHeight:18;
-  const treeVariation=slider('treeHeightVariation','Tree height variation',landscapeSettings);
+  const treeVariation=slider('treeHeightVariation','Tree height variation',treeSettings);
   treeVariation.value=Number.isFinite(saved.treeHeightVariation)?saved.treeHeightVariation:.5;
   const treeHint=document.createElement('p');treeHint.textContent='Tree height: up to 120 m for towering forests. Variation: 0% gives an even canopy; 100% mixes trees from 10% to 100% of the maximum. Applies to Generate and Regrow; shrubs and rocks keep their sizes.';landscapeSettings.append(treeHint);
   const clusterHint=document.createElement('p');clusterHint.textContent='Coverage sets the amount. Clustering: evenly spread → tight patches. Shared with regrowth; changes apply when you Generate or Regrow.';landscapeSettings.append(clusterHint);
-  $('generate').closest('.row').before(landscapeSettings);
+  treeSettings.append(treeHint);
+  $('generate').closest('.row').before(landscapeSettings,treeSettings);
   const sceneryClusters=document.createElement('div');sceneryClusters.id='clusteringControls';
   const clusterInput=slider('sceneryClustering','Scenery clustering',sceneryClusters);$('scatter').before(sceneryClusters);
   function syncSliders(){
@@ -63,7 +65,7 @@ export function installGenerationControls(){
   $('density').addEventListener('input',()=>{syncSliders();saveSettings();});
   for(const input of [landClusters,clusterInput])input.oninput=()=>{clustering=Number(input.value);syncSliders();saveSettings();};
   syncSliders();
-  const summary=document.createElement('button');summary.id='generationScenery';summary.onclick=()=>document.getElementById('ribbon-tab-scenery')?.click();$('generate').before(summary);
+  const summary=document.createElement('button');summary.id='generationScenery';summary.onclick=()=>{const tab=document.getElementById('ribbon-tab-communities');if(tab?.getAttribute('aria-selected')!=='true')tab?.click();};$('generate').before(summary);
   function updateSummary(){const plants=pickers.communities.selected().length,rocks=pickers.rocks.selected().length;summary.textContent=`Scenery: ${plants} plant ${plants===1?'group':'groups'} · ${rocks} rock ${rocks===1?'type':'types'}`;}
   function recipe(){return {landforms:pickers.landforms.selected(),communities:pickers.communities.selected(),plantLayers:plants.layers(),rocks:pickers.rocks.selected(),density:Number($('density').value),clustering,maxTreeHeight:Number(treeHeight.value),treeHeightVariation:Number(treeVariation.value)};}
   updateSummary();

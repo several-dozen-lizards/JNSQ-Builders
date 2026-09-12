@@ -1,5 +1,8 @@
 // Bounded front-to-back cloud integration, shared by sky, reflections and the lower cloud sea.
 export const cloudVolumeGLSL=`
+// A uniform bound keeps ANGLE from expanding the full density integration at
+// every call site. The sample count and cloud shape are unchanged.
+uniform int cloudMarchSteps;
 float volumeHash(vec3 p){p=fract(p*.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
 float volumeNoise(vec3 p){
   vec3 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);
@@ -32,11 +35,11 @@ vec4 billowClouds(vec3 origin,vec3 ray,float base,float thickness,float deck){
   float a=(base-origin.y)/ray.y,b=(base+thickness-origin.y)/ray.y;
   float start=max(0.,min(a,b)),end=min(max(a,b),start+1800.);
   if(end<=start)return vec4(0.);
-  float stride=(end-start)/32.,transmission=1.;vec3 colour=vec3(0.);
+  float stride=(end-start)/float(cloudMarchSteps),transmission=1.;vec3 colour=vec3(0.);
   float jitter=volumeHash(vec3(gl_FragCoord.xy,13.));
   vec3 sun=normalize(sunDirection);
   float forward=pow(max(dot(ray,sun),0.),8.);
-  for(int i=0;i<32;i++){
+  for(int i=0;i<cloudMarchSteps;i++){
     vec3 p=origin+ray*(start+(float(i)+jitter)*stride);
     float density=billowDensity(p,base,thickness,deck);
     if(density>.005){

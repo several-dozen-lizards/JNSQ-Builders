@@ -167,6 +167,7 @@ const featureControls=document.createElement('div');
 featureControls.innerHTML='<label>Include in the next island</label><label><input type="checkbox" id="generateCliffs"> Cliff terraces</label><label><input type="checkbox" id="generateRiver" checked> River & cascades</label><label><input type="checkbox" id="generateRoad" checked> Winding dirt road</label><p>Generation replaces the landscape; Undo brings it back. Rivers carve downhill to the sea. Roads stop at riverbanks. Water animates with Animate atmosphere.</p>';
 $('generate').parentElement.before(featureControls);
 function generateIsland(newSeed=false){
+  if(!sidebar?.creation.active||busy)return;
   cancelRoute();
   if(newSeed)$('seed').value=crypto.getRandomValues(new Uint32Array(1))[0];
   if(!$('seed').checkValidity()){status('Use a whole seed between 0 and 4294967295.',true);return;}
@@ -231,7 +232,12 @@ hints.place='Click or hold left-drag to paint scenery. Spacing follows scenery s
 for(const b of document.querySelectorAll('[data-tool]'))if(b.dataset.tool!=='steps')b.onclick=()=>{finish();chooseTool(b.dataset.tool);};
 compactToolbar();
 const firstPersonButton=document.createElement('button');firstPersonButton.id='firstPerson';firstPersonButton.textContent='First person';firstPersonButton.title='Walk through the world at standing height';$('viewbar').insertBefore(firstPersonButton,$('stats'));
-firstPerson=installFirstPerson({camera,controls,canvas:renderer.domElement,world:()=>world,button:firstPersonButton,help:$('help'),invalidate:()=>dirtyFrame=true,onEnter:()=>{finish();ring.visible=false;if(floraDetail!=='near'){floraDetail='near';updateScenery();}}});
+firstPerson=installFirstPerson({camera,controls,canvas:renderer.domElement,world:()=>world,button:firstPersonButton,help:$('help'),invalidate:()=>dirtyFrame=true,onEnter:()=>{finish();ring.visible=false;if(floraDetail!=='near'){floraDetail='near';updateScenery();}},allowEditorEvent:event=>{
+  const furnitureOpen=!!furnitureEditor?.primaryActionActive;
+  if(event.type==='wheel')return furnitureOpen;
+  const buildingsOpen=document.getElementById('ribbon-panel-buildings')?.hidden===false;
+  return event.button===0&&(tool!=='orbit'||furnitureOpen||buildingsOpen);
+}});
 window.addEventListener('pagehide',()=>firstPerson.dispose(),{once:true});
 for(const [id,format] of [['radius',v=>v+' m'],['strength',v=>v],['propSize',v=>v+'×'],['density',v=>Math.round(v*100)+'%']])$(id).oninput=()=>{$(id+'Value').textContent=format($(id).value);};
 generationControls=installGenerationControls();
@@ -317,7 +323,7 @@ renderer.domElement.addEventListener('pointermove',event=>{
   }
   if(stroke){const spacing=Math.max(world.size/N*.5,Number($('radius').value)*.16),distance=Math.hypot(point.x-stroke.last.x,point.z-stroke.last.z);if(distance>=spacing){const start=stroke.last.clone(),count=Math.min(48,Math.floor(distance/spacing));for(let i=1;i<=count;i++)dab(start.clone().lerp(point,i/count),false);if(tool==='erase')updateScenery();else if(tool==='paint')updateGroundPaint();else rebuild();stroke.last=point.clone();}}
 });
-function finish(){if(!stroke)return;const placing=stroke.placing;stroke=null;controls.enabled=true;if(tool==='erase')buildingEditor.refresh();changed(placing?'Scenery painted · Undo removes the whole stroke':'Landscape edited · Undo restores the whole stroke');}
+function finish(){if(!stroke)return;const placing=stroke.placing;stroke=null;controls.enabled=!firstPerson?.active;if(tool==='erase')buildingEditor.refresh();changed(placing?'Scenery painted · Undo removes the whole stroke':'Landscape edited · Undo restores the whole stroke');}
 renderer.domElement.addEventListener('pointerup',finish);renderer.domElement.addEventListener('pointercancel',finish);renderer.domElement.addEventListener('lostpointercapture',finish);
 renderer.domElement.addEventListener('pointerleave',()=>{ring.visible=false;dirtyFrame=true;});
 document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.key==='Escape'){chooseTool('orbit');finish();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();$(e.shiftKey?'redo':'undo').click();}});
@@ -339,7 +345,7 @@ function validate(w){
 function captureAtmosphere(){world.atmosphere=Object.fromEntries(['environment','weather','hour','strength','followLocalWeather','followLocalTime','cloudShadows','sunRays','cavernLighting','nebulaClouds','landBrightness','skyBrightness','lightingColor','water','customSky','skyColors'].map(k=>[k,clone(daylightControl.state[k])]));}
 function download(){commitName();captureAtmosphere();const blob=new Blob([JSON.stringify(world)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=(world.name.replace(/[^a-z0-9_-]/gi,'_')||'island')+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('Island exported · includes sculpted terrain and scenery');}
 $('export').onclick=download;$('import').onclick=()=>{if(!busy)$('file').click();};
-$('file').onchange=async()=>{try{const file=$('file').files[0];if(!file)return;if(file.size>4000000)throw Error('Choose an island file smaller than 4 MB.');const value=validate(JSON.parse(await file.text()));remember();restore(value);activeId=null;revision=null;frame();status('Island imported · Save to add it to My islands');}catch(e){status(e.message,true);}finally{$('file').value='';}};
+$('file').onchange=async()=>{try{const file=$('file').files[0];if(!file)return;if(file.size>4000000)throw Error('Choose an island file smaller than 4 MB.');const value=validate(JSON.parse(await file.text()));sidebar?.creation.close();remember();restore(value);activeId=null;revision=null;frame();status('Island imported · Save to add it to My islands');}catch(e){status(e.message,true);}finally{$('file').value='';}};
 async function api(path,options){const response=await fetch('/api/islands'+path,options);let value;try{value=await response.json();}catch{throw Error('Island storage is unavailable on this host. Export preserves your work.');}if(!response.ok)throw Error(value.error||'Island storage request failed');return value;}
 async function saveIsland(asCopy=false){
   if(busy)return false;commitName();captureAtmosphere();busy=true;$('save').disabled=true;const snapshot=clone(world);
@@ -367,7 +373,7 @@ async function saveIsland(asCopy=false){
   return !dirty;
 }
 $('save').onclick=()=>saveIsland();
-const newButton=document.createElement('button');newButton.id='newIsland';newButton.textContent='New';$('library').before(newButton);
+const newButton=document.createElement('button');newButton.id='newIsland';newButton.textContent='New';newButton.setAttribute('aria-controls','creationRibbon');newButton.setAttribute('aria-expanded','false');$('library').before(newButton);
 newButton.onclick=async()=>{
   if(busy||document.getElementById('newIslandDialog'))return;
   await promptNewIsland({name:$('name').value,save:()=>saveIsland(),errorMessage:()=>$('status').textContent,create:()=>{
@@ -375,7 +381,7 @@ newButton.onclick=async()=>{
     firstPerson?.exit();finish();stepEditor?.cancel();cancelRoute();chooseTool('orbit');furnitureEditor?.select(null);
     world=fresh;activeId=null;revision=null;past=[];future=[];dirty=true;recoveryBackupPending=false;waterTime=0;
     daylightControl.restore({environment:'ocean',weather:'clear',hour:12,strength:.5,followLocalTime:true,followLocalWeather:false,clouds:true,cloudShadows:true,sunRays:true,cavernLighting:'natural',nebulaClouds:false,landBrightness:1,skyBrightness:1,lightingColor:'#ffffff',customSky:null});
-    captureAtmosphere();syncInputs();rebuild();historyButtons();frame();cacheDraft();$('ribbon-tab-land')?.click();
+    captureAtmosphere();syncInputs();rebuild();historyButtons();frame();cacheDraft();sidebar.creation.open();
     status('New unsaved island · Save to add it to My islands');
   }});
 };
@@ -384,7 +390,7 @@ $('library').onclick=async()=>{
   if(busy){status('Finishing this save…');return;}
   $('shelf').showModal();$('savedList').textContent='Loading…';
   try{const data=await api('');$('savedList').replaceChildren();if(!data.islands.length)$('savedList').textContent='Your saved islands will appear here.';
-    for(const item of data.islands){const row=document.createElement('div');row.className='saved';const name=document.createElement('span');name.textContent=item.name;const detail=document.createElement('small');detail.textContent=`${item.style} · ${item.size} m`;name.append(detail);const load=document.createElement('button');load.textContent='Open';load.onclick=async()=>{try{const data=await api('/'+item.id);validate(data.world);remember();restore(data.world);activeId=data.id;revision=data.revision;dirty=false;frame();$('shelf').close();status('Saved island opened · Undo can recover your previous landscape');}catch(e){status(e.message,true);}};row.append(name,load);$('savedList').append(row);}
+    for(const item of data.islands){const row=document.createElement('div');row.className='saved';const name=document.createElement('span');name.textContent=item.name;const detail=document.createElement('small');detail.textContent=`${item.style} · ${item.size} m`;name.append(detail);const load=document.createElement('button');load.textContent='Open';load.onclick=async()=>{try{const data=await api('/'+item.id);validate(data.world);sidebar?.creation.close();remember();restore(data.world);activeId=data.id;revision=data.revision;dirty=false;frame();$('shelf').close();status('Saved island opened · Undo can recover your previous landscape');}catch(e){status(e.message,true);}};row.append(name,load);$('savedList').append(row);}
   }catch(e){$('savedList').textContent=e.message;}
 };
 $('closeShelf').onclick=()=>$('shelf').close();
@@ -416,7 +422,7 @@ if(!visitId){
   const openFurniture=sidebar.addPanel('furniture','Furniture & objects',panel);
   document.getElementById('ribbon-tab-furniture').addEventListener('click',()=>{if(!firstPerson?.active)chooseTool('orbit');});
   const css=document.createElement('style');css.textContent='.furniture-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}#workshopRibbon #ribbon-panel-furniture{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden}#ribbon-panel-furniture>div{columns:auto;height:100%;min-height:0;flex:0 0 250px;overflow-y:auto;box-sizing:border-box}#ribbon-panel-furniture>.furniture-preview{flex-basis:220px;margin:0}#ribbon-panel-furniture>.furniture-placement{flex:1 0 300px}#ribbon-panel-furniture button{margin:3px 4px 3px 0}#ribbon-panel-furniture input,#ribbon-panel-furniture select{max-width:100%}';document.head.append(css);
-  furnitureEditor=installFurnitureEditor({scene,camera,canvas:renderer.domElement,controls,panel,objects:()=>world.furniture||{},commit:(objects,message)=>{remember();world.furniture=objects;changed(message);},status,invalidate:()=>{dirtyFrame=true;renderer.shadowMap.needsUpdate=true;},ground:(x,z)=>heightAt(world,x,z),activate:()=>{chooseTool('orbit');openFurniture();},isActive:()=>tool==='orbit'});
+  furnitureEditor=installFurnitureEditor({scene,camera,canvas:renderer.domElement,controls,panel,objects:()=>world.furniture||{},commit:(objects,message)=>{remember();world.furniture=objects;changed(message);},status,invalidate:()=>{dirtyFrame=true;renderer.shadowMap.needsUpdate=true;},ground:(x,z)=>heightAt(world,x,z),activate:()=>{chooseTool('orbit');openFurniture();},isActive:()=>tool==='orbit'&&!panel.hidden});
   const library=document.createElement('div'),placement=document.createElement('div'),preview=panel.querySelector('.furniture-preview');placement.className='furniture-placement';
   const selectionLabel=panel.querySelector('[data-f="selection"]').parentElement;
   let inPlacement=false;for(const child of [...panel.children]){if(child===selectionLabel)inPlacement=true;if(child===preview)continue;(inPlacement?placement:library).append(child);}
@@ -424,7 +430,7 @@ if(!visitId){
   panel.append(library,preview,placement);
   if(new URLSearchParams(location.search).get('furniture')==='1')openFurniture();
 }
-syncInputs();rebuild();frame();render();status(dirty?'Recovered your unsaved island draft':'Ready · generate an island or start shaping this one');
+syncInputs();rebuild();frame();render();status(dirty?'Recovered your unsaved island draft':'Ready · shape this island, or choose New to start another');
 const requestedArchitecture=new URLSearchParams(location.search).get('architecture');
 if(requestedArchitecture&&[...$('buildingArchitecture').options].some(o=>o.value===requestedArchitecture)){
   $('buildingArchitecture').value=requestedArchitecture;$('buildingArchitecture').onchange();

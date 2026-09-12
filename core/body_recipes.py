@@ -55,6 +55,7 @@ DEFAULT_FACE = {key: 0.50 for key in FACE_PARAMETERS}
 IDENTITY_PARAMETERS = (
     "eye_socket_depth", "mouth_corner_shape", "forehead_slope", "under_jaw_fullness",
     "jowl_volume", "double_chin_volume", "neck_fullness", "nose_tip_roundness", "lip_taper", "lip_projection",
+    "face_neck_fullness",
     'ear_point', 'ear_sweep', 'ear_round', 'fangs', 'tusks', 'horns', 'tail',
     'character_heart', 'character_oval', 'character_square', 'character_fine', 'character_round', 'character_aquiline', 'character_age', 'body_softness', 'body_power',
     "body_frame", "stature", "body_mass", "muscularity", "proportions",

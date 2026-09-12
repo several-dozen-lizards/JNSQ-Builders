@@ -61,6 +61,19 @@
     .appearance-section-body{padding:0 .85rem .85rem}
     .appearance-section-body>details{margin:.75rem 0}
     .appearance-section-body>details>summary{cursor:pointer;padding:.35rem 0}
+    #hairSearch{width:100%;font:inherit;color:var(--ink);background:var(--deep);border:1px solid var(--line);border-radius:9px;padding:.65rem}
+    .hair-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;max-height:360px;overflow:auto;padding:2px}
+    .hair-preview-card{display:flex;flex-direction:column;gap:.35rem;align-items:stretch;margin:0;padding:.4rem;font-size:.82rem;overflow-wrap:anywhere}
+    .hair-preview-card[data-current=true]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+    .hair-preview-card small{color:var(--muted);font-weight:400}.hair-preview-card[data-current=true] small{color:var(--green)}
+    .hair-picture{display:grid;place-items:center;width:100%;aspect-ratio:1;background:#080d0a;border-radius:6px;overflow:hidden}
+    .hair-picture img{width:100%;height:100%;object-fit:contain}.hair-picture-fallback{color:var(--muted);font-weight:400;padding:.5rem}
+    .hair-preview-dialog{width:min(420px,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.1rem;box-shadow:0 20px 60px #0008}
+    .hair-preview-dialog::backdrop{background:#000a}.hair-preview-heading{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
+    .hair-preview-heading h2{flex:1;margin:0;text-transform:none;letter-spacing:0}.hair-preview-heading button{width:auto;margin:0;padding:.25rem .65rem;font-size:1.4rem}
+    .hair-preview-dialog .quiet{font-size:.85rem;margin:.8rem 0}.hair-preview-dialog>button{margin:0}
+    #hairPreviews a,.hair-preview-dialog a{color:var(--green)}
+    .hair-preview-card:focus-visible,.hair-preview-dialog button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
     .studio-controls{max-height:72vh;overflow:auto;padding-right:.5rem}
     .studio-stage{position:sticky;top:1rem;min-width:0}
     .studio-stage .preview-shell{margin:0}.studio-stage iframe{height:clamp(430px,68vh,850px)}
@@ -233,7 +246,7 @@
   </section>
   </details>
 </main>
-<script>
+<script src="/3d/designer/hand-fit.js?v=1"></script><script>
 const $=id=>document.getElementById(id);
 const ROLE_FIELDS=["hips","chest","neck","head","jaw","left_eye","right_eye","left_hand","right_hand","left_foot","right_foot"];
 const EXPRESSION_FIELDS=["blink","blink_left","blink_right","mouth_open","smile","frown","pucker","mouth_wide"];
@@ -313,6 +326,7 @@ const HUMAN_MORPH_CONTROLS=[
   ["jowl_volume","Jowls","JNSQ_Jowl_Taut","JNSQ_Jowl_Full"],
   ["double_chin_volume","Double-chin volume","JNSQ_DoubleChin_Lean","JNSQ_DoubleChin_Full"],
   ["neck_fullness","Neck fullness","JNSQ_Neck_Lean","JNSQ_Neck_Full"],
+  ["face_neck_fullness","Face & neck fullness","JNSQ_FaceNeck_Lean","JNSQ_FaceNeck_Full"],
   ["nose_tip_roundness","Nose tip roundness","JNSQ_NoseTip_Angular","JNSQ_NoseTip_Bulbous"],
   ["lip_taper","Lip corner fullness","JNSQ_LipCorners_Tapered","JNSQ_LipCorners_Full"],
   ["lip_projection","Lip projection","JNSQ_Lips_Recessed","JNSQ_Lips_Projected"],
@@ -1005,7 +1019,8 @@ function shapedAvatarGLB(buffer,identity,designName,appearance={},allowUnshaped=
     model.extensionsUsed=[...new Set([...(model.extensionsUsed||[]),'KHR_materials_clearcoat'])];
   }
   model.extras={...(model.extras||{}),jnsq_design:{name:designName,identity:{...identity},appearance:Object.fromEntries(Object.entries(appearance).filter(([key])=>!key.endsWith('_data'))),expressions:"neutral"}};
-  const encoded=new TextEncoder().encode(JSON.stringify(model)),padded=(encoded.length+3)&~3,tail=new Uint8Array(buffer,end);
+  const tail=fitAvatarHandRig(model,new Uint8Array(buffer,end),weights);
+  const encoded=new TextEncoder().encode(JSON.stringify(model)),padded=(encoded.length+3)&~3;
   const result=new Uint8Array(20+padded+tail.length),header=new DataView(result.buffer);
   header.setUint32(0,0x46546c67,true);header.setUint32(4,2,true);header.setUint32(8,result.length,true);header.setUint32(12,padded,true);header.setUint32(16,0x4e4f534a,true);
   result.fill(32,20,20+padded);result.set(encoded,20);result.set(tail,20+padded);return result;
@@ -1026,7 +1041,8 @@ $("studioExport").onclick=async()=>{
   }catch(error){studioStatus(error.message,true);}finally{$("studioExport").disabled=false;}
 };
 boot();loadCandidates();startStudio();
-</script><script src="/3d/designer/textures.js?v=11"></script><script src="/3d/designer/studio.js?v=38"></script><script src="/3d/designer/generated-skin.js?v=3"></script><script src="/3d/designer/surface-layers.js?v=9"></script><script src="/3d/designer/character-starts.js?v=2"></script></body></html>
+</script><script src="/3d/designer/textures.js?v=11"></script><script src="/3d/designer/studio.js?v=42"></script><script src="/3d/designer/generated-skin.js?v=3"></script><script src="/3d/designer/surface-layers.js?v=9"></script><script src="/3d/designer/character-starts.js?v=2"></script></body></html>
+
 
 
 

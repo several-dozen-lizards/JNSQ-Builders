@@ -1,7 +1,7 @@
 /* Product layer shared by the visible designer and its downloadable package. */
 const APPEARANCE_DEFAULT={skin_sheen:0,iris_lightness:.5,eye_style:'original',pupil_shape:'round',pupil_width:.5,pupil_height:.5,iris_size:.5,eye_accent:'#8eefff',hair_lightness:.7,hair_highlight_color:'#d9b878',hair_highlight_amount:0,hair_highlight_pattern:'fine',skin:'#ffffff',hair:'#ffffff',eyes:'#ffffff',iris:'#ffffff',iris_inner:'#ffffff',skin_texture:'',eye_texture:'404c3124d841bd39938e19692c2e54b2130d572c8c6beefd973eede94f0e1b75',eye_shading:.65,outfit:'#ffffff',outfit_top:'#ffffff',outfit_bottom:'#ffffff',hairstyle:'short01',eyebrows:'eyebrow001',beard:'none'};
 let appearanceState={...APPEARANCE_DEFAULT},comparison=null,comparing=false,libraryState=null;
-let editPast=[],editFuture=[],editLast=null,saveBusy=false;
+let editPast=[],editFuture=[],editLast=null,saveBusy=false,historyBusy=false;
 function studioCommand(command,value,extra={}){const f=$('previewFrame').contentWindow?.jnsqStudio;if(typeof f==='function')f(JSON.stringify({command,value,...extra}));}
 function readAppearance(){return {...appearanceState};}
 let appearanceRequest=0;
@@ -14,20 +14,27 @@ applyHumanMorphPreview=function(){
   const fold=readHumanMorphs().nasolabial_definition??.5;
   if(humanPreviewReady&&fold!==lastPreviewFold){lastPreviewFold=fold;appearancePreview();}
 };
-function stateNow(){return {identity:readHumanMorphs(),appearance:readAppearance()};}
+function stateNow(){return {candidate_id:activeCandidate,identity:readHumanMorphs(),appearance:readAppearance()};}
 function invalidateDownload(){if(avatarDownloadURL){URL.revokeObjectURL(avatarDownloadURL);avatarDownloadURL=null;}$('studioDownload').replaceChildren();}
 function markEdit(){studioDirty=true;invalidateDownload();studioStatus('Unsaved changes');}
-function historyButtons(){$('humanUndo').disabled=!editPast.length;$('humanRedo').disabled=!editFuture.length;}
+function historyButtons(){$('humanUndo').disabled=historyBusy||!editPast.length;$('humanRedo').disabled=historyBusy||!editFuture.length;}
 function commitEdit(){if(comparing){comparing=false;$('compareToggle').textContent='Show before';$('compareToggle').setAttribute('aria-pressed','false');applyHumanMorphPreview();appearancePreview();}const now=stateNow();if(editLast&&JSON.stringify(now)!==JSON.stringify(editLast)){editPast.push(clone(editLast));editFuture=[];markEdit();}editLast=clone(now);historyButtons();}
 const oldReadBuilder=readBuilder;
 readBuilder=function(){return {...oldReadBuilder(),appearance:readAppearance()};};
 const oldWriteBuilder=writeBuilder;
 writeBuilder=function(recipe,commit=true){appearanceState={...APPEARANCE_DEFAULT,...recipe.appearance};oldWriteBuilder(recipe,commit);paintAppearance();for(const select of document.querySelectorAll('#facePreset,#shapePreset,[data-feature-preset]'))select.value='';};
 const oldRestoreHuman=restoreHuman;
-function restoreState(value){appearanceState={...APPEARANCE_DEFAULT,...value.appearance};oldRestoreHuman(value.identity||{});paintAppearance();appearancePreview();editLast=stateNow();markEdit();historyButtons();}
+async function restoreState(value){if(value.candidate_id&&value.candidate_id!==activeCandidate){const past=editPast,future=editFuture;await openMapper(value.candidate_id,value.identity);editPast=past;editFuture=future;if(activeCandidate!==value.candidate_id)throw new Error('The previous outfit could not be reopened.');}appearanceState={...APPEARANCE_DEFAULT,...value.appearance};oldRestoreHuman(value.identity||{});paintAppearance();appearancePreview();editLast=stateNow();markEdit();historyButtons();}
 rememberHumanChange=commitEdit;
-$('humanUndo').onclick=()=>{if(editPast.length){editFuture.push(stateNow());restoreState(editPast.pop());}};
-$('humanRedo').onclick=()=>{if(editFuture.length){editPast.push(stateNow());restoreState(editFuture.pop());}};
+async function travelHistory(back){
+  if(historyBusy||!(back?editPast:editFuture).length)return;
+  const past=editPast.slice(),future=editFuture.slice();historyBusy=true;historyButtons();
+  try{const target=(back?editPast:editFuture).pop();(back?editFuture:editPast).push(stateNow());await restoreState(target);}
+  catch(error){editPast=past;editFuture=future;studioStatus(error.message,true);}
+  finally{historyBusy=false;historyButtons();}
+}
+$('humanUndo').onclick=()=>travelHistory(true);
+$('humanRedo').onclick=()=>travelHistory(false);
 $('humanReset').onclick=()=>{oldRestoreHuman({});commitEdit();};
 
 const COLOR_PALETTES={
@@ -229,32 +236,33 @@ function paintWardrobe(){
   const query=$('wardrobeSearch').value.trim().toLowerCase(),group=$('wardrobeGroup').value;
   const visible=wardrobeItems.filter(c=>(!group||(c.group||'Originals')===group)&&`${c.name} ${c.group||''}`.toLowerCase().includes(query));
   $('wardrobe').innerHTML='<option value="">Choose an outfit</option>'+visible.map(c=>`<option value="${c.candidate_id}">${esc(c.name)}</option>`).join('');
-  $('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===activeCandidate||item.asset===fittedOutfit)?.candidate_id||'';
+  $('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===activeCandidate||item.asset===fittedOutfit||(item.pieces&&fittedOutfit==='separates:'+item.top+':'+item.bottom))?.candidate_id||'';
   $('wardrobeCount').textContent=`${visible.length} of ${wardrobeItems.length} outfits. Your face, body and colors stay with you when changing outfits.`;
   $('wardrobeGallery').innerHTML=visible.map(c=>`<button type="button" data-outfit-choice="${c.candidate_id}" style="width:100%;padding:.3rem">${c.asset?`<img loading="lazy" alt="" src="/3d/designer/wardrobe-previews/${esc(c.asset)}.png" style="width:100%;aspect-ratio:1;object-fit:contain">`:''}${esc(c.name)}</button>`).join('');
   for(const button of $('wardrobeGallery').querySelectorAll('button'))button.onclick=()=>{$('wardrobe').value=button.dataset.outfitChoice;$('wardrobe').dispatchEvent(new Event('change'));};
 }
 async function loadWardrobe(){
-  const data=await json('/api/avatar-library/starters');wardrobeItems=data.starters;
+  const data=await json('/api/avatar-library/starters');wardrobeItems=data.starters.filter(item=>item.asset||item.pieces);
   $('wardrobeGroup').innerHTML='<option value="">All outfits</option>'+[...new Set(wardrobeItems.map(c=>c.group||'Originals'))].sort().map(group=>`<option>${esc(group)}</option>`).join('');
   paintWardrobe();
 }
 $('wardrobeSearch').oninput=paintWardrobe;$('wardrobeGroup').onchange=paintWardrobe;
 $('useSeparates').onclick=()=>{const entry=wardrobeItems.find(item=>item.top===$('separateTop').value&&item.bottom===$('separateBottom').value);if(!entry)return; $('wardrobeSearch').value='';$('wardrobeGroup').value='';paintWardrobe();$('wardrobe').value=entry.candidate_id;$('wardrobe').dispatchEvent(new Event('change'));};
 $('wardrobe').onchange=async()=>{
-  const id=$('wardrobe').value;if(!id||$('wardrobe').disabled)return;
-  if(!activeHumanMorphs.length||activeHumanMorphs.some(row=>row[0]==='character_heart')){studioStatus('This character keeps its fitted outfit. More outfits need fitting to this character range.');$('wardrobe').value='';return;}
-  const identity=readHumanMorphs(),outfit=wardrobeItems.find(item=>item.candidate_id===id),hair=extraHairItems.find(item=>item.id===appearanceState.hairstyle);
+  const id=$('wardrobe').value,source=activeCandidate;if(!id||$('wardrobe').disabled||historyBusy)return;
+  const outfit=wardrobeItems.find(item=>item.candidate_id===id);
   $('wardrobe').disabled=true;
   for(const button of $('wardrobeGallery').querySelectorAll('button'))button.disabled=true;
   try{
-    if(hair&&outfit){
-      studioStatus('Preparing this outfit with your selected hairstyle…');
-      const response=await fetch(hair.url);if(!response.ok)throw new Error('Hairstyle bundle unavailable');
-      const outfitKey=outfit.pieces?'separates:'+outfit.top+':'+outfit.bottom:outfit.asset;
-      await fitAccessoryBlob(await response.blob(),'hair',outfitKey);
-      if(readyAccessory?.name===hair.id&&readyAccessory.outfit===(outfit.pieces?'separates:'+outfit.top+':'+outfit.bottom:outfit.asset))await $('openAccessory').onclick();
-    }else{await openMapper(id,identity);if(activeCandidate===id)markEdit();}
+    studioStatus('Fitting '+outfit.name+' to your current character…');
+    const result=await api('/api/avatar-library/wardrobe/'+source,{outfit_id:id});
+    if(activeCandidate!==source)return;
+    const before=stateNow(),past=editPast.slice();
+    await openMapper(result.candidate_id,before.identity);
+    if(activeCandidate!==result.candidate_id)throw new Error('The fitted outfit could not be opened.');
+    appearanceState=before.appearance;paintAppearance();appearancePreview();
+    editPast=[...past,before];editFuture=[];editLast=stateNow();historyButtons();markEdit();
+    $('wardrobe').value=id;studioStatus('Wearing '+outfit.name+' · unsaved changes');
   }catch(error){studioStatus(error.message,true);}
   finally{$('wardrobe').disabled=false;for(const button of $('wardrobeGallery').querySelectorAll('button'))button.disabled=false;}
 };
@@ -278,7 +286,7 @@ function mergeHairChoices(){
   }
   $('hairstyle').value=appearanceState.hairstyle;
 }
-json('/3d/designer/extra-hair/index.json').then(data=>{extraHairItems=window.JNSQ_STANDALONE?[]:data.hair;mergeHairChoices();}).catch(error=>studioStatus('Additional hairstyles unavailable: '+error.message,true));
+Promise.all(['/3d/designer/masculine-hair/index.json','/3d/designer/extra-hair/index.json'].map(url=>json(url).catch(error=>{studioStatus('Some hairstyles are unavailable: '+error.message,true);return {hair:[]};}))).then(catalogs=>{extraHairItems=catalogs.flatMap(data=>data.hair);mergeHairChoices();});
 const hairHelp=document.createElement('p');hairHelp.className='quiet';hairHelp.setAttribute('role','status');hairHelp.textContent='All hairstyles are in this list. Additional styles fit locally on first use, then apply automatically. Cached combinations open faster.';
 $('hairstyle').parentElement.after(hairHelp);
 $('hairstyle').onchange=async()=>{
@@ -294,6 +302,90 @@ $('hairstyle').onchange=async()=>{
   }catch(error){appearanceState.hairstyle=previous;paintAppearance();hairHelp.textContent=error.message;studioStatus(error.message,true);}
   finally{$('hairstyle').disabled=false;}
 };
+
+// Inspect catalog pictures without changing the design or starting a fitting job.
+const hairPreviews=document.createElement('details');hairPreviews.id='hairPreviews';
+hairPreviews.innerHTML='<summary>Browse hair previews</summary><label>Hair collection<select id="hairCollection"><option value="">All styles</option><option value="masculine">Masculine styles</option><option value="new">New styles</option></select></label><label>Find a hairstyle<input id="hairSearch" type="search" placeholder="Try quiff, short, braid…"></label><p id="hairPreviewCount" class="quiet" role="status"></p><div id="hairGallery" class="hair-gallery" role="group" aria-label="Hairstyle previews"></div><p class="quiet">Choose a picture to inspect it, then try it on your avatar. Pictures show the original style; your colors and fit appear on the live model. Every style is available to any avatar.</p><p class="quiet"><a href="/3d/designer/masculine-hair/ASSET-CREDITS.txt" target="_blank" rel="noopener">New hairstyle credits</a> · Attribution is included in downloaded avatars.</p>';
+hairHelp.after(hairPreviews);
+const hairPreviewDialog=document.createElement('dialog');hairPreviewDialog.className='hair-preview-dialog';
+hairPreviewDialog.setAttribute('aria-labelledby','hairPreviewTitle');
+hairPreviewDialog.innerHTML='<div class="hair-preview-heading"><h2 id="hairPreviewTitle"></h2><button type="button" id="closeHairPreview" aria-label="Close hair preview">×</button></div><div id="hairPreviewPicture" class="hair-preview-picture"></div><p id="hairPreviewCredit" class="quiet" hidden></p><p id="hairPreviewNote" class="quiet"></p><button type="button" id="tryHairPreview">Try on avatar</button>';
+document.body.append(hairPreviewDialog);
+let builtInHairPictures=new Map(),inspectedHair='';
+function hairPreviewChoices(){
+  return [...new Map([...$('hairstyle').options].map(option=>{
+    const item=extraHairItems.find(item=>item.id===option.value);
+    const masculine=/^(short0[1-4]|afro01|ponytail01|cortu_short_messy_hair|cortu_shaggy_green_hair|sonntag78_junglebook_hair|rehmanpolanski_hair_bun_brown)$/.test(option.value);
+    return [option.value,{id:option.value,name:option.textContent,disabled:option.disabled,thumbnail:item?.thumbnail||builtInHairPictures.get(option.value),tags:item?.tags||(masculine?['masculine']:[]),credit:item?.credit,isNew:!!item?.credit}];
+  })).values()];
+}
+function hairPicture(item){
+  const picture=document.createElement('span');picture.className='hair-picture';
+  const fallback=document.createElement('span');fallback.className='hair-picture-fallback';
+  fallback.textContent=item.id==='none'?'No hair':'Picture unavailable';picture.append(fallback);
+  if(item.thumbnail){
+    const img=document.createElement('img');img.alt='';img.loading='lazy';img.src=item.thumbnail;
+    fallback.hidden=true;img.onerror=()=>{img.remove();fallback.hidden=false;};picture.append(img);
+  }
+  return picture;
+}
+function updateHairPreviewDialog(){
+  if(!hairPreviewDialog.open)return;
+  const item=hairPreviewChoices().find(item=>item.id===inspectedHair);
+  const current=item?.id===appearanceState.hairstyle;
+  $('tryHairPreview').disabled=!item||item.disabled||$('hairstyle').disabled||!activeCandidate||current;
+  $('tryHairPreview').textContent=current?'On your avatar':'Try on avatar';
+  $('hairPreviewNote').textContent=!item||item.disabled?'This style is unavailable for the current model.':
+    !activeCandidate?'Choose a starting model to try this style.':
+    $('hairstyle').disabled?'An accessory is being prepared. You can keep browsing while it finishes.':
+    current?'This is your current hairstyle.':item.id==='none'?'Try your avatar without hair.':
+    availableHairstyles.has(item.id)?'Ready to try with your current shape and hair colors.':
+    'This style fits locally when you try it for the first time. Your shape and colors carry over.';
+}
+function paintHairGallery(){
+  const query=$('hairSearch').value.trim().toLowerCase(),collection=$('hairCollection').value,all=hairPreviewChoices();
+  const items=all.filter(item=>(!collection||(collection==='new'?item.isNew:item.tags.includes(collection)))&&`${item.name} ${item.tags.join(' ')}`.toLowerCase().includes(query));
+  $('hairPreviewCount').textContent=items.length?`${items.length} of ${all.length} hairstyles`:'No hairstyles match. Try a different name.';
+  $('hairGallery').replaceChildren(...items.map(item=>{
+    const button=document.createElement('button');button.type='button';button.className='hair-preview-card';
+    button.setAttribute('aria-label','Preview '+item.name);button.dataset.hairPreview=item.id;
+    const current=item.id===appearanceState.hairstyle;button.dataset.current=String(current);
+    const name=document.createElement('span');name.textContent=item.name;
+    const status=document.createElement('small');status.textContent=current?'On your avatar':item.disabled?'Unavailable on this model':'Preview';
+    button.append(hairPicture(item),name,status);
+    button.onclick=()=>{
+      inspectedHair=item.id;$('hairPreviewTitle').textContent=item.name;
+      $('hairPreviewPicture').replaceChildren(hairPicture(item));
+      const credit=$('hairPreviewCredit');credit.replaceChildren();credit.hidden=!item.credit;
+      if(item.credit){
+        const source=document.createElement('a');source.href=item.credit.source;source.target='_blank';source.rel='noopener';source.textContent=item.credit.author;
+        const license=document.createElement('a');license.href=item.credit.license_url;license.target='_blank';license.rel='noopener';license.textContent=item.credit.license;
+        credit.append('By ',source,' · ',license,'. Keep the included attribution when sharing your avatar.');
+      }
+      hairPreviewDialog.showModal();updateHairPreviewDialog();
+    };
+    return button;
+  }));
+  updateHairPreviewDialog();
+}
+$('hairSearch').oninput=paintHairGallery;
+$('hairCollection').onchange=paintHairGallery;
+$('closeHairPreview').onclick=()=>hairPreviewDialog.close();
+$('tryHairPreview').onclick=()=>{
+  updateHairPreviewDialog();if($('tryHairPreview').disabled)return;
+  $('hairstyle').value=inspectedHair;hairPreviewDialog.close();
+  $('hairstyle').dispatchEvent(new Event('change',{bubbles:true}));
+};
+const paintAppearanceWithHairPreviews=paintAppearance;
+paintAppearance=function(){paintAppearanceWithHairPreviews();paintHairGallery();};
+// Availability follows model loads and fitting state, without polling.
+new MutationObserver(paintHairGallery).observe($('hairstyle'),{childList:true,subtree:true,attributes:true,attributeFilter:['disabled']});
+$('hairstyle').addEventListener('change',paintHairGallery);
+json('/3d/designer/hair-previews/index.json').then(data=>{
+  builtInHairPictures=new Map(data.hair.map(item=>[item.id,item.thumbnail]));paintHairGallery();
+}).catch(()=>paintHairGallery());
+paintHairGallery();
+
 async function fitAccessoryBlob(blob,category,outfit=fittedOutfit){
   if(accessoryBusy)throw new Error('A hairstyle or accessory is already being fitted. Let it finish before choosing another.');
   if(category==='hair'&&!outfit)throw new Error('Choose an outfit from the catalog before fitting another hairstyle.');
@@ -350,7 +442,7 @@ openMapper=async function(id,identity=null){
   const assets=detail.candidate.compatibility.fitted_assets||[];
   fittedOutfit=assets.find(asset=>asset.category==='clothes')?.name||'';
   const readyOutfit=readyAccessory?.candidate_id===id?readyAccessory.outfit:'';
-  const separates=wardrobeItems.find(item=>item.pieces&&(item.candidate_id===id||readyOutfit==='separates:'+item.top+':'+item.bottom));
+  const separates=wardrobeItems.find(item=>item.pieces&&(item.candidate_id===id||fittedOutfit==='separates:'+item.top+':'+item.bottom||readyOutfit==='separates:'+item.top+':'+item.bottom));
   $('separateColors').disabled=!separates;
   if(separates){fittedOutfit='separates:'+separates.top+':'+separates.bottom;$('separateTop').value=separates.top;$('separateBottom').value=separates.bottom;}
   const labels={short01:'Short — classic',short02:'Short — cut 2',short03:'Short — cut 3',short04:'Short — cut 4',bob01:'Bob — classic',bob02:'Bob — cut 2',afro01:'Afro',braid01:'Braid',long01:'Long',ponytail01:'Ponytail',wdg_scruffy_beard:'Scruffy beard',rehmanpolanski_moustache_viking:'Viking moustache',rehmanpolanski_beard_viking:'Viking beard',grinsegold_beard_sigmund_wip:'Sigmund beard',culturalibre_faun_beard:'Faun beard'};
@@ -363,7 +455,7 @@ openMapper=async function(id,identity=null){
       const missing=document.createElement('option');missing.value=appearanceState[key];missing.textContent=appearanceState[key]+' (not in this model)';missing.disabled=true;$(key).append(missing);
     }
   }
-  mergeHairChoices();paintAppearance();$('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===id||item.asset===fittedOutfit)?.candidate_id||'';
+  mergeHairChoices();paintAppearance();$('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===id||item.asset===fittedOutfit||(item.pieces&&fittedOutfit==='separates:'+item.top+':'+item.bottom))?.candidate_id||'';
   const supported=new Set(activeHumanMorphs.map(([key])=>key));
   $('shapePreset').disabled=!activeHumanMorphs.length;
   $('humanReset').disabled=!activeHumanMorphs.length;
@@ -506,7 +598,7 @@ const faceSections=[
  {id:'nose',title:'Nose',preset:'Nose',keys:['nose_size','nose_vertical','nose_projection','lower_nose_projection','nose_bridge_width','nose_tip_width','nose_tip_roundness','nose_curve','nose_tip_angle','nostril_width','nostril_flare','nostril_angle','septum_angle']},
  {id:'mouth',title:'Lips & mouth',preset:'Lips',keys:['mouth_corner_shape','mouth_position','mouth_width','philtrum_depth','lip_height','upper_lip_height','lower_lip_height','upper_lip_volume','lower_lip_volume','cupids_bow','lip_taper','lip_projection']},
  {id:'cheeks',title:'Cheeks, folds & temples',keys:['cheekbones','cheekbone_height','cheek_volume','nasolabial_definition','midface_projection','temple_definition']},
- {id:'jaw',title:'Jaw, chin & neck',preset:'Jaw',keys:['jowl_volume','double_chin_volume','neck_fullness','under_jaw_fullness','jaw_width','jaw_corner','jaw_definition','jaw_angle','jaw_projection','chin_height','chin_projection']},
+ {id:'jaw',title:'Jaw, chin & neck',preset:'Jaw',keys:['face_neck_fullness','jowl_volume','double_chin_volume','neck_fullness','under_jaw_fullness','jaw_width','jaw_corner','jaw_definition','jaw_angle','jaw_projection','chin_height','chin_projection']},
  {id:'contour',title:'Face contour & ears',keys:['forehead_slope','facial_definition','ear_size']}
 ];
 const faceSectionOpen=new Map();
@@ -556,5 +648,6 @@ const faceSectionStyle=document.createElement('style');
 faceSectionStyle.textContent=`#humanMorphFields .face-feature-section{border:1px solid #45614f;border-radius:12px;padding:0;background:#14271e;margin:0}#humanMorphFields .face-feature-section>summary{padding:.85rem 1rem;font-weight:650;cursor:pointer}#humanMorphFields .face-feature-fields{display:grid;gap:.8rem;padding:0 .8rem .8rem}#humanMorphFields .face-feature-section[hidden]{display:none!important}`;
 document.head.append(faceSectionStyle);
 arrangeFaceSections();
+
 
 

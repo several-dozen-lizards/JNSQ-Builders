@@ -1,11 +1,12 @@
 import * as THREE from './vendor/three.module.js';
+import {avatarRig} from './avatar-rig.mjs';
 
 // Resolve authored anatomical forward, then mount it on the room's -Z heading.
 export function alignAvatarFacing(model){
   model.updateWorldMatrix(true,true);
   const bones=[];model.traverse(o=>{if(o.isBone)bones.push(o);});
   const name=b=>b.name.toLowerCase().replace(/_([lr])$/,'.$1');
-  const head=bones.find(b=>name(b)==='head');
+  const head=avatarRig(model).slots.get('Head');
   const eyes=bones.filter(b=>['eyel','eyer','eye.l','eye.r','left_eye','right_eye'].includes(name(b)));
   const feet=bones.filter(b=>['leftfoot','rightfoot','foot.l','foot.r'].includes(name(b)));
   const toes=bones.filter(b=>['lefttoes','righttoes'].includes(name(b)));

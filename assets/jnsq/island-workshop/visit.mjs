@@ -24,7 +24,7 @@ import {renderRecovery,graphicsRecoveryPanel} from './render-recovery.mjs';
 const $=id=>document.getElementById(id);
 const status=(message,error=false)=>{$('status').textContent=message;$('status').classList.toggle('error',error);};
 const id=new URLSearchParams(location.search).get('visit');
-async function stage(message){status(message);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));}
+async function stage(message){status(message);$('loading')?.querySelector('p')?.replaceChildren(message);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));}
 async function start(){
   if(!/^[a-f0-9]{32}$/.test(id||''))throw Error('This published location link is invalid.');
   const response=await fetch('/api/world-destinations/'+encodeURIComponent(id));
@@ -142,9 +142,18 @@ let viewWidth=0,viewHeight=0;
 const resize=()=>{const rect=$('stage').getBoundingClientRect(),width=Math.floor(rect.width),height=Math.floor(rect.height);if(width<1||height<1||(width===viewWidth&&height===viewHeight))return;viewWidth=width;viewHeight=height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();dirtyFrame=true;};
 new ResizeObserver(resize).observe($('stage'));resize();
 let previous=performance.now();
-function render(now){if(!drawing)return;requestAnimationFrame(render);const delta=Math.min((now-previous)/1000,.1);previous=now;if(document.hidden)return;graphics.frame(()=>{waterTime+=delta;const light=daylightControl.tick(delta);const rig=updateLighting(light);landscapeFeatures.update(waterTime);atmosphere.update(camera,waterTime,light,state);skyIllumination.update(light,daylightControl.state,rig);rig.applySky();renderer.render(scene,camera);dirtyFrame=false;});}
-// The visitor owns live membership and movement; no editable draft is read here.
-installVisitor({scene,camera,controls,canvas:renderer.domElement,world,id,arrival:published.arrival,status,invalidate:()=>{dirtyFrame=true;renderer.shadowMap.needsUpdate=true;},applyEnvironment:value=>Object.assign(state,value),onReady:()=>{$('loading').remove();requestAnimationFrame(render);},onError:showError}).catch(showError);
+function render(now){if(!drawing)return;requestAnimationFrame(render);const delta=Math.min((now-previous)/1000,.1);previous=now;if(document.hidden)return;const drawn=graphics.frame(()=>{waterTime+=delta;const light=daylightControl.tick(delta);const rig=updateLighting(light);landscapeFeatures.update(waterTime);atmosphere.update(camera,waterTime,light,state);skyIllumination.update(light,daylightControl.state,rig);rig.applySky();renderer.render(scene,camera);dirtyFrame=false;});if(drawn&&$('loading')){$('loading').remove();status('You are in '+world.name+'.');}}
+async function prepareGraphics(){
+  await stage('Preparing the sky and landscape graphics…');
+  const light=daylightControl.tick(0);updateLighting(light);atmosphere.update(camera,waterTime,light,state);
+  // Wait on KHR_parallel_shader_compile before the first draw can make a
+  // synchronous driver query. The room and loading UI remain responsive.
+  await renderer.compileAsync(scene,camera);
+  if(!drawing)return;
+  previous=performance.now();requestAnimationFrame(render);
 }
-function showError(error){$('loading-title')?.replaceChildren('Unable to enter this location');status(error.message||String(error),true);}
+// The visitor owns live membership and movement; no editable draft is read here.
+installVisitor({scene,camera,controls,canvas:renderer.domElement,world,id,arrival:published.arrival,status,invalidate:(shadows=false)=>{dirtyFrame=true;if(shadows)renderer.shadowMap.needsUpdate=true;},applyEnvironment:value=>Object.assign(state,value),onReady:()=>{prepareGraphics().catch(showError);},onError:showError}).catch(showError);
+}
+function showError(error){const message=error.message||String(error);$('loading-title')?.replaceChildren('Unable to enter this location');$('loading')?.querySelector('p')?.replaceChildren(message);status(message,true);}
 start().catch(showError);

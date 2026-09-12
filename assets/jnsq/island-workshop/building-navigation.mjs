@@ -5,7 +5,7 @@ export function installBuildingNavigation(aside,panel,activate){
   const title=document.createElement('h2');title.textContent='Building editor';inspector.append(title);
   const selected=document.createElement('div');selected.className='building-selection';
   for(const id of ['buildingList','buildingCutaway'])selected.append(document.querySelector(`label[for="${id}"]`),$(id));
-  inspector.append(selected,building);aside.append(inspector);
+  inspector.append(selected,building);panel.append(inspector);
   $('drawPartition').after($('partitionFeedback'));
   const groups=new Map(),nav=document.createElement('nav');nav.className='building-navigation';nav.setAttribute('aria-label','Building tasks');
   const general=document.createElement('div');general.id='buildingGeneral';
@@ -17,13 +17,13 @@ export function installBuildingNavigation(aside,panel,activate){
   for(const id of ['buildingShape','drawBuilding']){const label=document.querySelector(`label[for="${id}"]`);if(label)footprintControls.append(label);footprintControls.append($(id));}
   general.prepend(footprintControls);
   const pavilion=$('buildingEnclosure').parentElement,optional=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Open pavilion / columns';pavilion.before(optional);optional.append(summary,pavilion);
+  candidates.splice(1,0,['pavilion','Column buildings','Use columns instead of walls',general]);
   let active='general';
-  function show(key){if(!groups.has(key))key='general';active=key;for(const [id,{node,button}] of groups){node.hidden=id!==key;if(node.tagName==='DETAILS')node.open=true;button.setAttribute('aria-pressed',String(id===key));}title.textContent=groups.get(key).label;aside.scrollTop=0;}
+  function show(key){if(!groups.has(key))key='general';active=key;const selectedNode=groups.get(key).node;for(const [id,{node,button}] of groups){node.hidden=node!==selectedNode;if(node.tagName==='DETAILS')node.open=true;button.setAttribute('aria-pressed',String(id===key));}if(key==='pavilion')optional.open=true;title.textContent=groups.get(key).label;panel.scrollTop=0;}
   for(const [key,label,hint,node] of candidates){if(!node)continue;const button=document.createElement('button');button.type='button';button.innerHTML=`<strong>${label}</strong><span>${hint}</span>`;button.onclick=()=>{window.dispatchEvent(new Event('island-building-task'));show(key);};nav.append(button);groups.set(key,{node,button,label});}
   panel.append(nav);
-  const hint=document.createElement('p');hint.textContent='Choose a task above. Edit the selected building in the panel on the left. Interior view hides upper floors and the roof.';panel.append(hint);
-  const brushNodes=[...aside.children].filter(n=>n!==inspector);
-  function setActive(enabled){inspector.hidden=!enabled;for(const node of brushNodes)node.hidden=enabled;aside.parentElement.classList.toggle('editing-buildings',enabled);aside.setAttribute('aria-label',enabled?'Building editor':'Brush tools and controls');}
+  const hint=document.createElement('p');hint.textContent='Choose a task above, then edit the selected building below. Interior view hides upper floors and the roof.';panel.append(hint,inspector);
+  function setActive(enabled){inspector.hidden=!enabled;aside.parentElement.classList.toggle('editing-buildings',enabled);}
   document.addEventListener('click',event=>{const id=event.target.closest('button')?.id;if(['interiorWallControls','drawPartition'].includes(id)){activate('buildings');show('interiors');}else if(['buildHouse','drawBuilding','houseSettings'].includes(id))show('general');},true);
   $('buildingCutaway').addEventListener('change',()=>{if($('buildingCutaway').value!=='all')show('interiors');});
   const style=document.createElement('style');style.textContent=`

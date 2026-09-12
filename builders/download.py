@@ -7,7 +7,7 @@ import shutil
 import urllib.request
 import zipfile
 
-BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.0-preview/'
+BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.1-preview/'
 
 
 def digest(path):
@@ -30,15 +30,18 @@ def main():
         raise RuntimeError('Please free enough disk space for the ZIPs plus 28 GB extracted, then retry.')
     for item in manifest['archives']:
         name=item['name']
-        if not re.fullmatch(r'JNSQ-Builders-0\.1\.0-[a-z]+-\d+\.zip',name):
+        if not re.fullmatch(r'JNSQ-Builders-0\.1\.\d+-[a-z]+-\d+\.zip',name):
             raise ValueError('Unexpected archive name')
+        url=item.get('url',BASE+name)
+        if not re.fullmatch(r'https://github\.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0\.1\.\d+-preview/'+re.escape(name),url):
+            raise ValueError('Unexpected asset source')
         target=cache/name
         if target.exists() and target.stat().st_size==item['bytes'] and digest(target)==item['sha256']:
             print('Already verified: '+name,flush=True)
         else:
             print('Downloading '+name,flush=True)
             partial=target.with_suffix('.partial')
-            with urllib.request.urlopen(BASE+name,timeout=120) as response,partial.open('wb') as out:
+            with urllib.request.urlopen(url,timeout=120) as response,partial.open('wb') as out:
                 shutil.copyfileobj(response,out,length=4*1024*1024)
             if partial.stat().st_size!=item['bytes'] or digest(partial)!=item['sha256']:
                 raise RuntimeError('Download verification failed: '+name+'. Please rerun.')

@@ -1,0 +1,75 @@
+{
+  "source": "https://static.makehumancommunity.org/assets/assetpacks/hair02.html",
+  "sha256": "c681e5efd37df4007a52253a8d071aedbfe3b614f199d8dae4ae76d5bd7d95c9",
+  "hair": [
+    {
+      "id": "elvs_maxwell_hair",
+      "name": "Swept-back quiff — Maxwell",
+      "tags": [
+        "masculine",
+        "short",
+        "quiff",
+        "spiked"
+      ],
+      "credit": {
+        "asset_id": "elvs_maxwell_hair",
+        "title": "Swept-back quiff — Maxwell",
+        "original_title": "elvs_maxwell_hair",
+        "author": "Elvaerwyn",
+        "source": "https://www.makehumancommunity.org/node/1639",
+        "license": "CC-BY",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "changes": "Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified."
+      },
+      "url": "/3d/designer/masculine-hair/elvs_maxwell_hair.zip",
+      "thumbnail": "/3d/designer/masculine-hair/elvs_maxwell_hair.png",
+      "bytes": 683395
+    },
+    {
+      "id": "elvs_grump_hair",
+      "name": "Side-part volume — Grump",
+      "tags": [
+        "masculine",
+        "short",
+        "side part",
+        "comb over"
+      ],
+      "credit": {
+        "asset_id": "elvs_grump_hair",
+        "title": "Side-part volume — Grump",
+        "original_title": "elvs_grump_hair",
+        "author": "Elvaerwyn",
+        "source": "https://www.makehumancommunity.org/node/2796",
+        "license": "CC-BY",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "changes": "Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified."
+      },
+      "url": "/3d/designer/masculine-hair/elvs_grump_hair.zip",
+      "thumbnail": "/3d/designer/masculine-hair/elvs_grump_hair.png",
+      "bytes": 3866109
+    },
+    {
+      "id": "elvs_braided_rows",
+      "name": "Cornrows with beads",
+      "tags": [
+        "masculine",
+        "braids",
+        "cornrows",
+        "beads"
+      ],
+      "credit": {
+        "asset_id": "elvs_braided_rows",
+        "title": "Cornrows with beads",
+        "original_title": "elvs_braided_rows",
+        "author": "Elvaerwyn",
+        "source": "https://www.makehumancommunity.org/node/1659",
+        "license": "CC-BY",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "changes": "Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified."
+      },
+      "url": "/3d/designer/masculine-hair/elvs_braided_rows.zip",
+      "thumbnail": "/3d/designer/masculine-hair/elvs_braided_rows.png",
+      "bytes": 3858834
+    }
+  ]
+}

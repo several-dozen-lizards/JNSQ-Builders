@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "standalone": true,
   "asset_review": "maintainer-attested; see ASSET_REVIEW.json"
 }

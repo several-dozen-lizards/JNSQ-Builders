@@ -1,46 +1,116 @@
 import * as THREE from './vendor/three.module.js';
+import {avatarRig} from './avatar-rig.mjs';
 
-// Same measured joint-frame transfer as studio_motion.gd. The clip supplies
-// articulated walking; contact correction below seats feet on actual treads.
-export function createGait(model,root,clip,ground){
-  const bones=[];model.traverse(o=>{if(o.isBone)bones.push(o);});
-  const canonical=bone=>bone.name.replace(/_([LR])$/,'.$1');
-  const names=new Map(bones.map(b=>[canonical(b),b]));
-  const mapping={root:'Hips',spine03:'Spine',spine02:'Chest',spine01:'UpperChest',neck01:'Neck',head:'Head'};
-  for(const side of ['L','R'])for(const [a,b] of [['clavicle','Shoulder'],['upperarm01','UpperArm'],['lowerarm01','LowerArm'],['wrist','Hand'],['upperleg01','UpperLeg'],['lowerleg01','LowerLeg'],['foot','Foot'],['toe1-1','Toes']])mapping[a+'.'+side]=(side==='L'?'Left':'Right')+b;
-  root.updateMatrixWorld(true);
-  const q=()=>new THREE.Quaternion(),v=()=>new THREE.Vector3(),rootInverse=model.getWorldQuaternion(q()).invert(),pairs=[];
-  for(const bone of bones){
-    const name=canonical(bone);
-    const index=clip.bones.findIndex(s=>s.name===(mapping[name]||name));if(index<0)continue;
-    const source=clip.bones[index],rest=bone.getWorldQuaternion(q()).premultiply(rootInverse),alignment=q();
-    const nextName=name.replace('upperarm01','lowerarm01').replace('lowerarm01','wrist');
-    let next=names.get(name.startsWith('upperarm01')?name.replace('upperarm01','lowerarm01'):nextName);
-    if(name.startsWith('upperleg01'))next=names.get(name.replace('upperleg01','lowerleg01'));
-    if(name.startsWith('lowerleg01'))next=names.get(name.replace('lowerleg01','foot'));
-    if(next&&source.direction){const direction=next.getWorldPosition(v()).sub(bone.getWorldPosition(v())).normalize().applyQuaternion(rootInverse);alignment.setFromUnitVectors(direction,v().fromArray(source.direction).normalize());}
-    pairs.push({bone,index,rest,alignment,inverse:q().fromArray(source.rest).invert()});
+const q=()=>new THREE.Quaternion(),v=()=>new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
+const arm=role=>/Shoulder|UpperArm|LowerArm|Hand/.test(role);
+const support=role=>/Hips|Leg|Foot|Toes/.test(role);
+
+function meanRotation(clip,index){
+  const anchor=q().fromArray(clip.frames[0][index]),sum=new THREE.Vector4();
+  for(const frame of clip.frames){const r=q().fromArray(frame[index]),sign=anchor.dot(r)<0?-1:1;sum.add(new THREE.Vector4(r.x,r.y,r.z,r.w).multiplyScalar(sign));}
+  return new THREE.Quaternion(sum.x,sum.y,sum.z,sum.w).normalize();
+}
+function palm(points,prefix){
+  const hand=points.get(prefix+'Hand'),middle=points.get(prefix+'MiddleProximal'),index=points.get(prefix+'IndexProximal'),little=points.get(prefix+'LittleProximal');
+  if(!hand||!middle||!index||!little)return null;
+  const y=middle.clone().sub(hand).normalize(),z=index.clone().sub(little).cross(y).normalize();
+  if(z.lengthSq()<1e-8)return null;
+  return q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(y.clone().cross(z).normalize(),y,z));
+}
+function limb(direction,normal){
+  const y=direction.clone().normalize(),z=normal.clone().addScaledVector(y,-normal.dot(y)).normalize();
+  return q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(y.clone().cross(z).normalize(),y,z));
+}
+function forward(points){
+  const left=points.get('LeftUpperArm'),right=points.get('RightUpperArm');
+  if(!left||!right)return new THREE.Vector3(0,0,1);
+  const lateral=left.clone().sub(right);lateral.y=0;
+  return lateral.normalize().cross(up).normalize();
+}
+function sample(clip,index,phase){
+  const cursor=((phase%1)+1)%1*clip.frames.length,first=Math.floor(cursor),second=(first+1)%clip.frames.length;
+  return q().fromArray(clip.frames[first][index]).slerp(q().fromArray(clip.frames[second][index]),cursor-first).normalize();
+}
+
+// Match the room's native joint-frame transfer, using measured limb and palm
+// directions. Body translation remains entirely owned by the room snapshot.
+export function createGait(model,root,clip,ground,idleClip=null){
+  const {bones,slots}=avatarRig(model),roles=new Map([...slots].map(([role,bone])=>[bone,role]));
+  model.updateWorldMatrix(true,true);
+  const inverse=model.getWorldQuaternion(q()).invert(),points=new Map(),rests=new Map();
+  const origin=model.getWorldPosition(v());
+  for(const [role,bone] of slots){
+    points.set(role,bone.getWorldPosition(v()).sub(origin).applyQuaternion(inverse));
+    rests.set(role,bone.getWorldQuaternion(q()).premultiply(inverse));
   }
+  const hasLegs=slots.has('LeftUpperLeg')&&slots.has('RightUpperLeg');
+  function bind(source){
+    const sourcePoints=new Map(source.bones.map(b=>[b.name,v().fromArray(b.position)]));
+    const frame=q().setFromUnitVectors(forward(sourcePoints),forward(points)),unframe=frame.clone().invert();
+    const targetPoints=new Map([...points].map(([role,p])=>[role,p.clone().applyQuaternion(unframe)]));
+    return new Map(bones.flatMap(bone=>{
+      const role=roles.get(bone),index=source.bones.findIndex(b=>b.name===role);
+      // Palm/finger anchors calibrate roll but retain their authored local pose.
+      // A tail-bearing resident's pelvis/support chain also remains authored.
+      if(index<0||/Proximal$/.test(role)||(!hasLegs&&support(role)))return [];
+      const rest=rests.get(role).clone().premultiply(unframe),record=source.bones[index];
+      let alignment=q(),next='';
+      for(const [start,end] of [['UpperArm','LowerArm'],['LowerArm','Hand'],['UpperLeg','LowerLeg'],['LowerLeg','Foot']])
+        if(role.endsWith(start))next=role.replace(start,end);
+      const direction=next&&targetPoints.has(next)?targetPoints.get(next).clone().sub(targetPoints.get(role)).normalize():null;
+      if(direction)alignment.setFromUnitVectors(direction,v().fromArray(record.direction).normalize());
+      if(/UpperArm|LowerArm|Hand/.test(role)){
+        const prefix=role.startsWith('Left')?'Left':'Right',tp=palm(targetPoints,prefix),sp=palm(sourcePoints,prefix);
+        if(tp&&sp){
+          if(direction){
+            const normal=new THREE.Vector3(0,0,1);
+            alignment=limb(v().fromArray(record.direction),normal.clone().applyQuaternion(sp)).multiply(limb(direction,normal.applyQuaternion(tp)).invert());
+          }else alignment=sp.multiply(tp.invert());
+        }
+      }
+      return [[bone,{role,index,frame,rest,alignment,inverse:q().fromArray(record.rest).invert(),mean:meanRotation(source,index)}]];
+    }));
+  }
+  const walkPairs=bind(clip),idlePairs=idleClip?bind(idleClip):walkPairs;
   const legs=[];
-  for(const side of ['L','R']){const hip=names.get('upperleg01.'+side),knee=names.get('lowerleg01.'+side),foot=names.get('foot.'+side);if(!hip||!knee||!foot)continue;
-    const p=foot.getWorldPosition(v());legs.push({hip,knee,foot,ankle:Math.max(.04,p.y-root.getWorldPosition(v()).y)});
+  for(const side of ['Left','Right']){
+    const hip=slots.get(side+'UpperLeg'),knee=slots.get(side+'LowerLeg'),foot=slots.get(side+'Foot');
+    if(hip&&knee&&foot)legs.push({hip,knee,foot,ankle:foot.getWorldPosition(v()).y-root.getWorldPosition(v()).y});
   }
-  const hips=clip.hips,travel=hips?Math.max(.4,v().fromArray(hips.at(-1)).sub(v().fromArray(hips[0])).length()):1.1;
-  let distance=0,previous=root.position.clone();
-  return {update(moving){
-    distance+=root.position.distanceTo(previous);previous.copy(root.position);
-    const cursor=(distance/travel%1)*clip.frames.length,first=Math.floor(cursor),second=(first+1)%clip.frames.length;
+  const travel=clip.hips?v().fromArray(clip.hips.at(-1)).sub(v().fromArray(clip.hips[0])).length():0;
+  let distance=0,time=0,weight=0,previous=root.position.clone();
+  function desired(pair,source,phase,standing){
+    if(standing&&support(pair.role))return rests.get(pair.role).clone();
+    const rotation=source?sample(source,pair.index,phase):pair.mean.clone();
+    // Keep the authored upright torso baseline; transfer the clip's variation.
+    // Arms carry the full lowered stance, independently of torso amplitude.
+    const reference=!arm(pair.role)&&!support(pair.role)?pair.mean.clone().invert():pair.inverse;
+    const alignment=!arm(pair.role)&&!support(pair.role)?q():pair.alignment;
+    return pair.frame.clone().multiply(rotation).multiply(reference).multiply(alignment).multiply(pair.rest).normalize();
+  }
+  return {mappedBones:walkPairs.size,roles:[...walkPairs.values()].map(p=>p.role),update(moving,delta=0){
+    delta=Number.isFinite(delta)?Math.max(0,delta):0;time+=delta;
+    // Arrival/teleport displacement cannot advance an unrequested stride.
+    if(moving)distance+=Math.hypot(root.position.x-previous.x,root.position.z-previous.z);
+    previous.copy(root.position);
+    weight+=(Number(!!moving)-weight)*(1-Math.exp(-delta/(clip.duration/4)));
+    const walkPhase=travel>1e-6?distance/travel:time/clip.duration;
     const rootQ=model.getWorldQuaternion(q());
-    for(const p of pairs){const rotation=q().fromArray(clip.frames[first][p.index]).slerp(q().fromArray(clip.frames[second][p.index]),cursor-first);
-      const desired=rootQ.clone().multiply(rotation).multiply(p.inverse).multiply(p.alignment).multiply(p.rest);
-      p.bone.quaternion.copy(p.bone.parent.getWorldQuaternion(q()).invert().multiply(desired));p.bone.updateWorldMatrix(false,true);
+    for(const [bone,pair] of walkPairs){
+      const idle=idlePairs.get(bone),standing=idle?desired(idle,idleClip,idleClip?time/idleClip.duration:0,true):rests.get(pair.role).clone();
+      const rotation=standing.slerp(desired(pair,clip,walkPhase,false),weight).premultiply(rootQ);
+      bone.quaternion.copy(bone.parent.getWorldQuaternion(q()).invert().multiply(rotation));bone.updateWorldMatrix(false,true);
     }
     for(const leg of legs){
-      const current=leg.foot.getWorldPosition(v()),height=ground(current.x,current.z,root.position.y);
-      if(height===null)continue;
-      const target=current.clone();target.y=moving?Math.max(current.y,height+leg.ankle):height+leg.ankle;
+      const current=leg.foot.getWorldPosition(v()),height=ground?.(current.x,current.z,root.position.y);
+      if(height==null)continue;
+      const target=current.clone(),footRotation=leg.foot.getWorldQuaternion(q());
+      target.y=Math.max(current.y,height+leg.ankle)*weight+(height+leg.ankle)*(1-weight);
       solveLeg(leg.hip,leg.knee,leg.foot,target,rootQ);
+      leg.foot.quaternion.copy(leg.foot.parent.getWorldQuaternion(q()).invert().multiply(footRotation));
+      leg.foot.updateWorldMatrix(false,true);
     }
+    return walkPairs.size>0;
   }};
 }
 

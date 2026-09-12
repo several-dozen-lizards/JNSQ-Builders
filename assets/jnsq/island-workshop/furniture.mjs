@@ -226,6 +226,6 @@ export function installFurnitureEditor({scene,camera,canvas,controls,panel,objec
     if($('remove').disabled){status('This object is protected from removal.',true);return;}
     moving=false;$('move').textContent='Place in view';$('remove').click();
   });
-  return {refresh,layer,select,updateBox};
+  return {refresh,layer,select,updateBox,get primaryActionActive(){return moving||!panel.hidden;}};
 }
 

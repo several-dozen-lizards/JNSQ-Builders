@@ -62,9 +62,10 @@ def clothing_baked(path,mtime,color,top,bottom):
     for name,raw in source_textures(path,mtime,'','clothes').items():
         chosen=top if name.lower()=='jnsq.top' and top!='#ffffff' else bottom if name.lower()=='jnsq.bottom' and bottom!='#ffffff' else color
         image=Image.open(io.BytesIO(raw)).convert('RGBA');pixels=np.array(image)
-        rgb=pixels[:,:,:3]/255;lum=rgb.max(axis=2)
-        tint=np.array([int(chosen[i:i+2],16)/255 for i in (1,3,5)])
-        pixels[:,:,:3]=np.rint((.6+.4*lum)[:,:,None]*tint*255).astype('uint8')
+        if chosen!='#ffffff':
+            rgb=pixels[:,:,:3]/255;lum=rgb.max(axis=2)
+            tint=np.array([int(chosen[i:i+2],16)/255 for i in (1,3,5)])
+            pixels[:,:,:3]=np.rint((.6+.4*lum)[:,:,None]*tint*255).astype('uint8')
         out=io.BytesIO();Image.fromarray(pixels).save(out,format='PNG')
         result[name]='data:image/png;base64,'+base64.b64encode(out.getvalue()).decode()
     return result

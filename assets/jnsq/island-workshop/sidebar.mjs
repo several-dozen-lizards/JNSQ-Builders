@@ -1,6 +1,7 @@
 // Move existing controls rather than recreating them: values, event handlers,
 // editor references, and unsaved world state all remain intact.
 import {installRibbon} from './ribbon.mjs';
+import {installCreationRibbon} from './creation-ribbon.mjs';
 export function installSidebar(){
   const aside=document.querySelector('aside'),$=id=>document.getElementById(id);
   aside.setAttribute('aria-label','World builder settings');
@@ -13,6 +14,7 @@ export function installSidebar(){
   }
   function wrap(node,key,title,open=false){const marker=document.createTextNode('');node.before(marker);const box=fold(key,title,[node],open);marker.replaceWith(box);return box;}
   const land=$('name').closest('section'),scenery=$('prop').closest('section'),shape=$('radius').closest('section');
+  const creation=installCreationRibbon(land);
   const rock=$('rockAdd').closest('section'),building=$('build-home'),columns=$('columnStyle').closest('section'),sky=$('skyHour').closest('section');
   const visit=[...aside.children].find(n=>n.tagName==='SECTION'&&n!==land&&n!==scenery&&n!==shape&&n!==rock&&n!==building&&n!==columns&&n!==sky);
   const routes=$('routeKind').parentElement,steps=$('stepFinish').parentElement;
@@ -21,16 +23,17 @@ export function installSidebar(){
   // scenery category, with its size control explicitly grouped with placement.
   const regrowth=document.createElement('div'),placement=document.createElement('div');
   const label=id=>document.querySelector(`label[for="${id}"]`);
+  regrowth.append($('treeHeightControls'));
   for(const id of ['sceneryMix','density'])regrowth.append(label(id),$(id));
   regrowth.querySelector('#sceneryMix').after($('rockMixControls'),$('sceneryMixHint'));
   regrowth.append($('clusteringControls'),$('scatter'),scenery.querySelector(':scope > p'));
   if($('groundCoverControls'))regrowth.append($('groundCoverControls'));
   for(const node of [...scenery.children])if(node.tagName!=='H2')placement.append(node);
-  scenery.append(regrowth,fold('placement','Place individual scenery',[placement],true));
+  scenery.append(fold('placement','Place individual scenery',[placement],true));
   // Ground paint belongs with terrain brushes rather than river authoring.
   const paint=document.createElement('div');paint.append(label('paintKind'),$('paintKind'),$('applyGroundAll'));
   const paintBrush=document.createElement('button');paintBrush.id='paintTerrainBrush';paintBrush.textContent='Paint terrain directly';paintBrush.dataset.tool='paint';paintBrush.setAttribute('aria-pressed','false');paintBrush.onclick=()=>$('paintGround').click();paint.querySelector('#applyGroundAll').before(paintBrush);
-  const paintHint=document.createElement('p');paintHint.textContent='Choose a ground surface, click Paint terrain directly, then drag over the land. Brush radius and strength are on the left. Apply to all ground fills the landscape while preserving cliff faces. Both actions support Undo.';paint.append(paintHint);
+  const paintHint=document.createElement('p');paintHint.textContent='Choose a ground surface, click Paint terrain directly, then drag over the land. Brush radius and strength are on the right. Apply to all ground fills the landscape while preserving cliff faces. Both actions support Undo.';paint.append(paintHint);
   shape.append(paint);
   routes.querySelector('h3').textContent='Draw paths, rivers & ponds';
   routes.querySelector('p').textContent='Paths and rivers use waypoints. Ponds use a drag brush. Paths and ponds replace overlapping objects; Undo restores terrain and objects together.';
@@ -40,7 +43,8 @@ export function installSidebar(){
   wrap($('partitionFloor').parentElement,'interiors','Interior walls');
   const pool=$('poolEnabled').closest('div');if(pool&&building.contains(pool))wrap(pool,'pool','Swimming pool');
   aside.replaceChildren(
-    fold('land','Generate landscape',[land],true),
+    fold('land','Island',[land],true),
+    fold('communities','Plant communities',[regrowth],true),
     fold('scenery','Scenery & coverage',[scenery],true),
     terrain,fold('routes','Paths & water',[routes]),
     fold('buildings','Buildings',[building]),fold('columns','Columns & colonnades',[columns]),
@@ -67,5 +71,5 @@ export function installSidebar(){
   const targets={raise:'terrain',lower:'terrain',cliff:'terrain',flatten:'terrain',smooth:'terrain',paint:'terrain',steps:'steps',rock:'rock',place:'placement',erase:'scenery',build:'buildings',pond:'routes',route:'routes',removeRoute:'routes'};
   // Open ancestors before the existing shortcut focuses or scrolls its panel.
   document.addEventListener('click',e=>{const button=e.target.closest('button');if(button?.id==='houseSettings'||button?.id==='buildHouse')reveal('buildings',false);if(button?.id==='openColumns')reveal('columns',false);},true);
-  return {addPanel:ribbon.addPanel,revealBuildingMaterials(){reveal('finishes');},revealTool(tool){if(targets[tool])reveal(targets[tool]);}};
+  return {creation,addPanel:ribbon.addPanel,revealBuildingMaterials(){reveal('finishes');},revealTool(tool){if(targets[tool])reveal(targets[tool]);}};
 }

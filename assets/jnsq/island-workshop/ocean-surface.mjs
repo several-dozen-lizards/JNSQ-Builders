@@ -1,6 +1,16 @@
 // Wind-aligned wave slopes, depth absorption and a filtered sun reflection.
 // Surface motion uses the same pausable clock as the rest of the atmosphere.
 export const oceanSurfaceGLSL=`
+uniform sampler2D reflectedSky;
+uniform float reflectedSkyReady;
+vec3 reflectedSkyColour(vec3 ray){
+  vec2 uv=vec2(fract(.5+atan(ray.z,ray.x)/6.2831853),.5+asin(clamp(ray.y,-1.,1.))/3.14159265);
+  // Reuse the sky radiance capture. Recompiling the entire volumetric sky for
+  // each water/ice/haze lookup stalls the D3D shader compiler on first entry.
+  if(reflectedSkyReady>.5)return texture2D(reflectedSky,uv).rgb;
+  if(customSkyAmount>.5){uv.x=fract(uv.x+customSkyRotation/6.2831853);uv.y=1.-uv.y;return texture2D(customSky,uv).rgb*customSkyBrightness;}
+  return fogColour;
+}
 uniform vec3 waterTint;
 uniform float waterGlow,waterRipples;
 void oceanWave(inout vec2 slope,inout float crest,vec2 p,vec2 direction,float wavelength,float amplitude,float phase,float footprint,float seconds){
@@ -78,7 +88,7 @@ void main(){
   // Modest refracted light variation in clear, shallow water.
   float caustic=pow(max(0.,sin(dot(p,vec2(.9,.6))*2.1+crest*3.)*sin(dot(p,vec2(-.5,1.))*1.7-crest*2.)),5.);
   body+=vec3(.025,.055,.04)*caustic*exp(-depth*.65)*dayAmount/(1.+footprint*4.);
-  vec3 reflection=skyColour(reflect(-view,normal));
+  vec3 reflection=reflectedSkyColour(reflect(-view,normal));
   vec3 colour=mix(body,reflection,fresnel);
   // GGX highlight broadens as waves become smaller than a pixel. This makes
   // the sun trail stable at distance instead of flickering individual pixels.
@@ -102,14 +112,14 @@ void main(){
   foam=max(foam,whitecaps*.65);
   if(fantasyMode>2.5)foam*=.08;
   colour=mix(colour,vec3(.67,.77,.78)*(.12+.88*dayAmount),foam*.88);
-  vec3 horizon=skyColour(normalize(vec3(-view.x,.002,-view.z)));
+  vec3 horizon=reflectedSkyColour(normalize(vec3(-view.x,.002,-view.z)));
   float haze=1.-exp(-length(cameraPosition.xz-p)*(.00016+fogAmount*.009));
   colour=mix(colour,horizon,haze);
   float opacity=clamp(1.-exp(-depth*.85)+fresnel+foam,0.,1.);
   if(frozenWater>.5){
     float seams=abs(sin(p.x*.73+sin(p.y*.41)*2.)*sin(p.y*.91+p.x*.21));
     float crack=1.-smoothstep(.008,.034,seams);
-    vec3 iceLight=skyColour(reflect(-view,vec3(0,1,0)));
+    vec3 iceLight=reflectedSkyColour(reflect(-view,vec3(0,1,0)));
     colour=mix(vec3(.25,.43,.50)*(.25+.75*dayAmount),iceLight,.22)+vec3(.18,.23,.25)*crack;
     opacity=1.;
   }

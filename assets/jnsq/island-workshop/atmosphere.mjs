@@ -71,7 +71,9 @@ vec3 shootingStars(vec3 ray,float visibility){
 }
 vec3 unscaledSkyColour(vec3 ray){
   if(customSkyAmount>.5){float longitude=atan(ray.z,ray.x)+customSkyRotation;vec2 skyUv=vec2(fract(.5+longitude/6.2831853),clamp(.5-asin(clamp(ray.y,-1.,1.))/3.14159265,0.,1.));return texture2D(customSky,skyUv).rgb*customSkyBrightness;}
-  if(fantasyMode>2.5)return cavernSurroundings(cameraPosition,ray);
+  #if JNSQ_CAVERN
+  return cavernSurroundings(cameraPosition,ray);
+  #else
   float up=max(ray.y,0.);vec3 sunDir=normalize(sunDirection);
   vec3 daylight=mix(vec3(.27,.42,.61),vec3(.027,.10,.32),pow(up,.45));
   vec3 nightlight=mix(vec3(.026,.012,.065),vec3(.002,.003,.015),pow(up,.5));
@@ -115,6 +117,7 @@ vec3 unscaledSkyColour(vec3 ray){
   vec4 bank=billowClouds(cameraPosition,ray,180.,mix(125.,230.,stormAmount),0.);
   colour=colour*(1.-bank.a)+bank.rgb;
   colour+=solarScatter(cameraPosition,ray,500.)*(1.-bank.a*.75);
+  #if JNSQ_CLOUD_BANK
   if(cloudWorld>.5&&ray.y<0.){
     // Render the bank in the sky's ray direction rather than on an opaque
     // horizontal sheet: gaps reveal blue atmosphere, with no flat white rim.
@@ -123,23 +126,34 @@ vec3 unscaledSkyColour(vec3 ray){
     lower.rgb=mix(lower.rgb,colour*lower.a,aerial);
     colour=colour*(1.-lower.a)+lower.rgb;
   }
+  #endif
   colour*=.78+.22*dayAmount;
   colour=mix(colour,fogColour,fogAmount*.92);
   return colour;
+  #endif
 }
 vec3 skyColour(vec3 ray){return unscaledSkyColour(ray)*(customSkyAmount>.5?1.:generatedSkyBrightness);}
 `;
 
 export function createAtmosphere(scene,rockMaterial,solarUniforms){
+  const defines={JNSQ_CAVERN:0,JNSQ_CLOUD_BANK:1},materials=[];
+  function specialize(environment){
+    const cavern=environment.startsWith('cavern')?1:0,bank=environment==='clouds'?1:0;
+    if(defines.JNSQ_CAVERN===cavern&&defines.JNSQ_CLOUD_BANK===bank)return;
+    defines.JNSQ_CAVERN=cavern;defines.JNSQ_CLOUD_BANK=bank;
+    for(const material of materials)material.needsUpdate=true;
+  }
   const space=createSpace(scene,rockMaterial),weather=createWeather(scene);
   const lighting={skyColorsEnabled:{value:0},skyHorizon:{value:new THREE.Color()},skyZenith:{value:new THREE.Color()},skyNightHorizon:{value:new THREE.Color()},skyNightZenith:{value:new THREE.Color()},fantasyMode:{value:0},sunDirection:{value:new THREE.Vector3(-.8,.1,-.6)},fogColour:{value:scene.fog.color},fogAmount:{value:0},dayAmount:{value:1},twilight:{value:0},cloudWorld:{value:1},spaceMode:{value:0},cloudCover:{value:.5},stormAmount:{value:0}};
   Object.assign(lighting,solarUniforms);
+  lighting.cloudMarchSteps={value:32};
   lighting.cavernRock={value:rockMaterial.map};
   lighting.cavernLightMode={value:0};
   lighting.environmentCapture={value:0};lighting.nebulaClouds={value:0};lighting.meteorAmount={value:0};
   lighting.frozenWater={value:0};
   lighting.lavaOcean={value:0};
   const emptySky=new THREE.DataTexture(new Uint8Array([0,0,0,255]),1,1);emptySky.needsUpdate=true;
+  lighting.reflectedSky={value:emptySky};lighting.reflectedSkyReady={value:0};
   lighting.generatedSkyBrightness={value:1};lighting.customSky={value:emptySky};lighting.customSkyAmount={value:0};lighting.customSkyRotation={value:0};lighting.customSkyBrightness={value:1};
   lighting.waterTint={value:new THREE.Color('#087f91')};lighting.waterGlow={value:.35};lighting.waterRipples={value:1};
   let customSkyData=null,loadedSky=null,skyLoad=0;
@@ -155,21 +169,23 @@ export function createAtmosphere(scene,rockMaterial,solarUniforms){
     vertexShader:`varying vec3 waterPosition;void main(){waterPosition=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(waterPosition,1.);}`,
     fragmentShader:`uniform float time,islandSize;uniform sampler2D terrainHeight;varying vec3 waterPosition;${skyCode}\n${oceanSurfaceGLSL}`
   }));water.rotation.x=-Math.PI/2;water.position.y=-.04;scene.add(water);
+  materials.push(sky.material,water.material);for(const material of materials)material.defines=defines;
   return {
+    get needsReflectionSky(){return water.visible;},
+    setReflectionSky(texture){lighting.reflectedSky.value=texture||emptySky;lighting.reflectedSkyReady.value=texture?1:0;},
     createEnvironmentMaterial(){
-      // Enclosed environments never use this probe; omit the expensive cavern
-      // branch so the compiler can discard its relief and texture sampling.
-      const illuminationCode=skyCode.replace('if(fantasyMode>2.5)return cavernSurroundings(cameraPosition,ray);','');
-      return new THREE.ShaderMaterial({depthTest:false,depthWrite:false,toneMapped:false,
+      // Water uses this same capture, including authored cavern surroundings.
+      const illuminationCode=skyCode;
+      const material=new THREE.ShaderMaterial({defines,depthTest:false,depthWrite:false,toneMapped:false,
       uniforms:{...lighting,environmentCapture:{value:1},environmentGround:{value:new THREE.Color()},environmentTint:{value:new THREE.Color(1,1,1)}},
       vertexShader:'varying vec2 probeUv;void main(){probeUv=uv;gl_Position=vec4(position.xy,0.,1.);}',
       fragmentShader:`varying vec2 probeUv;uniform vec3 environmentGround,environmentTint;${illuminationCode}
         void main(){float lon=(probeUv.x-.5)*6.2831853,lat=(probeUv.y-.5)*3.14159265;
           vec3 ray=vec3(cos(lat)*cos(lon),sin(lat),cos(lat)*sin(lon));
           vec3 radiance=skyColour(ray)*environmentTint;
-          if(spaceMode<.5)radiance=mix(environmentGround,radiance,smoothstep(-.18,.08,ray.y));
-          gl_FragColor=vec4(radiance,1.);}`});},
+          if(spaceMode<.5&&fantasyMode<2.5)radiance=mix(environmentGround,radiance,smoothstep(-.18,.08,ray.y));
+          gl_FragColor=vec4(radiance,1.);}`});materials.push(material);return material;},
     updateTerrain(world){lighting.frozenWater.value=world.frozenWater?1:0;water.material.depthWrite=!!world.frozenWater;const data=heightTexture.image.data;for(let i=0;i<world.heights.length;i++){const h=Math.round((world.heights[i]+12)/77*65535);data[i*4]=h>>8;data[i*4+1]=h&255;data[i*4+3]=255;}heightTexture.needsUpdate=true;uniforms.islandSize.value=world.size;space.updateTerrain(world);weather.updateTerrain(world);},
-    update(camera,seconds,light,state){lighting.generatedSkyBrightness.value=Number.isFinite(state.skyBrightness)?Math.max(.1,Math.min(2,state.skyBrightness)):1;applyCustomSky(state.customSky);const skyColors=normalizedSkyColors(state.skyColors);lighting.skyColorsEnabled.value=skyColors.enabled?1:0;for(const [key,uniform] of [["horizon","skyHorizon"],["zenith","skyZenith"],["nightHorizon","skyNightHorizon"],["nightZenith","skyNightZenith"]])lighting[uniform].value.set(skyColors[key]);const waterState=normalizedWater(state.water);lighting.waterTint.value.set(waterState.color);lighting.waterGlow.value=waterState.glow;lighting.waterRipples.value=waterState.ripples;lighting.lavaOcean.value=['lava','cavern-lava'].includes(state.environment)?1:0;lighting.nebulaClouds.value=state.nebulaClouds?1:0;lighting.meteorAmount.value=state.weather==='meteors'?state.strength:0;lighting.cavernLightMode.value=Math.max(0,['natural','bio','amber','cool'].indexOf(state.cavernLighting));const airless=isSpaceEnvironment(state.environment),profile=weatherProfile(hasAtmosphericWeather(state.environment)?state.weather:'clear',state.strength);sky.position.copy(camera.position);uniforms.time.value=seconds;lighting.sunDirection.value.fromArray(light.direction);lighting.dayAmount.value=light.day;lighting.twilight.value=light.twilight;lighting.fantasyMode.value=state.environment==='aurora'?1:state.environment==='alien'?2:state.environment==='cavern-glow'?4:state.environment.startsWith('cavern')?3:0;lighting.spaceMode.value=state.environment==='planet'?1:state.environment==='asteroids'?2:state.environment==='space'?3:0;lighting.cloudCover.value=profile.cover;lighting.stormAmount.value=profile.storm;lighting.fogAmount.value=profile.fog;water.visible=hasOceanSurface(state.environment)&&waterState.surface!=='none';lighting.cloudWorld.value=state.environment==='clouds'?1:0;space.update(state.environment);weather.update(seconds,profile,light);}
+    update(camera,seconds,light,state){specialize(state.environment);lighting.generatedSkyBrightness.value=Number.isFinite(state.skyBrightness)?Math.max(.1,Math.min(2,state.skyBrightness)):1;applyCustomSky(state.customSky);const skyColors=normalizedSkyColors(state.skyColors);lighting.skyColorsEnabled.value=skyColors.enabled?1:0;for(const [key,uniform] of [["horizon","skyHorizon"],["zenith","skyZenith"],["nightHorizon","skyNightHorizon"],["nightZenith","skyNightZenith"]])lighting[uniform].value.set(skyColors[key]);const waterState=normalizedWater(state.water);lighting.waterTint.value.set(waterState.color);lighting.waterGlow.value=waterState.glow;lighting.waterRipples.value=waterState.ripples;lighting.lavaOcean.value=['lava','cavern-lava'].includes(state.environment)?1:0;lighting.nebulaClouds.value=state.nebulaClouds?1:0;lighting.meteorAmount.value=state.weather==='meteors'?state.strength:0;lighting.cavernLightMode.value=Math.max(0,['natural','bio','amber','cool'].indexOf(state.cavernLighting));const airless=isSpaceEnvironment(state.environment),profile=weatherProfile(hasAtmosphericWeather(state.environment)?state.weather:'clear',state.strength);sky.position.copy(camera.position);uniforms.time.value=seconds;lighting.sunDirection.value.fromArray(light.direction);lighting.dayAmount.value=light.day;lighting.twilight.value=light.twilight;lighting.fantasyMode.value=state.environment==='aurora'?1:state.environment==='alien'?2:state.environment==='cavern-glow'?4:state.environment.startsWith('cavern')?3:0;lighting.spaceMode.value=state.environment==='planet'?1:state.environment==='asteroids'?2:state.environment==='space'?3:0;lighting.cloudCover.value=profile.cover;lighting.stormAmount.value=profile.storm;lighting.fogAmount.value=profile.fog;water.visible=hasOceanSurface(state.environment)&&waterState.surface!=='none';lighting.cloudWorld.value=state.environment==='clouds'?1:0;space.update(state.environment);weather.update(seconds,profile,light);}
   };
 }

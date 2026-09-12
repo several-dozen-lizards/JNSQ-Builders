@@ -1,0 +1,38 @@
+<!doctype html><meta charset="utf-8"><title>Visitor walking check</title>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<header><small></small><h1>Walking check</h1><div class="actions"></div></header><canvas></canvas><div id="help"></div><pre id="receipt">Running…</pre>
+<script type="module">
+import * as THREE from 'three';
+import {installVisitor} from './visitor.mjs';
+const realFetch=window.fetch.bind(window),delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const id='b128702d9a7046e88aa8ae3c1bf295c5',published=await (await realFetch('/api/world-destinations/'+id)).json();
+// Exercise the real visitor against a synthetic room. Actions never reach JNSQ.
+const rec={position_m:[0,0],height_m:2,heading_deg:0,movement:{}},snapshot={members:{Re:rec},objects:{},last_seq:0};
+let actions=0,active=0,maxActive=0,gets=0;const controlsSeen=[],samples=[];
+function pose(){const m=rec.movement;if(!m.path_xyz)return [rec.position_m[0],rec.height_m,-rec.position_m[1]];const t=Math.min(1,Math.max(0,(Date.now()/1000-m.started_at)/m.move_duration_s));return m.path_xyz[0].map((v,i)=>v+(m.path_xyz[1][i]-v)*t);}
+window.fetch=async(input,options={})=>{
+ const url=new URL(typeof input==='string'?input:input.url,location.href).pathname;
+ if(url==='/api/act'){
+  actions++;active++;maxActive=Math.max(maxActive,active);const data=JSON.parse(options.body);controlsSeen.push(data.payload.control);
+  await delay(35);const start=pose(),end=[data.to[0],2,-data.to[1]],speed=data.payload.control==='run'?8.4:4.8,duration=Math.hypot(...end.map((v,i)=>v-start[i]))/speed;
+  rec.position_m=[start[0],-start[2]];rec.movement={started_at:Date.now()/1000,turn_duration_s:0,move_duration_s:duration,total_duration_s:duration,interpolation:'linear',path_xyz:[start,end],cruise_speed_mps:speed};
+  const result={ok:true,motion:structuredClone(rec.movement),current_position_m:[...rec.position_m]};await delay(35);active--;return Response.json(result);
+ }
+ if(url.includes('/api/rooms/')&&url.includes('/events/wait')){await delay(100);return Response.json({events:[]});}
+ if(url.includes('/api/rooms/')){gets++;return Response.json(snapshot);}
+ if(url==='/tuning')return Response.json({rooms:{}});
+ if(url.startsWith('/avatars/')||url==='/api/world-walk-clip')return new Response('',{status:404});
+ return realFetch(input,options);
+};
+const camera=new THREE.PerspectiveCamera(),scene=new THREE.Scene(),canvas=document.querySelector('canvas');
+const key=(type,code)=>canvas.dispatchEvent(new KeyboardEvent(type,{code,bubbles:true}));
+let sampling=true;
+function sample(){if(!sampling)return;const p=pose();samples.push({t:performance.now(),camera:camera.position.z,body:p[2]});requestAnimationFrame(sample);}
+installVisitor({scene,camera,controls:{target:new THREE.Vector3(),update(){},enabled:false},canvas,world:published.world,id,arrival:published.arrival,status(){},invalidate(){},applyEnvironment(){},
+ onReady:async()=>{
+  requestAnimationFrame(sample);key('keydown','KeyW');await delay(750);key('keydown','ShiftLeft');await delay(650);key('keyup','KeyW');key('keyup','ShiftLeft');const releasedActions=actions;await delay(450);sampling=false;
+  const result={actions,maxActive,gets,controlsSeen,stopped:releasedActions===actions,samples:samples.length,settledError:Math.abs(camera.position.z-pose()[2]),smoothed:samples.some(p=>Math.abs(p.camera-p.body)>.015),cameraDistance:Math.abs(samples.at(-1).camera-samples[0].camera)};
+  result.pass=result.actions>4&&result.maxActive===1&&result.gets===1&&result.stopped&&result.controlsSeen.includes('walk')&&result.controlsSeen.includes('run')&&result.settledError<.015&&result.smoothed&&result.cameraDistance>3;
+  document.querySelector('#receipt').textContent=JSON.stringify(result);await realFetch('/walking-receipt',{method:'POST',body:JSON.stringify(result)});
+ },onError:error=>document.querySelector('#receipt').textContent=error.message}).catch(console.error);
+</script>

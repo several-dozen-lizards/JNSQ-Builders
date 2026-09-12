@@ -1,19 +1,21 @@
 import {installRibbonWheel} from './ribbon-wheel.mjs';
 import {installBuildingNavigation} from './building-navigation.mjs';
+import {installSideDock} from './side-dock.mjs';
 export function installRibbon(aside){
   const $=id=>document.getElementById(id),main=aside.parentElement;
   const ribbon=document.createElement('div');ribbon.id='workshopRibbon';
   const removeWheel=installRibbonWheel(ribbon);window.addEventListener('pagehide',removeWheel,{once:true});
   const tabs=document.createElement('div');tabs.className='ribbon-tabs';tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','World builder sections');
   const panels=document.createElement('div');panels.className='ribbon-panels';ribbon.append(tabs,panels);main.prepend(ribbon);
-  const labels={land:'Landscape',scenery:'Scenery',terrain:'Terrain',routes:'Paths & water',buildings:'Buildings',columns:'Columns',sky:'Sky & weather',visit:'Visit'};
-  const entries=[];
+  const labels={land:'Island',scenery:'Place scenery',communities:'Plant communities',terrain:'Terrain',routes:'Paths & water',buildings:'Buildings',columns:'Columns',sky:'Sky & weather',visit:'Visit'};
+  const entries=[];let activeKey=null;
+  tabs.setAttribute('aria-orientation','vertical');
   function addPanel(key,label,panel){
     panel.dataset.category=key;
     panel.open=true;panel.classList.add('ribbon-panel');panel.id='ribbon-panel-'+key;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby','ribbon-tab-'+key);
     const tab=document.createElement('button');tab.id='ribbon-tab-'+key;tab.textContent=label;tab.setAttribute('role','tab');tab.setAttribute('aria-controls',panel.id);tabs.append(tab);panels.append(panel);entries.push({key,panel,tab});
-    tab.onclick=()=>activate(key);
-    tab.onkeydown=e=>{const i=entries.findIndex(v=>v.tab===tab);let next;if(e.key==='ArrowRight')next=(i+1)%entries.length;else if(e.key==='ArrowLeft')next=(i+entries.length-1)%entries.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=entries.length-1;else return;e.preventDefault();activate(entries[next].key);entries[next].tab.focus();};
+    tab.onclick=()=>activate(activeKey===key?null:key);
+    tab.onkeydown=e=>{const i=entries.findIndex(v=>v.tab===tab);let next;if(e.key==='ArrowDown'||e.key==='ArrowRight')next=(i+1)%entries.length;else if(e.key==='ArrowUp'||e.key==='ArrowLeft')next=(i+entries.length-1)%entries.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=entries.length-1;else return;e.preventDefault();activate(entries[next].key);entries[next].tab.focus();};
     panel.hidden=true;tab.setAttribute('aria-selected','false');tab.tabIndex=-1;
     return ()=>activate(key);
   }
@@ -22,7 +24,7 @@ export function installRibbon(aside){
   for(const button of $('tools').querySelectorAll('button'))button.title=button.getAttribute('aria-label')||button.textContent;
   for(const id of ['radius','strength'])aside.append(document.querySelector(`label[for="${id}"]`),$(id));
   aside.append($('toolHint'));aside.setAttribute('aria-label','Brush tools and controls');
-  const help=document.createElement('p');help.textContent='Radius and strength apply to terrain and paint brushes. Other tool settings are in the ribbon.';aside.append(help);
+  const help=document.createElement('p');help.textContent='Radius and strength apply to terrain and paint brushes. Open a tab on the left for more settings. Click its tab again to collapse it.';aside.append(help);
   // Building shortcuts belong with their settings, not over the canvas.
   $('build-home').prepend($('houseTools'));
   const sceneryPanel=$('ribbon-panel-scenery'),scenerySection=sceneryPanel.querySelector('section'),sceneryLibrary=$('sceneryLibrary');
@@ -30,7 +32,7 @@ export function installRibbon(aside){
   const sceneryLayout=document.createElement('div');sceneryLayout.className='scenery-layout';
   scenerySettings.append(scenerySection);sceneryLayout.append(scenerySettings,sceneryLibrary);sceneryPanel.append(sceneryLayout);
   let buildingNavigation;
-  function activate(key){for(const e of entries){const selected=e.key===key;e.panel.hidden=!selected;e.tab.setAttribute('aria-selected',String(selected));e.tab.tabIndex=selected?0:-1;}buildingNavigation?.setActive(key==='buildings');}
+  function activate(key){activeKey=key;main.classList.toggle('dock-collapsed',!key);for(const e of entries){const selected=e.key===key;e.panel.hidden=!selected;e.tab.setAttribute('aria-selected',String(selected));e.tab.tabIndex=selected||(!key&&e===entries[0])?0:-1;}buildingNavigation?.setActive(key==='buildings');}
   buildingNavigation=installBuildingNavigation(aside,$('ribbon-panel-buildings'),activate);
   const requested=new URLSearchParams(location.search).get('panel');
   activate(entries.some(entry=>entry.key===requested)?requested:'land');
@@ -100,5 +102,6 @@ export function installRibbon(aside){
     #sceneryLibrary .scenery-preview-hint{margin:0;flex:none}
     .scenery-preview-strip:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
   `;document.head.append(style);
+  installSideDock(main);
   return {addPanel,activateFor(node){if(buildingNavigation.reveal(node))return;const panel=node.closest('.ribbon-panel');if(panel)activate(panel.dataset.category);else if(node.id==='build-home'||node.dataset.category==='buildings')activate('buildings');}};
 }
