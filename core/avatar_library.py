@@ -47,11 +47,14 @@ def publish(root, candidates, candidate_id, name, mapping_source=None):
     if mapping_source:
         source = load_candidate(candidates, _id(mapping_source), 'testy_mcprototype')
         source_model, _, _ = _read_glb_json(candidate_model_path(candidates, mapping_source, 'testy_mcprototype'))
-        # A shaped export can inherit mapping only when node names and skin
-        # joints still match, not merely because the client claims a source.
-        signature = lambda m: ([n.get('name') for n in m.get('nodes', [])],
-                               [s.get('joints') for s in m.get('skins', [])])
-        if signature(model) != signature(source_model):
+        # Preview derivation appends fitted brows/lashes. Original node indices
+        # and names, and every skin's joint indices, must still match before
+        # inheriting the mapping; appended render nodes do not change the rig.
+        source_names = [n.get('name') for n in source_model.get('nodes', [])]
+        export_names = [n.get('name') for n in model.get('nodes', [])]
+        joints = lambda m: [s.get('joints') for s in m.get('skins', [])]
+        if (export_names[:len(source_names)] != source_names
+                or joints(model) != joints(source_model)):
             raise BodyPackageError('Export skeleton differs from its mapping source')
         adapter = source.get('adapter')
     if not adapter:

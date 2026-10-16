@@ -6,32 +6,10 @@ let eyeBakeKey='',eyeBakeValue=null;
 let fantasyBakeKey='',fantasyBakeValue=null;
 let hairBakeKey='',hairBakeValue={};
 let clothingBakeKey='',clothingBakeValue={};
-let foldBakeKey='',foldBakePromise=null;
-// Resolve from the original complexion every time: shadows never accumulate.
-function nasolabialShadowAmount(identity={}){
-  const t=Math.max(0,Math.min(1,2*(Number(identity.nasolabial_definition??.5)-.5)));
-  return t*t*(3-2*t);
-}
+// Fold geometry does not imply painted wrinkles. Explicit skin layers own lines.
+function nasolabialShadowAmount(identity={}){return 0;}
 async function withNasolabialShadow(source,identity={}){
-  const amount=nasolabialShadowAmount(identity);
-  if(!amount)return source;
-  const key=JSON.stringify([source||'',amount]);
-  if(key!==foldBakeKey){
-    foldBakeKey=key;
-    foldBakePromise=(async()=>{
-      const load=async url=>{const r=await fetch(url);if(!r.ok)throw Error('Fold shading texture unavailable');return createImageBitmap(await r.blob());};
-      const [skin,mask]=await Promise.all([load(source||'/3d/designer/skin-source.png'),load('/3d/designer/skin-detail/generated/surface-v2-nasolabial.png')]);
-      const c=document.createElement('canvas');c.width=Math.max(2048,skin.width);c.height=Math.round(skin.height*c.width/skin.width);
-      const g=c.getContext('2d');g.drawImage(skin,0,0,c.width,c.height);skin.close();
-      const m=document.createElement('canvas');m.width=c.width;m.height=c.height;const mg=m.getContext('2d');
-      mg.drawImage(mask,0,0,m.width,m.height);mask.close();
-      const shade=mg.getImageData(0,0,m.width,m.height).data,pixels=g.getImageData(0,0,c.width,c.height),p=pixels.data;
-      for(let i=0;i<p.length;i+=4){const factor=1-amount*Math.min(.42,(1-shade[i]/255)*1.2);for(let k=0;k<3;k++)p[i+k]*=factor;}
-      g.putImageData(pixels,0,0);return c.toDataURL('image/png');
-    })();
-    const pending=foldBakePromise;pending.catch(()=>{if(foldBakePromise===pending){foldBakeKey='';foldBakePromise=null;}});
-  }
-  return foldBakePromise;
+  return source;
 }
 // Parametric crease curves follow the current MakeHuman skin atlas. Multiplicative
 // shading retains complexion color and grain; the baked map uses normal save/export.
@@ -103,7 +81,7 @@ async function resolvedAppearance(values,candidateId=typeof activeCandidate==='u
     for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
       const u=x/canvas.width,v=y/canvas.height;
       const left=Math.hypot(u-.707,v-.298),right=Math.hypot(u-.290,v-.711);
-      const rawDistance=Math.min(left,right),distance=rawDistance/.97,cy=left<right?.298:.711,cx=left<right?.707:.290,dy=v-cy;
+      const rawDistance=Math.min(left,right),distance=rawDistance/.97,cy=left<right?.298:.711,cx=left<right?.707:.290,dy=v-cy,dx=u-cx;
       const offset=(y*canvas.width+x)*4;
       if(rawDistance<.125){const sx=Math.max(0,Math.min(canvas.width-1,Math.round((cx+(u-cx)/.97)*canvas.width))),sy=Math.max(0,Math.min(canvas.height-1,Math.round((cy+(v-cy)/.97)*canvas.height)));for(let c=0;c<4;c++)data[offset+c]=original[(sy*canvas.width+sx)*4+c];}
       if(distance<.112&&distance>.035){
@@ -114,11 +92,19 @@ async function resolvedAppearance(values,candidateId=typeof activeCandidate==='u
         const exposure=2**((Number(values.iris_lightness??.5)-.5)*3);
         for(let c=0;c<3;c++)data[offset+c]*=exposure;
       }else if(distance>=.112){
-        // Soft ambient eye depth. Both atlas islands have upper lids toward -V.
-        // Fade at the iris boundary; preserve pupil, iris detail and wet highlights.
-        const rim=smooth(.112,.225,distance),upper=smooth(0,.16,-dy);
-        const shade=1-shading*smooth(.112,.135,distance)*(.1+.32*rim+.2*upper);
+        // The globe recedes under both lids and into both canthi. Keep this
+        // graded rather than painting a hard outline around the iris.
+        const rim=smooth(.095,.225,distance),upper=smooth(-.015,.115,-dy);
+        const corner=smooth(.10,.23,Math.abs(dx)),lower=smooth(.10,.22,dy);
+        const shade=1-shading*(.10+.30*rim+.36*upper+.12*corner+.06*lower);
         for(let c=0;c<3;c++)data[offset+c]*=sclera[c]*shade;
+      }
+      // A real upper lid shades the cornea, iris, and pupil together. The old
+      // bake exempted the iris, leaving it luminous inside a darker socket.
+      if(distance<.112){
+        const upper=smooth(-.015,.115,-dy),irisRim=smooth(.085,.112,distance);
+        const shade=1-shading*(.02+.38*upper+.08*irisRim);
+        for(let c=0;c<3;c++)data[offset+c]*=shade;
       }
     }
     ctx.putImageData(pixels,0,0);eyeBakeValue=canvas.toDataURL('image/png');eyeBakeKey=key;

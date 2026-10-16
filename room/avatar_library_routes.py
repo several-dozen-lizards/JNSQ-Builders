@@ -13,10 +13,12 @@ from core.body_packages import BodyPackageError
 from core.body_candidates import candidate_model_path
 
 def install(app, repo, candidate_root, *, standalone=False):
-    root = os.environ.get('JNSQ_AVATAR_LIBRARY', os.path.join(repo, 'state', 'avatar_library'))
+    root = os.environ.get('JNAIQ_AVATAR_LIBRARY', os.path.join(repo, 'state', 'avatar_library'))
     app.state.avatar_library_root = root
     from core.avatar_accessories import recover_interrupted
     recover_interrupted(root)
+    from core.avatar_piece_jobs import recover_interrupted as recover_piece_jobs
+    recover_piece_jobs(root)
     router = APIRouter(prefix='/api/avatar-library')
 
     @router.post('/eye-finish')
@@ -67,6 +69,11 @@ def install(app, repo, candidate_root, *, standalone=False):
     def starters():
         return json.loads((Path(repo) / 'room/avatar_starters.json').read_text(encoding='utf-8'))
 
+    @router.get('/wardrobe-pieces')
+    def wardrobe_pieces():
+        from core.avatar_piece_jobs import catalog
+        return catalog(repo, public=True)
+
     @router.post('/wardrobe/{candidate_id}')
     def change_wardrobe(candidate_id: str, values: dict):
         from core.avatar_wardrobe import change
@@ -74,6 +81,20 @@ def install(app, repo, candidate_root, *, standalone=False):
             return change(repo,root,candidate_root(),candidate_id,values.get('outfit_id'))
         except (BodyPackageError,ValueError,KeyError,StopIteration) as exc:
             return JSONResponse({'error':str(exc) or 'This model does not contain a compatible fitted outfit.'},status_code=422)
+
+    @router.post('/wardrobe-pieces/{candidate_id}')
+    def fit_wardrobe_pieces(candidate_id: str, values: dict):
+        from core import avatar_piece_jobs
+        try:
+            return avatar_piece_jobs.start(repo,root,candidate_root(),candidate_id,values)
+        except (BodyPackageError,ValueError,KeyError,StopIteration) as exc:
+            return JSONResponse({'error':str(exc)},status_code=422)
+
+    @router.get('/wardrobe-pieces/jobs/{job}')
+    def wardrobe_piece_status(job: str, after: str = ''):
+        from core import avatar_piece_jobs
+        try:return avatar_piece_jobs.status(root,job,after)
+        except BodyPackageError as exc:return JSONResponse({'error':str(exc)},status_code=404)
 
     @router.post('/accessories/{category}')
     async def accessory(category: str, request: Request, outfit: str = 'male_casualsuit01'):
@@ -175,8 +196,12 @@ def install(app, repo, candidate_root, *, standalone=False):
     def model(package_id: str):
         try:
             package = library.load_package(root, package_id)
-            return FileResponse(candidate_model_path(candidate_root(), package['candidate_id'], 'testy_mcprototype'),
-                                media_type='model/gltf-binary', headers={'Cache-Control': 'private, max-age=31536000, immutable'})
+            from core.asset_delivery import model_path, delivery_headers
+            source = candidate_model_path(candidate_root(), package['candidate_id'], 'testy_mcprototype')
+            prepared = model_path(source)
+            headers = delivery_headers(source, prepared)
+            headers['Cache-Control'] = 'private, no-cache'
+            return FileResponse(prepared, media_type='model/gltf-binary', headers=headers)
         except BodyPackageError as exc:
             return JSONResponse({'error': str(exc)}, status_code=404)
 

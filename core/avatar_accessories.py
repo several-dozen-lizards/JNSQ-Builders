@@ -63,10 +63,10 @@ def unpack(archive, destination):
 def start(repo, root, candidates, archive, category, outfit='male_casualsuit01'):
     if category not in {'hair','clothes'}: raise BodyPackageError('Choose hair or clothes')
     from tools.build_avatar_wardrobe import BLENDER,SOURCE,HAIR,anatomy_assets
-    blender=os.environ.get('JNSQ_BLENDER',BLENDER)
-    source=os.environ.get('JNSQ_AVATAR_SOURCE_BLEND',SOURCE)
+    blender=os.environ.get('JNAIQ_BLENDER',BLENDER)
+    source=os.environ.get('JNAIQ_AVATAR_SOURCE_BLEND',SOURCE)
     if not Path(blender).is_file() or not Path(source).is_file():
-        raise BodyPackageError('Local fitting needs Blender with MPFB and a source body. Configure JNSQ_BLENDER and JNSQ_AVATAR_SOURCE_BLEND.')
+        raise BodyPackageError('Local fitting needs Blender with MPFB and a source body. Configure JNAIQ_BLENDER and JNAIQ_AVATAR_SOURCE_BLEND.')
     repo=Path(repo).resolve()
     allowed_outfits={entry.get('asset') for entry in json.loads((repo/'room/avatar_starters.json').read_text())['starters']}
     allowed_outfits.update({'male_casualsuit01','female_elegantsuit01','male_elegantsuit01','mindfront_f_dress_01'})
@@ -85,7 +85,7 @@ def start(repo, root, candidates, archive, category, outfit='male_casualsuit01')
         compile_outfit=outfit
     digest=hashlib.sha256(archive.read());archive.seek(0)
     digest.update((category+outfit+str(Path(source).stat().st_mtime_ns)).encode())
-    for module in ['tools/convert_makehuman_jnsq.py','tools/build_avatar_wardrobe.py','tools/optimize_avatar_textures.py','tools/add_avatar_contour_morphs.py','core/avatar_accessories.py','tools/mix_avatar_clothes.py']:
+    for module in ['tools/convert_makehuman_jnaiq.py','tools/build_avatar_wardrobe.py','tools/optimize_avatar_textures.py','tools/add_avatar_contour_morphs.py','core/avatar_accessories.py','tools/mix_avatar_clothes.py']:
         digest.update((repo/module).read_bytes())
     if bottom_source:digest.update(str(bottom_source).encode())
     build_key=digest.hexdigest()
@@ -113,7 +113,7 @@ def start(repo, root, candidates, archive, category, outfit='male_casualsuit01')
             assets=anatomy_assets()
             assets+=['clothes:'+compile_outfit] if category=='hair' else []
             assets+=[category+':'+str(definition)]
-            command=[blender,'--background','--python-exit-code','1','--python',str(repo/'tools/convert_makehuman_jnsq.py'),'--','--source',source,'--output',str(output),'--manifest',str(directory/'conversion.json')]
+            command=[blender,'--background','--python-exit-code','1','--python',str(repo/'tools/convert_makehuman_jnaiq.py'),'--','--source',source,'--output',str(output),'--manifest',str(directory/'conversion.json')]
             for asset in assets: command+=['--asset',asset]
             with (directory/'build.log').open('w',encoding='utf-8') as log:
                 subprocess.run(command,cwd=repo,stdout=log,stderr=subprocess.STDOUT,check=True,timeout=900,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))

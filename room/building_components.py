@@ -41,7 +41,10 @@ def validate_components(b, texture_ids):
                     or o['width'] < .2 or o['bottom'] < 0 or o['top'] > 3.05 or o['top']-o['bottom'] < .2
                     or o.get('glass') not in ('none','clear','stained','image') or not isinstance(o.get('color'), str) or not re.fullmatch(r'#[a-fA-F0-9]{6}',o['color'])
                     or not .05 <= o['opacity'] <= 1 or o.get('door') not in ('none','solid') or not 0 <= o['angle'] <= 120
-                    or o['kind'] == 'door' and o['bottom'] != 0 or o['kind'] == 'window' and o['door'] != 'none'
+                    or 'doorStyle' in o and o['doorStyle'] not in ('flat','panelled','medieval','glazed')
+                    or 'doorColor' in o and not re.fullmatch(r'#[a-fA-F0-9]{6}',str(o['doorColor']))
+                    or 'doorImage' in o and o['doorImage'] not in texture_ids
+                    or o['kind'] == 'door' and o['bottom'] != 0 or o['kind'] == 'window' and (o['door'] != 'none' or any(k in o for k in ('doorStyle','doorColor','doorImage')))
                     or 'image' in o and o['image'] not in texture_ids or o['glass'] == 'image' and o.get('image') not in texture_ids):
                 raise ValueError('Invalid opening or glazing')
             ids.add(o['id'])

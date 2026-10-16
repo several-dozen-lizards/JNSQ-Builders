@@ -28,7 +28,7 @@ def coordinate_tongue(model,binary):
     anatomy={node.get('extras',{}).get('jnsq_fit_category'):model['meshes'][node['mesh']] for node in model.get('nodes',[]) if 'mesh' in node}
     if not all(key in anatomy for key in ['teeth','tongue']): return
     teeth=anatomy['teeth'];tongue=anatomy['tongue']
-    name='JNSQ_Expr_MouthOpen'
+    name='JNAIQ_Expr_MouthOpen'
     if any(name not in mesh.get('extras',{}).get('targetNames',[]) for mesh in [teeth,tongue]): return
     primitive=teeth['primitives'][0];index=teeth['extras']['targetNames'].index(name)
     neutral=accessor_array(model,binary,primitive['attributes']['POSITION'])
@@ -64,7 +64,7 @@ def optimize(path):
         if i is None: continue
         mesh=model['meshes'][i]
         for index,name in enumerate(mesh.get('extras',{}).get('targetNames',[])):
-            if not name.startswith('JNSQ_Expr_'): continue
+            if not name.startswith('JNAIQ_Expr_'): continue
             for primitive in mesh.get('primitives',[]):
                 for accessor_id in primitive.get('targets',[])[index].values():
                     accessor=model['accessors'][accessor_id]

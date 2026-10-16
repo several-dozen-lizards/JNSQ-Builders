@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from tools.mix_avatar_clothes import load
 from tools.optimize_avatar_textures import accessor_array
 from core.body_candidates import CandidateStager,save_candidate_mapping
-NEW_NAMES=['JNSQ_EyeAngle_Down', 'JNSQ_EyeAngle_Up', 'JNSQ_InnerEyeFold_In', 'JNSQ_InnerEyeFold_Out', 'JNSQ_InnerLidOpening_Low', 'JNSQ_InnerLidOpening_High', 'JNSQ_OuterLidOpening_Low', 'JNSQ_OuterLidOpening_High']
+NEW_NAMES=['JNAIQ_EyeAngle_Down', 'JNAIQ_EyeAngle_Up', 'JNAIQ_InnerEyeFold_In', 'JNAIQ_InnerEyeFold_Out', 'JNAIQ_InnerLidOpening_Low', 'JNAIQ_InnerLidOpening_High', 'JNAIQ_OuterLidOpening_Low', 'JNAIQ_OuterLidOpening_High']
 REPAIR_NAMES=[]
 NAMES=NEW_NAMES
 

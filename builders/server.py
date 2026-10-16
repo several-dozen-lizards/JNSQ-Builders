@@ -1,4 +1,4 @@
-"""Run both editors from an isolated JNSQ Builders installation."""
+"""Run both editors from an isolated JNAIQ Builders installation."""
 from __future__ import annotations
 import argparse
 import json
@@ -20,7 +20,7 @@ def create_app(root=ROOT, *, data_root=None):
     root = Path(root).resolve()
     # A marker is required: never run this service against the live workshop.
     if not (root / 'BUILDERS.json').is_file():
-        raise RuntimeError('Build or extract JNSQ Builders first; do not run it in the household workspace.')
+        raise RuntimeError('Build or extract JNAIQ Builders first; do not run it in the household workspace.')
     data = Path(data_root).resolve() if data_root else root / 'data'
     if not data.is_relative_to(root):
         raise ValueError('Builder data must stay inside its installation.')
@@ -28,10 +28,10 @@ def create_app(root=ROOT, *, data_root=None):
     candidates = root / 'scratch/body_candidates'
     recipes = data / 'designs'
     objects = root / 'godot-room/assets/objects'
-    os.environ['JNSQ_OBJECT_ASSETS'] = str(objects)
-    os.environ['JNSQ_AVATAR_LIBRARY'] = str(data / 'avatar_library')
-    os.environ['JNSQ_ROOM_DRAFTS'] = str(data / 'room_layouts')
-    app = FastAPI(title='JNSQ Builders', docs_url=None, redoc_url=None)
+    os.environ['JNAIQ_OBJECT_ASSETS'] = str(objects)
+    os.environ['JNAIQ_AVATAR_LIBRARY'] = str(data / 'avatar_library')
+    os.environ['JNAIQ_ROOM_DRAFTS'] = str(data / 'room_layouts')
+    app = FastAPI(title='JNAIQ Builders', docs_url=None, redoc_url=None)
     app.state.rooms = {}
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=['127.0.0.1', 'localhost', 'testserver'])
 
@@ -63,7 +63,7 @@ def create_app(root=ROOT, *, data_root=None):
 
     @app.get('/api/builders-health')
     def health():
-        return {'application': 'jnsq-builders', 'root': str(root), 'version': '0.1.0', 'standalone': True}
+        return {'application': 'jnsq-builders', 'root': str(root), 'version': '0.2.0-preview.1', 'standalone': True}
 
     @app.get('/', response_class=HTMLResponse)
     def home():
@@ -107,13 +107,20 @@ def create_app(root=ROOT, *, data_root=None):
     def model(key: str, compact: bool = False):
         def serve():
             path = Path(candidate_model_path(str(candidates), key, PILOT_TARGET))
-            if compact:
+            from core.asset_delivery import model_path as optimized_model_path
+            original = path
+            path = Path(optimized_model_path(path, 'compact' if compact else 'standard'))
+            if compact and path == original:
                 for name in ('preview-compact-v2.glb', 'preview-compact-v1.glb'):
                     packed = path.with_name(name)
                     if packed.is_file() and packed.stat().st_mtime >= path.stat().st_mtime:
                         path = packed
                         break
-            return FileResponse(path, media_type='model/gltf-binary')
+            from core.asset_delivery import delivery_headers
+            record = load_candidate(str(candidates), key, PILOT_TARGET)['candidate']
+            source_digest = record['compatibility']['asset']['sha256']
+            return FileResponse(path, media_type='model/gltf-binary',
+                                headers=delivery_headers(original, path, source_digest))
         return guarded(serve, 404)
 
     @app.post('/api/avatar-bodies/candidates/{key}/preview-receipts')
@@ -171,9 +178,10 @@ def create_app(root=ROOT, *, data_root=None):
     mimetypes.add_type('application/wasm', '.wasm')
     mimetypes.add_type('text/javascript', '.mjs')
     app.mount('/3d/designer', StaticFiles(directory=root / 'godot-room/export/web/designer', html=True))
-    app.mount('/assets/island-workshop', StaticFiles(directory=root / 'assets/jnsq/island-workshop', html=True))
+    app.mount('/assets/island-workshop', StaticFiles(directory=root / 'assets/jnaiq/island-workshop', html=True))
     app.mount('/builders', StaticFiles(directory=root / 'builders'))
-    app.mount('/models', StaticFiles(directory=objects))
+    from room.asset_static import PreparedObjectFiles
+    app.mount('/models', PreparedObjectFiles(directory=objects))
     thumbs = objects / '.thumbnails'
     thumbs.mkdir(exist_ok=True)
     app.mount('/model-thumbnails', StaticFiles(directory=thumbs))
@@ -201,7 +209,7 @@ def main():
             if info.get('application') == 'jnsq-builders' and info.get('root') == str(ROOT):
                 if not args.no_browser:
                     webbrowser.open(f'http://127.0.0.1:{port}{path}')
-                print('Using the running JNSQ Builders window.')
+                print('Using the running JNAIQ Builders window.')
                 return
         except (httpx.HTTPError, ValueError):
             pass
@@ -221,7 +229,7 @@ def main():
             if self.started:
                 marker.write_text(json.dumps({'port': port, 'pid': os.getpid()}))
                 url = f'http://127.0.0.1:{port}{path}'
-                print(f'JNSQ Builders: {url}\nKeep this window open. Ctrl+C stops the editors.', flush=True)
+                print(f'JNAIQ Builders: {url}\nKeep this window open. Ctrl+C stops the editors.', flush=True)
                 if not args.no_browser:
                     webbrowser.open(url)
 

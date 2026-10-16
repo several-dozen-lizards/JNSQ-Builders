@@ -43,7 +43,7 @@ def compose(source_path,outfit_path,reference_path,dest):
  sm=m['meshes'][source_body['mesh']];sp=sm['primitives'][0]
  dm=donor['meshes'][donor_body['mesh']];dp=dm['primitives'][0]
  sv=xyz(m,b,sp);dv=xyz(donor,db,dp);names=sm['extras']['targetNames']
- if 'JNSQ_BodyFrame_Feminine' not in names:raise BodyPackageError('This outfit needs a compatible editable human body.')
+ if 'JNAIQ_BodyFrame_Feminine' not in names:raise BodyPackageError('This outfit needs a compatible editable human body.')
  if len(sm['primitives'])!=1 or len(dm['primitives'])!=1:raise BodyPackageError('Body surface layout is not supported by this outfit.')
  # Bone indices in garment attributes must have the identical meaning.
  def joints(model,node):return [model['nodes'][i]['name'] for i in model['skins'][node['skin']]['joints']]
@@ -182,4 +182,43 @@ def change(repo,root,candidates,source_id,outfit_id):
   target=Path(candidates)/stage.candidate_id
   compact(target/'body.glb',target/'preview-compact-v2.glb')
   result={'candidate_id':stage.candidate_id,'outfit_id':outfit_id,'name':outfit['name'],'report':report}
+  receipt.write_text(json.dumps(result,indent=2));return result
+
+def change_to_model(repo,root,candidates,source_id,donor_path,name,outfit_token):
+ """Fit a trusted, already-compiled composite outfit to one character."""
+ entries=json.loads((Path(repo)/'room/avatar_starters.json').read_text())['starters']
+ outfits=[x for x in entries if x.get('asset') or x.get('pieces')]
+ source=Path(candidate_model_path(candidates,source_id,'testy_mcprototype'))
+ donor=Path(donor_path)
+ key=hashlib.sha256((VERSION+'-pieces').encode()+source.read_bytes()+donor.read_bytes()).hexdigest()
+ folder=Path(root)/'wardrobe-pieces'/key
+ with _lock:
+  receipt=folder/'result.json'
+  if receipt.exists():
+   result=json.loads(receipt.read_text());candidate_model_path(candidates,result['candidate_id'],'testy_mcprototype');return result
+  current,_=load(source)
+  character_id=current.get('extras',{}).get('jnsq_wardrobe_character',source_id)
+  character=Path(candidate_model_path(candidates,character_id,'testy_mcprototype'))
+  model,_=load(character);asset=mesh_node(model,'clothes').get('extras',{}).get('jnsq_fit_asset_name')
+  baseline=next((x for x in outfits if x.get('asset')==asset),None)
+  prior=model.get('extras',{}).get('jnsq_wardrobe_outfit')
+  if prior:baseline=next((x for x in outfits if x['candidate_id']==prior),baseline)
+  if baseline is None:raise BodyPackageError('The current custom outfit needs its fitting reference before it can be exchanged.')
+  reference=candidate_model_path(candidates,baseline['candidate_id'],'testy_mcprototype')
+  folder.mkdir(parents=True,exist_ok=True);dest=folder/'assembly.glb'
+  report=compose(character,donor,reference,dest)
+  raw=dest.read_bytes();n=struct.unpack_from('<I',raw,12)[0];m=json.loads(raw[20:20+n])
+  m.setdefault('extras',{})['jnsq_wardrobe_outfit']=outfit_token
+  m['extras']['jnsq_wardrobe_character']=character_id
+  j=json.dumps(m,separators=(',',':')).encode();j+=b' '*(-len(j)%4)
+  dest.write_bytes(struct.pack('<IIIII',0x46546c67,2,len(raw)-n+len(j),len(j),0x4e4f534a)+j+raw[20+n:])
+  stage=CandidateStager(candidates,name+' - current character.glb','testy_mcprototype')
+  with dest.open('rb') as handle:
+   while chunk:=handle.read(1024*1024):stage.write(chunk)
+  stage.finalize()
+  adapter=load_candidate(candidates,source_id,'testy_mcprototype')['adapter']
+  if adapter:save_candidate_mapping(candidates,stage.candidate_id,'testy_mcprototype',{k:adapter[k] for k in ['roles','expressions','optical_origin']})
+  target=Path(candidates)/stage.candidate_id
+  compact(target/'body.glb',target/'preview-compact-v2.glb')
+  result={'candidate_id':stage.candidate_id,'outfit_id':outfit_token,'name':name,'report':report}
   receipt.write_text(json.dumps(result,indent=2));return result

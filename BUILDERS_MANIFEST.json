@@ -1,0 +1,1568 @@
+{
+  "format": 1,
+  "version": "0.2.0-preview.1",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 68,
+      "sha256": "550e531f1a2e95d88263feefbe79be99d5a116d644e3a3d3e4c2485f5d60205e"
+    },
+    {
+      "path": "ASSET_ADMISSION.json",
+      "bytes": 113058,
+      "sha256": "067e68ff7e1e04b69cb535427d7f2edb3bb5d29f2e06f247d401d4ec8fc155b3"
+    },
+    {
+      "path": "ASSET_REVIEW.json",
+      "bytes": 2626,
+      "sha256": "0d1de77213e117dc90da0aa9a5de3c35f14bae5b309c76823fcf7cfa76ad6b8e"
+    },
+    {
+      "path": "BUILDERS.json",
+      "bytes": 128,
+      "sha256": "4175ebd6840f48fdc775400930e67814442f649b85c19640daa610e583db5186"
+    },
+    {
+      "path": "INSTALL_BUILDERS.bat",
+      "bytes": 114,
+      "sha256": "6716e73ef78e9e39b4cff959f7da1720324e0c6bbf44aeee0abdc121872f7903"
+    },
+    {
+      "path": "INSTALL_BUILDERS.ps1",
+      "bytes": 1245,
+      "sha256": "5a9523eddd92aa04f3f008da1befc5e789ca4cd2d670a4dd8d4f89a7aa37b028"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "LICENSES/GODOT-COPYRIGHT.txt",
+      "bytes": 93473,
+      "sha256": "54345b2362747231e34b138b191914b852d44f15443acff17f04a76d86a5c584"
+    },
+    {
+      "path": "LICENSES/GODOT-LICENSE.txt",
+      "bytes": 1149,
+      "sha256": "b0435e3b3e4e55238f05f4b306f30524a1b2e20147810d436eaa554fa6855c80"
+    },
+    {
+      "path": "LICENSES/MAKEHUMAN_COMPONENTS.txt",
+      "bytes": 3502,
+      "sha256": "a70229a92db359e86b9cc3c2608460d92883da189380e06521df04fc08de50aa"
+    },
+    {
+      "path": "LICENSES/STARTER_SOURCE_MATCHES.json",
+      "bytes": 5072,
+      "sha256": "e8d464b23f9288491a9c55160c4efbd145c99e49a2ebb2ac1d9fa7fd69c57443"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2271,
+      "sha256": "2dac6249f9ccf6abdc16046b64f5788bd0f9758c7cf25a723762c24bcec3474a"
+    },
+    {
+      "path": "START_AVATAR_CREATOR.bat",
+      "bytes": 217,
+      "sha256": "1907707a0a3740ac83788840026230843e1f3cb5ed127f6ec3880a1141bf37bf"
+    },
+    {
+      "path": "START_BUILDERS.bat",
+      "bytes": 215,
+      "sha256": "4643d167ded2e39ac3b6f814239bc7f71916af86f4eee47e80dd38634be506d9"
+    },
+    {
+      "path": "START_WORLD_BUILDER.bat",
+      "bytes": 216,
+      "sha256": "123873a489f379511f69dd259eb279462665cd471a98b8f32352e1176b521b5f"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 1444,
+      "sha256": "e16eb09724162761b10814407c7a8db0982e90248aad6077c474b6f9b94c4313"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/architecture-gallery.mjs",
+      "bytes": 3356,
+      "sha256": "19060bf14c8e10caf4f9cf8b21f7e11b66e471a52e9e4bfd456267b18e9ae918"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/architecture-render.mjs",
+      "bytes": 9745,
+      "sha256": "b29122aeb7a98c8fec4ea16e264859fd255b584bb0d3dd87988790c4a428215f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/architecture.json",
+      "bytes": 5964,
+      "sha256": "8fd67f52ea68264d66b016aaa6a9d77efa0178cd344482f2ad8633b6777239e1"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/architecture.mjs",
+      "bytes": 542,
+      "sha256": "8f90708523f20d058f1a01d5359a472e42a418aa1fab8eb77a54f9dc300adb0c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/atmosphere-profile.mjs",
+      "bytes": 2156,
+      "sha256": "02b31afc24c7c6fde65e19e6dbe796ffa584653f68fe04d0ccc33387561f60f0"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/atmosphere.mjs",
+      "bytes": 15938,
+      "sha256": "a655fc8ed48fa791beaaec1ecb6d74985a9659b86fa07aa1804e9963de644baf"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/avatar-eye.mjs",
+      "bytes": 1403,
+      "sha256": "e533e30b912249f007ed80427a47c9d971e6dd93517d3f76b4978d7d6d1721b9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/avatar-facing.mjs",
+      "bytes": 1417,
+      "sha256": "eb6a034bff6093329a50dc8f02a17fca125e41f0b90f59911f204539a33e52ef"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/avatar-height.mjs",
+      "bytes": 961,
+      "sha256": "7b6d270ee992c237d9d77261f6c3746d54423fbc9049d7c4dcb3a30d94582986"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/avatar-rig.mjs",
+      "bytes": 1772,
+      "sha256": "b43ef3820027a6d5d8321c538db70686d1323463f85d7056b5cdfde6dfbd2fc3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/avatar-surface.mjs",
+      "bytes": 37413,
+      "sha256": "98a0c1b0334c586570a96f688afdd838c6bd6d21fafc4af791c80490b09b5bfb"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/builder-guides.mjs",
+      "bytes": 2583,
+      "sha256": "a56a87dd06161b2d86610d07f04bd8c809dd0a1303845468656a95bbd4c0332c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/builder-theme.mjs",
+      "bytes": 1896,
+      "sha256": "0ad855bcc299d072f58285853293db96cdb46e191da9145ef94401c36449ad0d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/builder-vr.mjs",
+      "bytes": 4004,
+      "sha256": "ab374e7533b49f5e0bccbff61f84aaa1b88038485a285f7847c0a6b6d2a522ac"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-components.mjs",
+      "bytes": 7404,
+      "sha256": "d3bc64b823d0ae4d929281420cf5ceb791afb52b24610d61056a9eaa5e43dd92"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-dimensions.mjs",
+      "bytes": 102,
+      "sha256": "1931aa134cf71b0f4570326742649818ca01d282f0b9ed51ff5e0f8a6b3d41e9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-editor.mjs",
+      "bytes": 35919,
+      "sha256": "ca90eb15d02513b07b6528ed2d82c5825195f911c9ec72efcb69a6e60199e0a0"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-finishes.mjs",
+      "bytes": 2684,
+      "sha256": "c82779e8cceb1f6c2d35d769734ffde13d44bbcc1fc476305f144b081b51d81a"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-materials.mjs",
+      "bytes": 6926,
+      "sha256": "994ae544be2ca12078cf9b7fe0703b0d8abcf8a64a338f47f21025a59b350833"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/building-navigation.mjs",
+      "bytes": 6064,
+      "sha256": "7a52623d49b5ae26c15296be692fb3e55ea80dd74f098701cbc322464fea1cdf"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/cloud-volume.mjs",
+      "bytes": 3451,
+      "sha256": "8368210d9d4df1894553c7a04567038da6e40c4eb33f54a98af01d80e504a16a"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/column-editor.mjs",
+      "bytes": 9798,
+      "sha256": "144f3cbb19c074cb3439e01f441ffab644e7da840ac6400f8d34d1637f046729"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/column-styles.json",
+      "bytes": 1909,
+      "sha256": "4e95c0959e4f29088f1d6dbd056571e38a59f4e423d2f8ddf506ce823944bbc7"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/columns.mjs",
+      "bytes": 7075,
+      "sha256": "0aeefab9aadbb61e27d0d8f9c980cecf6c19f0c76f01e8e7bb86fef2b6b4be76"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/compile-collision.mjs",
+      "bytes": 2973,
+      "sha256": "c29d3ac544346c4ae0ef1e476ea858a1d8ae28998e5e8dbe4d899161b1322fe3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/component-editor.mjs",
+      "bytes": 11046,
+      "sha256": "03b0dc52dc1a40720e513108fc26d5c1bff6ff74743dc4a76e02c371dc096165"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/contact-occlusion.mjs",
+      "bytes": 2720,
+      "sha256": "a2b0bf0d4a9e6828a857d43c4f7213c3aeb4c8a8b66b7a6c4fca04c82524fb64"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/creation-ribbon.mjs",
+      "bytes": 2799,
+      "sha256": "3c8249c51d33293aeabdb341b7d30fb993b2abb23c3ebd2045e5aca124d7392d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/crystal-glow.mjs",
+      "bytes": 3979,
+      "sha256": "62cd26aa037331d912611c27522074a1896ea58afeade7fc7dc7a4f92845c27b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/daylight.mjs",
+      "bytes": 19082,
+      "sha256": "545ce7c8d58aaeb2b37fe451ca31de91ac337b0503313fe1b0090cc0385c314f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/door-leaves.mjs",
+      "bytes": 3786,
+      "sha256": "f9371c1679821ca350f24e0f579a1ffe57c559bcfb7caea1f79060a534191bc9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/dunes.mjs",
+      "bytes": 1207,
+      "sha256": "cc6fe9e271583fac6bef4d74ded6b915a1a7fec7488dd91e12974200227ae69e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/editor-markers.mjs",
+      "bytes": 1883,
+      "sha256": "697ad3834ee5b8bf2e1b2462a4127877c9f5aaf3ec52ac990306c04706652c0c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/entry.mjs",
+      "bytes": 170,
+      "sha256": "799eaa755fd623a8c5dbee783fdd675075b391af667dc948c67014854470be61"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/environment-lighting.mjs",
+      "bytes": 2405,
+      "sha256": "023e7f66e86499bebdb4eef118ae4f4ab7c419f4f885ed66debc1328921b5a53"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/experimental-vr.mjs",
+      "bytes": 3004,
+      "sha256": "99f7bbaacc664a21896f3fe322ced482f7f517c55b5460c1178d8f0ebc43d93c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/fantasy-sky.mjs",
+      "bytes": 6406,
+      "sha256": "84fd41777340528f069f388384065e13f2b1b2f045d46ac7d26f352ad9da6c7c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/feature-render.mjs",
+      "bytes": 8454,
+      "sha256": "81509da6c5f1adc5c3f6c7d4fd28d8275221eb77794932b28f2c4c5b7446ad8c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/first-person.mjs",
+      "bytes": 6410,
+      "sha256": "a6b005d9e5dfc9aff21eaeeed4aee5de494ea6028a07ee71dd4c23e8ab7063c2"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/flora-render.mjs",
+      "bytes": 7876,
+      "sha256": "f4757ea9995f60a2834e5d4a190436958983392e127697c3df573dc7f3f865db"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/flora.mjs",
+      "bytes": 40029,
+      "sha256": "592dd710531a430153d2a37ee6982952d3c0ae43880c811545110a014dac999e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture-boundary.mjs",
+      "bytes": 853,
+      "sha256": "db96739beb71066cc88933a4fdb0a6d9024a43458f590723b380ee70cad801b4"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture-gallery.mjs",
+      "bytes": 5319,
+      "sha256": "f29ec993fe157136f426f1724571adc1e086161be3174e55e9df4d8a86f3787b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture-gestures.mjs",
+      "bytes": 436,
+      "sha256": "dd50713a10d09ae1b0e9f1c20e749092c140b26ec60604eea384261f3555880b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture-preview.mjs",
+      "bytes": 3834,
+      "sha256": "99bfb51598aaff71d2308301586f559ed3f3f9086511a94804cf0be8391ac1fc"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture-rest-profiles.json",
+      "bytes": 2836,
+      "sha256": "0a05f6c6cecb8e56e172da3f1ae0d985a2cd0caead5b510aee4663ea70c03934"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/furniture.mjs",
+      "bytes": 33496,
+      "sha256": "508db89b1e11ca8302de48a3d66d1bc616c78b83860e5293c8c357618c49ff76"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/garden-crops.json",
+      "bytes": 411,
+      "sha256": "b5d8e806dfc7ceaed0c45ffa4f2edf8f8356c5a576b5f44c78c66683ceb38b8b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/garden-editor.mjs",
+      "bytes": 4493,
+      "sha256": "0749dc8c9e3461633e0b5032eb82e61faa2689798ceb165917d07f6735c20992"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/garden-render.mjs",
+      "bytes": 4265,
+      "sha256": "846ab0169470248713278e5690e5b2a5b7d49146a23afa473cb098988aa80bf3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/garden-visitor.mjs",
+      "bytes": 6596,
+      "sha256": "fb304222e9a72f80c686073be6687f6438a13f55f53da0b50921636f5324f2f9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/garden.mjs",
+      "bytes": 2937,
+      "sha256": "30a6b3f2bcec2e672b6e3777ef8f9f47da4f54a72a186e83e27e922773771617"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/generation-controls.mjs",
+      "bytes": 7759,
+      "sha256": "cb37e17d106c0776bb082fffb19a7d576620f3f96f00bb72d90a0a4898863fa5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/generation-options.json",
+      "bytes": 4719,
+      "sha256": "5db2554b406a32640d423054a75fc073e80a7b73bfd1b781863fa4bef52e6307"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/generation.mjs",
+      "bytes": 2539,
+      "sha256": "2f57a0aa720fcd74d223c6c15199f32a0fdca223ac9f792ed3c632891f3b9195"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/geology.mjs",
+      "bytes": 2884,
+      "sha256": "1de5d0a20823196cce7199bde6fdabce38e121a945f74e2ca4731218b8893c52"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/getting-started.mjs",
+      "bytes": 4420,
+      "sha256": "59f4bf37047bec067c3d743ae0c01408b55da4b6fdd43a4bad1e89b4f0a1e329"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/glass-bead-curtains.mjs",
+      "bytes": 10628,
+      "sha256": "80418ff6a1cc15ef00544906ea27df59bd12cd18357b3894a4ba36c64d9efdc8"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ground-cover.mjs",
+      "bytes": 9159,
+      "sha256": "c4c88f4f451267d245f43e7714c8d9269b91c598547c10da7602b4be6f2f9bc3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ground-surface.mjs",
+      "bytes": 1769,
+      "sha256": "0afa72d8bdc4f7c870ec2434cb027a72bd27ee76e1c3ce2f6533a94eeeb5920e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ice.mjs",
+      "bytes": 1056,
+      "sha256": "e6430049e4e98c7ed406b9a709459c453b1ea40886d9cb46d4140b1e07668676"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/imported-lighting.mjs",
+      "bytes": 517,
+      "sha256": "346166b22e2cfc3d2c992d4cda7889a99e3a16f0cb75874587079c5b6b665012"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/index.html",
+      "bytes": 8972,
+      "sha256": "ccf73eca5874f0a7b9cd5f3fef60c82c1a57abfb36ef93736e19e46db0ddde10"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/interior-snap.mjs",
+      "bytes": 1305,
+      "sha256": "7fc2dbc19c8d73907dae1e98fc8de767216ac39a32a48cfd642adcf84d23dcd3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/landscape-edit.mjs",
+      "bytes": 5244,
+      "sha256": "a44965ef0cf95e7566ccb50e370cbf84071157461a47bdaf36ab4548c82721ce"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/landscape-features.mjs",
+      "bytes": 4371,
+      "sha256": "9f02ccd0fdfeb66d541a56b32e25e239bef67e72ea4defb7ff0c16b727add852"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/landscape-profiles.mjs",
+      "bytes": 1217,
+      "sha256": "0ba1601748cdb0dbdf59fc0c31c45fb0502612e5ffc85ee6bfea49870ada871d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/leaf-carpet.mjs",
+      "bytes": 2734,
+      "sha256": "1e965cb2a9f32afd4a76d9904ff4d98ab45ce69c50df028275e8e2b3d3827c99"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/leaf-surface.mjs",
+      "bytes": 1456,
+      "sha256": "cac9741016bb25f1b1688db73f152ef50f2a9774c55e2a0022ce80082e58f629"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/live-garden-placement.mjs",
+      "bytes": 4204,
+      "sha256": "c98c1fb68dde8bd8294bb5a990a83fc295585e8b6411a0aa5ab5853c4c88df0b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/local-weather.mjs",
+      "bytes": 3329,
+      "sha256": "9f0d19e5632461098a339c8c55896efb8f82d682aa9d3f5259788184edfb14bd"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/material-previews.mjs",
+      "bytes": 6167,
+      "sha256": "a91e322404ee0b44248ac9d30610b608b15117d3b568050dee2f66b979bb8af4"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/materials.mjs",
+      "bytes": 18997,
+      "sha256": "fd21b4d0248b1cba0bebda433c2ffea326cf58f2574aaaffed5361c7896ad2d6"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/new-island.mjs",
+      "bytes": 2115,
+      "sha256": "dcf518c0cc21e9ce82a44b914783f0ba931b8b5a0ba232e761f1c32222752f84"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/object-asset-url.mjs",
+      "bytes": 1041,
+      "sha256": "678b79990dfb7ff9eaf333f40018803e37ba46e53295b94cad895dc773d17977"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/object-types.json",
+      "bytes": 3055,
+      "sha256": "c09dcd170558974ccb5e1932e926bd6f21948951df01e2fe71fe500f8db7340d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/object-types.mjs",
+      "bytes": 4302,
+      "sha256": "016bbaf8264b4b84cb0884845126721939fa5475eb0c07d0b7bc3e5e0191ee1c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ocean-surface.mjs",
+      "bytes": 7055,
+      "sha256": "7cab441086c6424ef1091bba01c9be0dbcc59170ea6bcd7954975cef02431703"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/opening-shapes.mjs",
+      "bytes": 2258,
+      "sha256": "6a5a30bc0c201acab7164a65a7f11c0a0eef6889fccbbe1642f5c21a8843606b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/placement-clearance.mjs",
+      "bytes": 2504,
+      "sha256": "dcdcf98d4832c6631cf101c712aa1e3a55fee7e3bb1dcb50405f44b1d6bfe0c3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/plant-layer-controls.mjs",
+      "bytes": 4047,
+      "sha256": "8edb0f77364026f4a57474f464e58acde74e068b162723c13694eccb79591dc5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/plant-layers.mjs",
+      "bytes": 1938,
+      "sha256": "8524c95f7ae5079c8054d4f63a6cb5a4fe2f65b68fe572db81cf87fd043def71"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/plant-sizes.json",
+      "bytes": 1105,
+      "sha256": "2e6714ba20ef4067deff1457d0562aa3763f54a589fdfeb04eef07047b99cc24"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/plants.mjs",
+      "bytes": 5005,
+      "sha256": "7d5368fd70a4b11cac921bd777a6178086dd726ff780a2553e1ba2d59d6cb624"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/polyhaven-surfaces.mjs",
+      "bytes": 1146,
+      "sha256": "74172e75fd4edcca3993d80d3222f6dfa0c531885ec398c67bc3caa89f442094"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pond-brush-editor.mjs",
+      "bytes": 2696,
+      "sha256": "f2823813df793184a7a3a7c3c15aaa06d3904a409331c83c241c34d31b78fb69"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pond-brush.mjs",
+      "bytes": 3158,
+      "sha256": "e51c71edc5692a5ec8ed46455bd0bdf058267e477ef8c584560064ce42d38839"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pond-level.mjs",
+      "bytes": 1033,
+      "sha256": "52978b7814e07692862d81441efa275e7912ada862f75c2502ecff0621830904"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pond-render.mjs",
+      "bytes": 2515,
+      "sha256": "3604955300c57ff003e6982d21a99dcd99f42f4185ce12f5efff5b55ee5dd2e9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pond-shape.mjs",
+      "bytes": 1528,
+      "sha256": "474824e4f2f6c27879892d319ad94b17586e089ccdd6afdbd98ae6cde9eccd25"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ponds.mjs",
+      "bytes": 2292,
+      "sha256": "dfb9dbf8bc6a0b58022e1a943ce2779c1645566d4b34f3b2026f743481ebad59"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/pools.mjs",
+      "bytes": 6055,
+      "sha256": "8f84b16384c512d24dde8aba4702b2ec9a6138c40bababcf2d1423f183302671"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/publication-target.mjs",
+      "bytes": 479,
+      "sha256": "d2aaaaaae6bcb765160a1349e6d6af6077a922e04703dfc4934fe766d214cd15"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/render-recovery.mjs",
+      "bytes": 1534,
+      "sha256": "5e6936438a2b1573d00ed7047fb807df95f2542cff25fdcb9db2312cf8fad668"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/rest-variants.mjs",
+      "bytes": 1143,
+      "sha256": "6441fa47429daeb00dcf18dac858ef5597d1d655df9bc72d5d54d544c4d033da"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/retired-content.mjs",
+      "bytes": 705,
+      "sha256": "1ba42317230e2141761bd5d125bc9d3827c8585f89cf51eed4ca08ce8b7d1fef"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ribbon-wheel.mjs",
+      "bytes": 2059,
+      "sha256": "93bc32f2550acfbcda0e69b5e3819b90b6135e6700a4f602257b4705d80ddbe1"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/ribbon.mjs",
+      "bytes": 10965,
+      "sha256": "cfc9ff07e4e3e1e04c071914c9423d5aa9620ea9907a3695e4408c9eb7400c83"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/rock-sculpt-editor.mjs",
+      "bytes": 5759,
+      "sha256": "a34017d606e5d72009c6e513e358ca7b32f4def89febd620024bd2cf6e27e0f5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/rock-sculpt.mjs",
+      "bytes": 5025,
+      "sha256": "5a2f6bf6eb099c09ea0860e0fa421b6f762b0c04be76c3db07f6c4d05d54be20"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/rocks.mjs",
+      "bytes": 7996,
+      "sha256": "06f74cf229d010d86afa4c2fe4274f56c187c6f52345e20ed7cf4248cf5085e6"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/room-chat.mjs",
+      "bytes": 4284,
+      "sha256": "5a5b973f80da10533f13d2eb0f2cf0be6f3daeee59df924dd46b002a758c88b4"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/room-editor.mjs",
+      "bytes": 11242,
+      "sha256": "aaee2ee2d78ec5dca30fbd7993643d31bcc02ff25410331ee1b16cc7cc90bede"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/room-landscape.mjs",
+      "bytes": 1998,
+      "sha256": "a2f4aea39be03e04b558c0bdcc8f95823241c0210fe03ec362dd8dd041f6e48a"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/scenery-surface.mjs",
+      "bytes": 3693,
+      "sha256": "2ce42bff3a4bda443c644b839eabf7a91da1aed11b1c4b108ac489f4221d0257"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/side-dock.mjs",
+      "bytes": 5420,
+      "sha256": "d68a7e9a8999e44571088be901e03e35e6681e661be255133a040fb8e2b20908"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/sidebar.mjs",
+      "bytes": 7118,
+      "sha256": "b6099c6c8c1420ae95d88c77b8a52d52c6661fe56a1b27b958c3a031c0869f97"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/sky-colors.mjs",
+      "bytes": 2170,
+      "sha256": "9d5c54bc8729e04049eb28544801afead4380209af2332edbe81bb2d11bef696"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/sky-illumination.mjs",
+      "bytes": 4350,
+      "sha256": "841ad77e7f0d359984a1c276027b093ffb6fee562a17de00c454ad6d118978fa"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/sky-water-options.mjs",
+      "bytes": 2452,
+      "sha256": "4e58959f802d02e7888e5c6b22b30e7fc0f2e0be28edfa1b994f36c18b80a5e0"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/space.mjs",
+      "bytes": 2336,
+      "sha256": "e02611c0d2fd08a4200416021973a5f77a1342b2290e05ba652255d7bd376bab"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/starter-surfaces.mjs",
+      "bytes": 3959,
+      "sha256": "756fbd925fa341a28193efcd5aefa8936bb66cc0f16c7c08bcaf0faca840dcff"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/step-editor.mjs",
+      "bytes": 3569,
+      "sha256": "eb62b9e7faf5994ccaeac7f94ddee5353a3912bb1147ff151cda65ceb49429bc"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/step-routes.mjs",
+      "bytes": 6264,
+      "sha256": "0fbe6e3bd1817a8c97187d31c1d5bb94357146cd5e8b6b888bb85d4973e70e80"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/stone-surface.mjs",
+      "bytes": 3300,
+      "sha256": "c79e02ef4a45e94b6732c30002c61d612b1abb4f9952a4e0a1c6d5d1d71cc037"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/structures.mjs",
+      "bytes": 15514,
+      "sha256": "7dbabb57d418a5fcc5da73a4d91e9ae546cbf140ecc9747fe2b34f1b897090e2"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/studio-frame.mjs",
+      "bytes": 1908,
+      "sha256": "1b49630b36ee21cbe830e31445ae44d1ce3b3b1769ec5fbfa3a62d8576874a68"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/sunlight.mjs",
+      "bytes": 5121,
+      "sha256": "f6d40412bee9501a1d22aaf6fd1bde210f115223b073278c7b66aa0e59ab4196"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/teleporter-model.mjs",
+      "bytes": 1096,
+      "sha256": "cfcb1923255d59a822b9674c7bba4b674128866bac42dafdb0f4d319d9d3951c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/terrain.mjs",
+      "bytes": 9147,
+      "sha256": "33379b43d3ac5e5bfed7f16f2f9d4188c2ddfd479e0e20af664a273d2de12970"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textiles.mjs",
+      "bytes": 5596,
+      "sha256": "d935a231f650f2dad60c4d99be89fa5f3a7ca7a0ec86d21c64eac08ed7fd5924"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/brick_wall_006_albedo.jpg",
+      "bytes": 457106,
+      "sha256": "fb0b43cdf362f8d3f20701c4b0ee755d6ab23a4910039e0f2f7b8bbd560458dd"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/brick_wall_006_height.png",
+      "bytes": 110517,
+      "sha256": "802851b352e426c061a6fd696eee621975f1534615392fc2146c84f15446b206"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/brick_wall_006_normal.png",
+      "bytes": 533548,
+      "sha256": "b22b178200aae673c9ef538505b54095e366cc880e6c6828dcc37a39b12501af"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/brick_wall_006_rough.png",
+      "bytes": 104108,
+      "sha256": "b3286cf4a229c4368157823997042fc4d1bbded1b20893eece2f0f690451a33d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/cliff_side_albedo.jpg",
+      "bytes": 291125,
+      "sha256": "0fcb29872cc560263952a64c1f0466b5eb859284979e64a408bae9666970b06c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/cliff_side_height.png",
+      "bytes": 83712,
+      "sha256": "e916f38513942d35eaca5d6072f5c81fdc4b318a15c7a5bd7132790faceacce3"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/cliff_side_normal.png",
+      "bytes": 514554,
+      "sha256": "117143387c0a40bb923707a22e031ec059be880771560a479b9e77cdc1ef6978"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/cliff_side_rough.png",
+      "bytes": 108940,
+      "sha256": "cf4ab4f5232aba71494f6845553fbd5cb9488c8aa5ef4f8e74c747078f25e31b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/coastal_cliff_02_albedo.jpg",
+      "bytes": 302802,
+      "sha256": "4914a5aa0170fd0d0a4d922c3a5d156c0afcad3cf903dbf892e85007e5a7c1a5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/coastal_cliff_02_normal.png",
+      "bytes": 467827,
+      "sha256": "327cb304df6396a50ed2c11fc04ad4bed9519c8fc1c1a562a6d966aec121814b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/coastal_cliff_02_rough.png",
+      "bytes": 115349,
+      "sha256": "9d6c8407a7ed9a926fc5434d583e6857bf67cbaccf1c136736ca9c669f6b70f7"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/concrete_wall_004_albedo.jpg",
+      "bytes": 171997,
+      "sha256": "43dd515aba21261a646632ec8342517e814418274c4025c4b20e11cbf38c6327"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/concrete_wall_004_height.png",
+      "bytes": 919,
+      "sha256": "bcd735b2fd94028e2f7b9109c5d6a2180c7128ecaf1a8ccf2e0b08788fda9493"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/concrete_wall_004_normal.png",
+      "bytes": 481935,
+      "sha256": "dbd20291a819b012671c9f15667e4c0db82373cb227eafff87236a936546f196"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/concrete_wall_004_rough.png",
+      "bytes": 45344,
+      "sha256": "43eaadf405423eb152f50708757b4d9ad87aeac633c706e764d1af65b6a9e2bf"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/dirt_floor_albedo.jpg",
+      "bytes": 355507,
+      "sha256": "7a267b6656d2c1ee4a9295d9abc717637dc436af910e916fa2e909d6e76518cf"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/dirt_floor_height.png",
+      "bytes": 128635,
+      "sha256": "11244c285332d7a93b360a6eecb9a9ec9cf2af40d42fb022ec240db3963e5277"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/dirt_floor_normal.png",
+      "bytes": 532789,
+      "sha256": "fdbbfd5b21e117aeaf10e5e56b8e192799ea6a67df6433c43e3c7f2290c4e6ba"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/dirt_floor_rough.png",
+      "bytes": 93644,
+      "sha256": "b50da22cf35a0345eee4c8a7a96d0f45aced9e1f97047dc578bea41afabc8eda"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/fir_bark_albedo.jpg",
+      "bytes": 318459,
+      "sha256": "e42741d76ea2c3db32af1eb52f9538a878c0a9ee7b39f40f2cab44ebc69ce952"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/fir_bark_height.png",
+      "bytes": 88471,
+      "sha256": "0f5dd97bc5d914ce43f84565f299b9668179c9c3b8191fa352f3244563c47e16"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/fir_bark_normal.png",
+      "bytes": 579241,
+      "sha256": "9f675a29d80d0c4755578ca64b99d1ed399564d866240cafa98629dda509f828"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/fir_bark_rough.png",
+      "bytes": 118911,
+      "sha256": "660f06ed30ec7ab3ac0898d591a7d00e77ad8af421153a7180f99fe68f4b5763"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/forest_ground_04_albedo.jpg",
+      "bytes": 476748,
+      "sha256": "a8eede15ea4294a71d1331a2aabd06ee056703becae76a23f10a64e9970cc1ed"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/forest_ground_04_height.png",
+      "bytes": 919,
+      "sha256": "bcd735b2fd94028e2f7b9109c5d6a2180c7128ecaf1a8ccf2e0b08788fda9493"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/forest_ground_04_normal.png",
+      "bytes": 602706,
+      "sha256": "58db3eb2dee0e60821dfa6b6ba3c621e805c21d88de7b6f2b0364fcad341ee90"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/forest_ground_04_rough.png",
+      "bytes": 142808,
+      "sha256": "ab659b106b5b76977de5e2f29ee8961a469618ca0913d310ab68c6f590a9b112"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_plaster_albedo.jpg",
+      "bytes": 475648,
+      "sha256": "a82fab05946233f8551fa08e7ed58f306cc02da062e2b4dc36e321b3004a7597"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_plaster_height.png",
+      "bytes": 940,
+      "sha256": "3864020dea5c4512585de851bb9b7b0e6771e4bab9e204dcbe7424c3d221db7a"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_plaster_normal.png",
+      "bytes": 338343,
+      "sha256": "7583c9ed5f397c2fe39942f04c426f4d0e08a5aa38fdc2767ae2b78d1bdccff9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_plaster_rough.png",
+      "bytes": 203096,
+      "sha256": "ad61e85ee175215dae790b825c62419e44d41233db17e21d7886b30ad3bb1bc9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_roof_01_albedo.jpg",
+      "bytes": 268026,
+      "sha256": "c821e534ceece46d081884d4bff3975acda93c2c9e4caa0e27ac135dc671a66d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_roof_01_height.png",
+      "bytes": 143302,
+      "sha256": "14002ecf04aa1a29409b047d01773c9e44f20ffde0ffbb1721a13fa0f8c022b7"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_roof_01_normal.png",
+      "bytes": 456090,
+      "sha256": "3d26955ff88feb7d8bf129d94a346aa34135fd8befcd02e3be88b55d81b21090"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/grey_roof_01_rough.png",
+      "bytes": 170944,
+      "sha256": "4053d9d1593604eb1e484936a1e8f54749c0c1d231fd15a97f37b8514b832154"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/leafy_grass_albedo.jpg",
+      "bytes": 445821,
+      "sha256": "9c7423bea802201c5bad7425f07b67dff73659a152ff4e3e611d9ffe0f9018c9"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/leafy_grass_height.png",
+      "bytes": 177871,
+      "sha256": "231caf48541ccc654a8c543a0d4d1f0c90842702bf59a9c3e7e47183fb970139"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/leafy_grass_normal.png",
+      "bytes": 607572,
+      "sha256": "4300423489e9158ebe4115c144c8e1ab19c7cdfc511256516a2aed69e373b210"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/leafy_grass_rough.png",
+      "bytes": 114257,
+      "sha256": "dc21429242fd648ec93f9cbf8421ad9b38a05fa4bc0885b1d3d5bd32acd55532"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/marble_01_albedo.jpg",
+      "bytes": 187543,
+      "sha256": "f9ddd4f8c5e5784e600c5fdd10162328a544150fa742f9712dc6874fe000fae5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/marble_01_height.png",
+      "bytes": 61853,
+      "sha256": "02106f10afe237d55d3e9bd0bdda5ba433bc11defd5f26b278cd1af7013eeb9b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/marble_01_normal.png",
+      "bytes": 177828,
+      "sha256": "e88d6e9293fa9d669cdf28d832cd16ee3facaa38fcf6a15b2d548882bf9a0d3d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/marble_01_rough.png",
+      "bytes": 62094,
+      "sha256": "be8a7664cf8dfb50355ee93ca0ee6f5d0d3958a726ad9000995247b3fad480fb"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/metal_plate_02_albedo.jpg",
+      "bytes": 196520,
+      "sha256": "d719adc73a0be67063699a8bb46899a241a67d030d9f8b820cad37d20fa50e3c"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/metal_plate_02_height.png",
+      "bytes": 82632,
+      "sha256": "08431e146413cb533bdf1cb388146211efcb442ed3162aa7bfc35e0de064058d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/metal_plate_02_normal.png",
+      "bytes": 148735,
+      "sha256": "9f7b61a8c825b4e69fa7aca2f68aa4158e3c0e6c2db946aeabcbb90e10c1b0cd"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/metal_plate_02_rough.png",
+      "bytes": 195168,
+      "sha256": "685e704388074071386d60aad1da230d1bc192553dca6d1aafa5a734ed8d5497"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/old_wood_floor_albedo.jpg",
+      "bytes": 259722,
+      "sha256": "f20b0153d5dc84f0bcff5bd1fc1349b98f57355f51572300f598df14bd44feba"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/old_wood_floor_height.png",
+      "bytes": 71131,
+      "sha256": "a79abec0f5d861d2d5a8ac9a66a21e83007c8d5b292454a4ef093a314ebfd032"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/old_wood_floor_normal.png",
+      "bytes": 317716,
+      "sha256": "39e0c9df9214b64df8e036909621eb7bc60bf2db7b302cba4261e4a3c0e96f58"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/old_wood_floor_rough.png",
+      "bytes": 113613,
+      "sha256": "b49b041b310d37865c7b5c338a94ba2f10240dff6c0bfacd7f14e79652562201"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rock_01_albedo.jpg",
+      "bytes": 424318,
+      "sha256": "99fa039fd1ee85f3d44bdbd3fe6104955d0ae39ea6edc4126c59ed8983e4a5ba"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rock_01_height.png",
+      "bytes": 129374,
+      "sha256": "42a8d2b2dac12dd01c72c4388d793d426edeec3ec6c6c3ce73284a688f7a3c18"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rock_01_normal.png",
+      "bytes": 463826,
+      "sha256": "42271586eb94702245704e8629348311827df06b8c0ab2009c6b5d8b7a2300c7"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rock_01_rough.png",
+      "bytes": 144689,
+      "sha256": "ef3da0a54dbebaa23f9b53400b3b8a9e7df6944eb7ebda3f115edcc7ad29c056"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rocks_ground_01_albedo.jpg",
+      "bytes": 463438,
+      "sha256": "c45fb50fad3d75a12bbff2e78765c8c3ac86ac79d6e544651100ee73ff2ddaab"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rocks_ground_01_height.png",
+      "bytes": 131241,
+      "sha256": "357dc4c68a71500d621ae3c1821eaa105899420bf3eecec3159c1aa4b198d58f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rocks_ground_01_normal.png",
+      "bytes": 626939,
+      "sha256": "ef5b08644473eae303d504290692794a24836ad3f7a6bba1b8a8dd9eb5c3b5b5"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/rocks_ground_01_rough.png",
+      "bytes": 184533,
+      "sha256": "321f943252b1e276793540b493f62c07f787e98925567a4297e7657cd7b86c4f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/snow_02_albedo.jpg",
+      "bytes": 218090,
+      "sha256": "386cf1a12e9776b259b60f2b7478301c7dc09c696a0e578bb1ea6c9205bd0e11"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/snow_02_height.png",
+      "bytes": 100274,
+      "sha256": "a49825ececfe92391af34ac1aa4ebb43edc7b122a0ab42084e55e8b592da231e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/snow_02_normal.png",
+      "bytes": 522345,
+      "sha256": "f70879c9885c48b273b509bb10daaf8a60f6273ef9c16962c09b4289b7baa05a"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/snow_02_rough.png",
+      "bytes": 98059,
+      "sha256": "dccf6efa196371615521717bf513bf6af83b79035601b9c736800f6671a4e835"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/terracotta_floor_tiles_albedo.jpg",
+      "bytes": 166605,
+      "sha256": "279c43cb7fbacce47d8c83030c679d6effbee1278716c092f79219bad4f76f14"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/terracotta_floor_tiles_height.png",
+      "bytes": 91816,
+      "sha256": "535ca9a9aa53648d22f000e1d90f3a80a26cc0204b6567bdc4358d39777ff698"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/terracotta_floor_tiles_normal.png",
+      "bytes": 302176,
+      "sha256": "72d6bd37c9235aa0154da6594726094c72f26c1d74c988bb73aea89b174eb018"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/terracotta_floor_tiles_rough.png",
+      "bytes": 139395,
+      "sha256": "0f94ece2730dd889e0b6092e699d6d6c5b357421e8e096222d8d530e5361eb4f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/thatch_roof_angled_albedo.jpg",
+      "bytes": 319176,
+      "sha256": "7246ef2fd04051bc42b99a059e7e410f54b384b5f34d1c16f9a9456d572f6749"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/thatch_roof_angled_height.png",
+      "bytes": 115548,
+      "sha256": "e2c955d7b06bc7c1a3497b267c59d598bcb1bd7f0272c27241d2d7664443b1a1"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/thatch_roof_angled_normal.png",
+      "bytes": 554195,
+      "sha256": "19b615b8d55e17a1da8958de65628f50916a40339719d114a237a5887a9167d2"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/thatch_roof_angled_rough.png",
+      "bytes": 132795,
+      "sha256": "58b07a8693c7e5b24d08b5d5106acfb5836b5de459b6790a6ab422dd5ace577f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/white_sandstone_blocks_02_albedo.jpg",
+      "bytes": 396253,
+      "sha256": "8d55392e0a7b51e5e24f627f8c675cf3c98952c688f40a289a05dd6c7f2f278f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/white_sandstone_blocks_02_height.png",
+      "bytes": 102261,
+      "sha256": "447bfc29d94c5cce970fd5299de163d639ed041108ddcb31c07aaf1162bfb7af"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/white_sandstone_blocks_02_normal.png",
+      "bytes": 443055,
+      "sha256": "5f6b10abab8f637f367739525a7abdea722c20c7bf32191598beb89ae93a19b8"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/white_sandstone_blocks_02_rough.png",
+      "bytes": 135686,
+      "sha256": "4f988a6819af703539e74a15c903dd1b9cbcd9d6d138352aaa5248db1501144e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/wood_planks_albedo.jpg",
+      "bytes": 187053,
+      "sha256": "b1afc416854c61daeea975f47748a16003ed488f905cab9d4ee2c08f7831d89e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/wood_planks_height.png",
+      "bytes": 65610,
+      "sha256": "bd2dce7be8885fe94e3ffda314d6a18673c6b05e89a8a3359211fcfcbf5dc24d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/wood_planks_normal.png",
+      "bytes": 327311,
+      "sha256": "0f31ea48cb57cddd597bbdda76e1347daab3c129bb56439450a5675c52a12cc7"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/textures/polyhaven-v1/wood_planks_rough.png",
+      "bytes": 82923,
+      "sha256": "0ba06ad43a854aeaa15cdd3c3dfe36bf6f8efea347faad53e4c6901ad1e48674"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/toolbar.mjs",
+      "bytes": 3377,
+      "sha256": "a44a662db672dfc7d2076c81b422123a1a4d68a48b51114384ee527d197dd8a1"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/tree-heights.mjs",
+      "bytes": 1129,
+      "sha256": "4d97dcaf874eb1be4ef82326bb9aab5b9fe833b6908428a5ab9f993658b63d0e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/underside.mjs",
+      "bytes": 1702,
+      "sha256": "d5294dc70647a419e151bcb0997ed80ef9b982318afea76e793b3ade6ba07d3d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vendor/BufferGeometryUtils.js",
+      "bytes": 31780,
+      "sha256": "3de832095679e56578beddf70f3e90846a47ec8a886fa8eb21c973cdaef88922"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vendor/GLTFLoader.js",
+      "bytes": 110022,
+      "sha256": "5bc183f5f98ebcd9e98c18977dab4a675db9fd8a6bcaa5d84898586033bb9979"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vendor/LICENSE",
+      "bytes": 1081,
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vendor/OrbitControls.js",
+      "bytes": 32134,
+      "sha256": "80efaadea4f8a636a65fb0bd08bfef62f3d93a0bb94e2e7500f23176c5c07f4e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vendor/three.module.js",
+      "bytes": 1304820,
+      "sha256": "0a3368c165eea773490aec7b77c22de70e3eac288503409256fdbf4d12578416"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vine-editor.mjs",
+      "bytes": 10801,
+      "sha256": "3426ce2e370c32201ed00dab4fede515938724327c4651a7cc436ce05ffd303e"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/vines.mjs",
+      "bytes": 10949,
+      "sha256": "9d0a8a284304062ef7e2f68a454c5d3bc006a44aa136f87fa4b17baeade9fb24"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visit-boot.mjs",
+      "bytes": 765,
+      "sha256": "2307e657d5ef369fb3068a3eca744fee0b5cdbb7c4e13481db2b9bf76c721793"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visit.mjs",
+      "bytes": 15438,
+      "sha256": "9e5c50a3e85b74f50de5d1a1fab9862a29556b02cf90c954d51859151eb79188"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-camera.mjs",
+      "bytes": 1284,
+      "sha256": "204eda219e33ad387bc864379c2973e10a808c5b4c39d84e4c730f2e35f14912"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-connection.mjs",
+      "bytes": 1867,
+      "sha256": "09ffc2b122d0866cc2fbcec7704dbb1f5a290bce4f01f2989136800f4f63367d"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-gait.mjs",
+      "bytes": 12358,
+      "sha256": "a651679b36d8ec0179e44469eaf792a5ead97781431d2bfc027c5a69c1182767"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-input.mjs",
+      "bytes": 2306,
+      "sha256": "30c80205ae0ecd52772f796ff2b3be207d1bfdbdc4edabb4420e97066965ee56"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-poses.mjs",
+      "bytes": 3626,
+      "sha256": "49b6f786a8dab09f7c80b17f753ed5adc44d164c845df7ee0cfb275fa1b5bc41"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor-surfaces.mjs",
+      "bytes": 576,
+      "sha256": "137b811c0e6cec98d70acca648a99bf414b4177037110c79f8dd2b1abb1ce77b"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/visitor.mjs",
+      "bytes": 27192,
+      "sha256": "fdf30fa95c8e0a827991d162e1ead5859629690cbd8cddbf27533ac73e285c89"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/weather.mjs",
+      "bytes": 2544,
+      "sha256": "4c6cdc9668c087f56fdd69021a39267b34268064f7155226b384f35dacb5f89f"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/workshop.mjs",
+      "bytes": 60229,
+      "sha256": "c665d6ed2e2601fa3cb9990ab600b03c6f919cd5ce785f74d0da4f76dddfea11"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/world-lighting.mjs",
+      "bytes": 11158,
+      "sha256": "260e2157c56ce2380604e206ba069e6b744ea3879afdc45b9f46e92ef52fed41"
+    },
+    {
+      "path": "assets/jnaiq/island-workshop/world-router.mjs",
+      "bytes": 2896,
+      "sha256": "b115f650debfc7f171850a98cd567dd00851ef2e8a3fcf301636cb766c5ccf37"
+    },
+    {
+      "path": "builders/INSTALL_BUILDERS.ps1",
+      "bytes": 1245,
+      "sha256": "5a9523eddd92aa04f3f008da1befc5e789ca4cd2d670a4dd8d4f89a7aa37b028"
+    },
+    {
+      "path": "builders/__init__.py",
+      "bytes": 69,
+      "sha256": "0b429fa0916b0455d607d02d85277dc943eb4f0f040f3ab5d68006f5f7ea2a6b"
+    },
+    {
+      "path": "builders/asset_packs.py",
+      "bytes": 9975,
+      "sha256": "826cc56dd8024dd90d5eeeb852e712247fe7974c833db5a1b5d59d5cdce7025c"
+    },
+    {
+      "path": "builders/download.py",
+      "bytes": 4444,
+      "sha256": "e84be6d7b4d79cd562641f9c357a8077620911038dcc5f6c05cc720eea436667"
+    },
+    {
+      "path": "builders/home.html",
+      "bytes": 2159,
+      "sha256": "466c757458e0b62614ffb44338e267e2493eefebe7a000540ab5e005d8c8540e"
+    },
+    {
+      "path": "builders/server.py",
+      "bytes": 10609,
+      "sha256": "763b25c83abddf0a337320436bf0c4f2700738fad97332117740e44403cb3b4a"
+    },
+    {
+      "path": "builders/standalone.js",
+      "bytes": 2001,
+      "sha256": "95ba604108bca22e41824e6dc96e3908cfa168aa0492b2b9d6bfcfb9741c7a8e"
+    },
+    {
+      "path": "builders/verify.py",
+      "bytes": 1332,
+      "sha256": "e664d684e683a0dc1602dcabcbbed4b93afaca02264f0465aa66d4ba9f034164"
+    },
+    {
+      "path": "core/asset_delivery.py",
+      "bytes": 2076,
+      "sha256": "f13b6d7f1e15801653819a71fd1e6e3e4406717908aa4747c837077c7e07a6c8"
+    },
+    {
+      "path": "core/avatar_accessories.py",
+      "bytes": 9335,
+      "sha256": "63569d2ab7940d7a5bff5f682336aa8bc0ad40fe95964f273a417029685ddfe4"
+    },
+    {
+      "path": "core/avatar_fantasy_eyes.py",
+      "bytes": 3394,
+      "sha256": "a55d4d49def786b204eb4a137c160cd1d77e4ce9620570c8cd1100ce13418e82"
+    },
+    {
+      "path": "core/avatar_hair_finish.py",
+      "bytes": 3950,
+      "sha256": "718ac6d8784da3c7199fa561d6bef5a04b39d9c4fa21c8d173a4fd2e48fa117a"
+    },
+    {
+      "path": "core/avatar_library.py",
+      "bytes": 5841,
+      "sha256": "d55c921333993b6f97eb63a414f67e0c8a78be5f9e97af1f9d3d4664c2671a6c"
+    },
+    {
+      "path": "core/avatar_piece_jobs.py",
+      "bytes": 5909,
+      "sha256": "1276985fc457062ec3731cfdda274446a4006d9274a1c28391d67c29149f6093"
+    },
+    {
+      "path": "core/avatar_wardrobe.py",
+      "bytes": 14892,
+      "sha256": "2262c5b9bbb1babd71db07fbb8c8c520a7b8c044e92a90d47a96fa0107ace1e4"
+    },
+    {
+      "path": "core/body_candidates.py",
+      "bytes": 18779,
+      "sha256": "500d06b70b79805147c61f4db24325759b0d2a05bc835ee2f351dc6b9b2c1d0d"
+    },
+    {
+      "path": "core/body_packages.py",
+      "bytes": 13483,
+      "sha256": "42a3bf7852556fd0b7743a657d17251d8a3faab9107122d1e041179da4a54da9"
+    },
+    {
+      "path": "core/body_recipes.py",
+      "bytes": 18364,
+      "sha256": "1d7d04bbfddf95a26425d3696669f76d9d4f0f273ddb308cc5c1b11b1e4118cc"
+    },
+    {
+      "path": "godot-room/assets/objects/chinese_tea_table.glb",
+      "bytes": 72050040,
+      "sha256": "10dbb93d9bee68c65944cb208626080be6385dbc0c5ff7bbad50e9e3ce822974"
+    },
+    {
+      "path": "godot-room/assets/objects/wooden_bookshelf_worn.glb",
+      "bytes": 84039208,
+      "sha256": "8d480e3a0c6ed4e96d6866ebbb6dff00c7fefd28008db11c552ab6e824d9b7c7"
+    },
+    {
+      "path": "godot-room/assets/objects/wooden_bowl_01.glb",
+      "bytes": 65488476,
+      "sha256": "d4baad2a1df58f27cdf0c46694e64bddeb451e185648c31f1903acc50598864d"
+    },
+    {
+      "path": "godot-room/assets/objects/wooden_crate_01.glb",
+      "bytes": 91178176,
+      "sha256": "6ea5e56f405407195c0fce9067b6dcd63958dbcf6d8cd19301972a49ffea2bf3"
+    },
+    {
+      "path": "godot-room/assets/objects/wooden_lantern_01.glb",
+      "bytes": 194868576,
+      "sha256": "7a0b03fbb1f4dcbdae7f43fc8d5df383a3f57841ffa816260d06cb300257e83d"
+    },
+    {
+      "path": "godot-room/assets/objects/wooden_stool_02.glb",
+      "bytes": 97974124,
+      "sha256": "8d9ff29271990f1150b469cfab8791e7601b44ebbe3b4a2c9b665273ceb536e3"
+    },
+    {
+      "path": "godot-room/export/web/designer/complexions/index.json",
+      "bytes": 4,
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "godot-room/export/web/designer/extra-hair/index.json",
+      "bytes": 20,
+      "sha256": "09f1407fd11be9a5c6cf93418eb60a6ef808d657727cfe9b7504fb26b0fc0e72"
+    },
+    {
+      "path": "godot-room/export/web/designer/eye-source.png",
+      "bytes": 610817,
+      "sha256": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b"
+    },
+    {
+      "path": "godot-room/export/web/designer/eyes/index.json",
+      "bytes": 4,
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "godot-room/export/web/designer/generated-skin.js",
+      "bytes": 274,
+      "sha256": "c504e9ac454762f0f7e039167706763403cd9ab256c3ca5be67b6ceafaa7e595"
+    },
+    {
+      "path": "godot-room/export/web/designer/hair-previews/index.json",
+      "bytes": 20,
+      "sha256": "09f1407fd11be9a5c6cf93418eb60a6ef808d657727cfe9b7504fb26b0fc0e72"
+    },
+    {
+      "path": "godot-room/export/web/designer/hand-fit.js",
+      "bytes": 67042,
+      "sha256": "c52fd0aaad56beb6f3aff17c0c218e5e3bd3e312eda4621c1acdc87fee6d55a8"
+    },
+    {
+      "path": "godot-room/export/web/designer/height.js",
+      "bytes": 4883,
+      "sha256": "35cee1c29f25d0a916e10cfd9f4433ed97261d4f3de9c7bfc56c6e1b9ccd7038"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.apple-touch-icon.png",
+      "bytes": 11952,
+      "sha256": "9b374ecbc8558f480421e646f38aaa8a69d5b1d65ff7b48d0735da214c46773a"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.audio.position.worklet.js",
+      "bytes": 3149,
+      "sha256": "347b512529c5dca302093f7b9de6d184dd09d10e9a6fba62cbab098a891b2368"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.html",
+      "bytes": 5410,
+      "sha256": "274fb5f4ed93dd95d875ef0801e29c455519ceaa33348107fa345e7b59bd3c14"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.icon.png",
+      "bytes": 5702,
+      "sha256": "08808dd5397e9a502cb3624944151f87a9705b5b66b5c365c5ca4c6ab51525f5"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.js",
+      "bytes": 317142,
+      "sha256": "19eb180d568bb8e17bcf4c72ca034ed3af44deeb90304deefee4e665562dfe31"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.pck",
+      "bytes": 175696,
+      "sha256": "bcf07c9e67e0af96a03b2338b6e464e7a716e42a1cf290a115446be24e488ae4"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "path": "godot-room/export/web/designer/index.wasm",
+      "bytes": 43699190,
+      "sha256": "e4a43dbae28662b2a68f6136857a94db6695430901515800b9883f6327cb7116"
+    },
+    {
+      "path": "godot-room/export/web/designer/masculine-hair/index.json",
+      "bytes": 20,
+      "sha256": "09f1407fd11be9a5c6cf93418eb60a6ef808d657727cfe9b7504fb26b0fc0e72"
+    },
+    {
+      "path": "godot-room/export/web/designer/shape-upgrades.json",
+      "bytes": 4,
+      "sha256": "e3566b3a06430868d71e9287dfd6c6c520a3da027aabea01951d407ee131dc2f"
+    },
+    {
+      "path": "godot-room/export/web/designer/skin-source.png",
+      "bytes": 3595270,
+      "sha256": "03efe1f6b0ae52429649dcefc9dcaef6058032f874a251169cc3e2ed473c3874"
+    },
+    {
+      "path": "godot-room/export/web/designer/studio.js",
+      "bytes": 92560,
+      "sha256": "e4ec3085e89730e2f07708ff322d50947b9019cbc864ee4e45c8b23fc90fdba7"
+    },
+    {
+      "path": "godot-room/export/web/designer/surface-layers.js",
+      "bytes": 20653,
+      "sha256": "1bd6d7993204e1e0cd0b907e858f4b1d2656991e0e9f69e06f2bb6c7bb2c9e12"
+    },
+    {
+      "path": "godot-room/export/web/designer/textures.js",
+      "bytes": 9428,
+      "sha256": "d4d676c8297c5887c2ffef173f76c5af8d18f1bb71ea58c78e7a28bce224ba1a"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 82,
+      "sha256": "a8ba285fdf66876c1035b3813103b1c8d58b3edaba6c4574feefaf380a99c00b"
+    },
+    {
+      "path": "room/__init__.py",
+      "bytes": 33,
+      "sha256": "7095f6cbb0b61f7374669ec93cce972dd6d3c4a45d18cba7f0eb5ba85932f62d"
+    },
+    {
+      "path": "room/asset_static.py",
+      "bytes": 512,
+      "sha256": "7cbdaac1c53fe0e0de53f253feec12aaa995d0f63237811f34224ee9c7909f6e"
+    },
+    {
+      "path": "room/avatar_library_routes.py",
+      "bytes": 11515,
+      "sha256": "17992206beecf2f842a826ee4213cf4c53eca8f3f6ceb0849481f15519f2e50f"
+    },
+    {
+      "path": "room/avatar_starters.json",
+      "bytes": 373,
+      "sha256": "661468ea81dbd30583ab4c1576a76036ae67c8b232a2e95ac6df69ac023e6c10"
+    },
+    {
+      "path": "room/avatar_wardrobe_pieces.json",
+      "bytes": 62,
+      "sha256": "5132fc653676f735cc66b91ef93096962331b08f76ef6e649e1e26dfc95b67fa"
+    },
+    {
+      "path": "room/body_workshop.html",
+      "bytes": 85105,
+      "sha256": "64843713fdfaaa318b35f7b59c5bbca7023a2804c5b8a6c272b9c96f9c4fb091"
+    },
+    {
+      "path": "room/building_components.py",
+      "bytes": 3642,
+      "sha256": "27c5ee79a5e3950c07a2e0681c3e4f951e55f317fb50b3dceb2823b67933ce83"
+    },
+    {
+      "path": "room/host.py",
+      "bytes": 3021,
+      "sha256": "0ef68c9a3eeae4779cfef0587857337aba7e7786d72459f7de5469df2b4d7dc4"
+    },
+    {
+      "path": "room/island_columns.py",
+      "bytes": 2540,
+      "sha256": "dbe997ffb8da109a2b0633495f62156f8fdaca29fa5ff17dc4763c369f49f1b9"
+    },
+    {
+      "path": "room/island_pools.py",
+      "bytes": 2320,
+      "sha256": "da0d3d93748145b3470eb276566646b465cbd99d4c94acb44c0a09c292ebe1ab"
+    },
+    {
+      "path": "room/island_retired_content.py",
+      "bytes": 1542,
+      "sha256": "6da72701bef2502f3694f6c6493755d2d82cfb278fc64edc4fcbcd31afb57d2f"
+    },
+    {
+      "path": "room/island_steps.py",
+      "bytes": 1386,
+      "sha256": "b9340c7d7b2f847459324c98b48cb379a18521b2e872f6b789978d9027abf29e"
+    },
+    {
+      "path": "room/island_vines.py",
+      "bytes": 2135,
+      "sha256": "8b3e77259b3ad5e41aeb5f8d72f27fd450c3b4f68ca60f68e4db28a230a25b4c"
+    },
+    {
+      "path": "room/island_workshop.py",
+      "bytes": 33211,
+      "sha256": "fac5b3ad744a86e647f2bc9588be78f0c71f32370c984a764293812eb036eb2a"
+    },
+    {
+      "path": "room/local_weather.py",
+      "bytes": 11016,
+      "sha256": "7b2e509b43369439c804884d2a5b7392048572cf360f5b6cc2e6e9cc3dec8c05"
+    },
+    {
+      "path": "room/room_workshop.py",
+      "bytes": 26167,
+      "sha256": "97c21d6d5a13112558849eee1edbd10703db989e2c464c038074d9b8c357d30e"
+    },
+    {
+      "path": "scratch/body_candidates/a5bbba7fd0df4fefaa8c9ecba8d0faea/adapter.json",
+      "bytes": 1267,
+      "sha256": "d53d5ff24b6a9927a6f8c54cd0a0f3bf5275f9ff7a830aad9b9fad3a0d13ba6a"
+    },
+    {
+      "path": "scratch/body_candidates/a5bbba7fd0df4fefaa8c9ecba8d0faea/body.glb",
+      "bytes": 33209048,
+      "sha256": "098d78b73c57b902fa1a8a90976b6e8c44d19c5a9244115acd0ac2412b8acbee"
+    },
+    {
+      "path": "scratch/body_candidates/a5bbba7fd0df4fefaa8c9ecba8d0faea/candidate.json",
+      "bytes": 18962,
+      "sha256": "7471db7059eee6b3afa398d4e9d12a9632759b09d73475866ce24ca94106740e"
+    },
+    {
+      "path": "shell/__init__.py",
+      "bytes": 37,
+      "sha256": "cb9ab6486537c659b8c1fe01222e95d8c60760da69569396d4c0761051c1cbe2"
+    },
+    {
+      "path": "shell/runtime_paths.py",
+      "bytes": 795,
+      "sha256": "d653ba4cca6796c4634e9684b008811c75bb528d05ae9fab55fcf8d636ef2b54"
+    },
+    {
+      "path": "tools/compact_avatar_preview.py",
+      "bytes": 5101,
+      "sha256": "32c892091df6b11f02e91436a73ab7adbb822133e585c98745aeae5f0a24d4fb"
+    },
+    {
+      "path": "tools/mix_avatar_clothes.py",
+      "bytes": 7394,
+      "sha256": "41226107cea019fcb05bb8d5b85d99af80dd295cd9acd06860d566980d502410"
+    },
+    {
+      "path": "tools/optimize_avatar_textures.py",
+      "bytes": 6918,
+      "sha256": "428424c8e4b4405bee541aac78cb1e91f1f22872ac18956cc638672752f47ffe"
+    },
+    {
+      "path": "tools/upgrade_avatar_shape_range.py",
+      "bytes": 9030,
+      "sha256": "6a6e0ff9e73c098bc245b6064807a37e13d9ca967e71d3e83cbde475a26085eb"
+    }
+  ],
+  "candidate_count": 1,
+  "starter_count": 1
+}

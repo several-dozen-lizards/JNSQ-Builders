@@ -13,7 +13,9 @@ def render(style,shape,width,height,size,iris,accent,sclera,shading,inner,lightn
     def color(hex):return np.array([int(hex[i:i+2],16)/255 for i in [1,3,5]])
     def smooth(a,b,t):
         t=np.clip((t-a)/(b-a),0,1);return t*t*(3-2*t)
-    shade=1-shading*smooth(radius,radius+.025,d)*(.1+.32*smooth(radius,.225,d)+.2*smooth(0,.16,-dy))
+    upper=smooth(-.015,.115,-dy)
+    shade=1-shading*(.10+.30*smooth(radius*.85,.225,d)+.36*upper+
+                     .12*smooth(.10,.23,np.abs(dx))+.06*smooth(.10,.22,dy))
     rgb=np.ones((n,n,3))*.91*color(sclera)*shade[:,:,None]
     fiber=.5+.5*np.sin(theta*91+np.sin(theta*27)*3+r*19)
     fine=.5+.5*np.sin(theta*183-r*36)
@@ -40,6 +42,10 @@ def render(style,shape,width,height,size,iris,accent,sclera,shading,inner,lightn
     metric=abs(px)+abs(py) if shape=='diamond' else np.sqrt(px*px+py*py)
     pupil=(1-smooth(.92,1.04,metric))*iris_mask if shape!='none' else np.zeros_like(r)
     rgb=rgb*(1-pupil[:,:,None])+np.array([.008,.009,.012])*pupil[:,:,None]
+    # The cornea/iris sits under the same upper lid as the sclera; do not leave
+    # fantasy or radial irises glowing independently of the socket lighting.
+    globe_shade=1-shading*(.02+.38*upper+.08*smooth(.85,1,r))
+    rgb*=1-iris_mask[:,:,None]+iris_mask[:,:,None]*globe_shade[:,:,None]
     rgba=np.concatenate([np.rint(np.clip(rgb,0,1)*255).astype('uint8'),np.full((n,n,1),255,dtype='uint8')],axis=2)
     output=io.BytesIO();Image.fromarray(rgba).save(output,format='PNG')
     return 'data:image/png;base64,'+base64.b64encode(output.getvalue()).decode()

@@ -47,7 +47,7 @@ def index(m,b,t):
 def clothing(m):return next(n for n in m['nodes'] if n.get('extras',{}).get('jnsq_fit_category')=='clothes')
 
 def material(m,p,slot):
-    mat=copy.deepcopy(m['materials'][p['material']]);mat['name']='JNSQ.'+slot.title();mat.setdefault('extras',{})['jnsq_clothing_slot']=slot
+    mat=copy.deepcopy(m['materials'][p['material']]);mat['name']='JNAIQ.'+slot.title();mat.setdefault('extras',{})['jnsq_clothing_slot']=slot
     p['material']=len(m['materials']);m['materials'].append(mat)
 
 def combine(top_path,bottom_path,dest):

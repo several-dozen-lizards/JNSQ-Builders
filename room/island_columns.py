@@ -3,7 +3,7 @@ import math
 import json
 from pathlib import Path
 
-STYLES=json.loads((Path(__file__).resolve().parents[1]/'assets/jnsq/island-workshop/column-styles.json').read_text(encoding='utf-8'))
+STYLES=json.loads((Path(__file__).resolve().parents[1]/'assets/jnaiq/island-workshop/column-styles.json').read_text(encoding='utf-8'))
 
 
 def number(v,low,high):

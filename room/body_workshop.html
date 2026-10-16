@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>JNSQ Avatar Designer</title>
+  <title>JNAIQ Avatar Designer</title>
   <style>
     :root{color-scheme:dark;--ink:#edf6ef;--muted:#9cb1a2;--line:#33483b;
       --panel:#121b17;--deep:#09100d;--green:#7feda7;--gold:#e7c56c;
@@ -43,6 +43,10 @@
     input[type=range]{width:100%;accent-color:var(--green)}
     input[type=color]{width:100%;height:2.4rem;background:#0b130f;border:1px solid #47604f;border-radius:9px}
     input[type=text]{width:100%;font:inherit;color:var(--ink);background:#0b130f;border:1px solid #47604f;border-radius:10px;padding:.7rem}
+    #exactHeight{padding:.65rem;border:1px solid var(--line);border-radius:12px;background:#0a120e}
+    #exactHeight label{padding:0;border:0;margin-bottom:.45rem;min-width:0;flex:1}
+    #exactHeight input,#exactHeight select{box-sizing:border-box;width:100%;font:inherit;color:var(--ink);background:#0b130f;border:1px solid #47604f;border-radius:8px;padding:.4rem}
+    #exactHeight button{padding:.4rem}#heightNote{font-size:.8rem;margin:.4rem 0 0}
     .builder-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem}.builder-actions button{margin:.35rem 0 0;padding:.55rem}
     .capability-strip{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0}.capability-strip .badge{margin:0}
     .builder-preview{min-height:400px}.builder-preview iframe{height:400px}
@@ -74,6 +78,16 @@
     .hair-preview-dialog .quiet{font-size:.85rem;margin:.8rem 0}.hair-preview-dialog>button{margin:0}
     #hairPreviews a,.hair-preview-dialog a{color:var(--green)}
     .hair-preview-card:focus-visible,.hair-preview-dialog button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+    .wardrobe-switcher{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin:.7rem 0}
+    .wardrobe-switcher button{margin:0;padding:.6rem}.wardrobe-switcher button[aria-selected=true]{background:var(--green);border-color:var(--green);color:#092013}
+    .wardrobe-gallery,.wardrobe-piece-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;max-height:390px;overflow:auto;padding:2px}
+    .wardrobe-card,.wardrobe-piece-card{display:flex;flex-direction:column;gap:.35rem;align-items:stretch;margin:0;padding:.4rem;font-size:.82rem;overflow-wrap:anywhere}
+    .wardrobe-card[data-current=true],.wardrobe-piece-card[aria-pressed=true]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+    .wardrobe-picture{display:grid;place-items:center;width:100%;aspect-ratio:1;background:#080d0a;border-radius:7px;overflow:hidden}
+    .wardrobe-picture img{width:100%;height:100%;object-fit:contain}.wardrobe-picture-fallback{color:var(--muted);font-weight:400;padding:.5rem}
+    .wardrobe-piece-section{margin:.85rem 0;padding-top:.75rem;border-top:1px solid var(--line)}.wardrobe-piece-section h3{margin:0 0 .2rem;color:var(--ink);font-size:.95rem}
+    .wardrobe-piece-section .quiet{margin:.15rem 0 .55rem}.wardrobe-selection{padding:.65rem .75rem;border:1px solid var(--line);border-radius:10px;background:#0a120e}
+    .wardrobe-card:focus-visible,.wardrobe-piece-card:focus-visible{outline:2px solid var(--green);outline-offset:2px}
     .studio-controls{max-height:72vh;overflow:auto;padding-right:.5rem}
     .studio-stage{position:sticky;top:1rem;min-width:0}
     .studio-stage .preview-shell{margin:0}.studio-stage iframe{height:clamp(430px,68vh,850px)}
@@ -89,9 +103,9 @@
     @media(min-width:821px){.studio-controls{max-height:calc(100dvh - 325px);min-height:280px}.studio-stage iframe{height:clamp(280px,calc(100dvh - 405px),650px)}.studio-stage p{margin:.5rem 0}.studio-layout{margin-top:.5rem}.studio-bar select,.studio-bar input{padding:.5rem}.studio-stage .view-actions{margin-top:0}}
     @media(max-width:820px){.studio-bar{grid-template-columns:1fr}.studio-layout{display:flex;flex-direction:column-reverse}.studio-stage{position:relative;top:0;width:100%}.studio-stage iframe{height:430px}.studio-controls{max-height:none;width:100%}}
   </style>
-<script>window.JNSQ_STANDALONE=true</script><script src="/builders/standalone.js" defer></script></head>
-<body><main>
-  <div class="studio-intro"><div class="eyebrow">JNSQ · make a face, find a form</div>
+<script src="/builders/standalone.js" defer></script><script>window.JNAIQ_CURATED=true;</script></head>
+<body><script defer src="/human-expression.js"></script><main>
+  <div class="studio-intro"><div class="eyebrow">JNAIQ · make a face, find a form</div>
   <h1>Avatar designer</h1>
   <p>Start with a human body, shape its features, and save a design you can return to. Your source models stay unchanged while you work on a design.</p></div>
   <section id="studioSetup" class="card" aria-labelledby="studioSetupTitle">
@@ -101,7 +115,7 @@
       <label>Starting model<select id="studioCandidate"><option value="">Loading human models…</option></select></label>
       <div id="studioRecipeSlot"></div><div id="studioNameSlot"></div>
     </div>
-    <div class="studio-actions"><button id="studioSave">Save design</button><button id="studioCopy">Save as new design</button><button id="studioExport">Download 3D avatar</button></div>
+    <div class="studio-actions"><button id="studioEditSaved" type="button">Edit saved avatar</button><button id="studioSave">Save design</button><button id="studioCopy">Save as new design</button><button id="studioExport">Download 3D avatar</button></div>
     <div id="studioState" class="quiet studio-status" role="status">Reading saved designs…</div>
     <div id="studioDownload"></div>
     <details><summary>Character development</summary><p class="quiet">Fine / slender is available in Starting model for appearance and expression editing. Choose Editable human range for the six character starts and fantasy anatomy. Shape, skin and feature edits can be saved and exported together.</p><div class="studio-actions"><a href="/3d/designer/character-studies/fine-slender-v1/review.html" target="_blank" rel="noopener">Fine / slender comparison</a><a href="/3d/designer/character-studies/character-range-v9/index.html" target="_blank" rel="noopener">Character shape workshop</a><a href="/3d/designer/character-studies/character-range-v9/review.html" target="_blank" rel="noopener">Human range comparison</a></div></details>
@@ -169,7 +183,7 @@
   </details>
 
   <details id="advancedWorkshop" class="advanced"><summary>Import your own model · model compatibility · current appearances</summary>
-  <p class="quiet">Import a GLB and review its skeleton mapping here. When it is ready, add it to your library and choose a persona under “Use an avatar in JNSQ”. Importing alone never changes an appearance.</p>
+  <p class="quiet">Import a GLB and review its skeleton mapping here. When it is ready, add it to your library and choose a persona under “Use an avatar in JNAIQ”. Importing alone never changes an appearance.</p>
   <h2>Current assignments</h2>
   <div id="assignments" class="grid"><div class="empty">Reading the resolver…</div></div>
 
@@ -239,102 +253,134 @@
         <div id="mappingState" class="quiet">Not saved.</div>
         <button id="launchPreview" type="button" hidden>Launch sealed 3D preview</button>
         <div id="previewShell" class="preview-shell" hidden>
-          <iframe id="previewFrame" title="Sealed Testy candidate preview" allow="fullscreen"></iframe>
+          <iframe id="previewFrame" title="Avatar preview" allow="fullscreen"></iframe>
         </div>
       </section>
     </div>
   </section>
   </details>
 </main>
-<script src="/3d/designer/hand-fit.js?v=1"></script><script>
+<script src="/3d/designer/hand-fit.js?v=1"></script><script src="/3d/designer/height.js?v=1"></script><script>
 const $=id=>document.getElementById(id);
 const ROLE_FIELDS=["hips","chest","neck","head","jaw","left_eye","right_eye","left_hand","right_hand","left_foot","right_foot"];
 const EXPRESSION_FIELDS=["blink","blink_left","blink_right","mouth_open","smile","frown","pucker","mouth_wide"];
 const HUMAN_MORPH_CONTROLS=[
-  ["body_frame","Body frame","JNSQ_BodyFrame_Feminine","JNSQ_BodyFrame_Masculine"],
-  ["stature","Stature","JNSQ_Stature_Short","JNSQ_Stature_Tall"],
-  ["body_mass","Body mass","JNSQ_BodyMass_Light","JNSQ_BodyMass_Full"],
-  ["muscularity","Muscularity","JNSQ_Muscularity_Soft","JNSQ_Muscularity_Strong"],
-  ["proportions","Proportions","JNSQ_Proportions_Compact","JNSQ_Proportions_Elongated"],
-  ["shoulder_width","Shoulder width","JNSQ_ShoulderWidth_Narrow","JNSQ_ShoulderWidth_Wide"],
-  ["hip_width","Hip width","JNSQ_HipWidth_Narrow","JNSQ_HipWidth_Wide"],
-  ["torso_length","Torso length","JNSQ_TorsoLength_Short","JNSQ_TorsoLength_Long"],
-  ["arm_length","Arm length","JNSQ_ArmLength_Short","JNSQ_ArmLength_Long"],
-  ["leg_length","Leg length","JNSQ_LegLength_Short","JNSQ_LegLength_Long"],
-  ["head_scale","Head scale","JNSQ_HeadScale_Small","JNSQ_HeadScale_Large"],
-  ["jaw_width","Jaw width","JNSQ_JawWidth_Narrow","JNSQ_JawWidth_Wide"],
-  ["chin_height","Chin height","JNSQ_ChinHeight_Short","JNSQ_ChinHeight_Long"],
-  ["cheekbones","Cheekbones","JNSQ_Cheekbones_Soft","JNSQ_Cheekbones_Prominent"],
-  ["cheekbone_height","Cheekbone height","JNSQ_CheekboneHeight_Lower","JNSQ_CheekboneHeight_Higher"],
-  ["nose_size","Nose size","JNSQ_NoseSize_Small","JNSQ_NoseSize_Large"],
-  ["nose_curve","Nose curve","JNSQ_NoseCurve_Concave","JNSQ_NoseCurve_Convex"],
-  ["nose_tip_angle","Nose tip angle","JNSQ_NoseTip_Down","JNSQ_NoseTip_Up"],
-  ["nostril_angle","Nostril angle","JNSQ_NostrilAngle_Down","JNSQ_NostrilAngle_Up"],
-  ["nostril_width","Nostril width","JNSQ_NostrilWidth_Narrow","JNSQ_NostrilWidth_Wide"],
-  ["nose_projection","Nose projection","JNSQ_NoseProjection_Recessed","JNSQ_NoseProjection_Forward"],
-  ["nose_vertical","Nose height","JNSQ_NoseVertical_Low","JNSQ_NoseVertical_High"],
-  ["septum_angle","Septum angle","JNSQ_SeptumAngle_Low","JNSQ_SeptumAngle_High"],
-  ["jaw_angle","Jaw angle","JNSQ_JawAngle_Raised","JNSQ_JawAngle_Dropped"],
-  ["jaw_projection","Jaw projection","JNSQ_JawProjection_Recessed","JNSQ_JawProjection_Forward"],
-  ["jaw_definition","Jaw definition","JNSQ_JawDefinition_Soft","JNSQ_JawDefinition_Angular"],
-  ["chin_projection","Chin projection","JNSQ_ChinProjection_Recessed","JNSQ_ChinProjection_Prominent"],
-  ["eye_size","Eye size","JNSQ_EyeSize_Small","JNSQ_EyeSize_Large"],
-  ["eye_spacing","Eye spacing","JNSQ_EyeSpacing_Close","JNSQ_EyeSpacing_Wide"],
-  ["mouth_width","Mouth width","JNSQ_MouthWidth_Narrow","JNSQ_MouthWidth_Wide"],
-  ["ear_size","Ear size","JNSQ_EarSize_Small","JNSQ_EarSize_Large"],
-  ["nasolabial_definition","Nasolabial fold depth","JNSQ_Nasolabial_Soft","JNSQ_Nasolabial_Defined"],
-  ["midface_projection","Midface projection","JNSQ_Midface_Recessed","JNSQ_Midface_Projected"],
-  ["philtrum_depth","Philtrum depth","JNSQ_Philtrum_Shallow","JNSQ_Philtrum_Deep"],
-  ["brow_height","Brow height","JNSQ_BrowHeight_Low","JNSQ_BrowHeight_High"],
-  ["brow_angle","Brow angle","JNSQ_BrowAngle_Up","JNSQ_BrowAngle_Down"],
-  ["brow_projection","Brow ridge projection","JNSQ_BrowProjection_Recessed","JNSQ_BrowProjection_Prominent"],
-  ["brow_width","Brow span","JNSQ_BrowWidth_Narrow","JNSQ_BrowWidth_Wide"],
-  ["brow_arch","Brow arch","JNSQ_BrowArch_Flat","JNSQ_BrowArch_Arched"],
-  ["brow_hair_thickness","Brow hair thickness","JNSQ_BrowHair_Thin","JNSQ_BrowHair_Thick"],
-  ["brow_hair_length","Brow tail length","JNSQ_BrowHair_Short","JNSQ_BrowHair_Long"],
-  ["breast_size","Breast size","JNSQ_BreastSize_Small","JNSQ_BreastSize_Large"],
-  ["hip_depth","Hip fullness","JNSQ_HipDepth_Shallow","JNSQ_HipDepth_Full"],
-  ["upper_lip_volume","Upper lip fullness","JNSQ_UpperLip_Thin","JNSQ_UpperLip_Full"],
-  ["lower_lip_volume","Lower lip fullness","JNSQ_LowerLip_Thin","JNSQ_LowerLip_Full"],
-  ["cupids_bow","Cupid’s bow","JNSQ_CupidsBow_Soft","JNSQ_CupidsBow_Defined"],
-  ["eyelid_fold", "Upper eyelid contour", "JNSQ_EyelidFold_Rounded", "JNSQ_EyelidFold_Defined"],
-  ["eyelid_fold_height", "Upper eyelid fold height", "JNSQ_EyelidFoldHeight_Low", "JNSQ_EyelidFoldHeight_High"],
-  ["lower_lid_volume", "Lower eyelid fullness", "JNSQ_LowerLid_Slim", "JNSQ_LowerLid_Full"],
-  ["upper_lip_height", "Upper lip height", "JNSQ_UpperLipHeight_Thin", "JNSQ_UpperLipHeight_Tall"],
-  ["lower_lip_height", "Lower lip height", "JNSQ_LowerLipHeight_Thin", "JNSQ_LowerLipHeight_Tall"],
-  ["lower_nose_projection", "Lower nose projection", "JNSQ_LowerNose_Recessed", "JNSQ_LowerNose_Projected"],
-  ["nose_bridge_width", "Nose bridge width", "JNSQ_NoseBridge_Narrow", "JNSQ_NoseBridge_Broad"],
-  ["nose_tip_width", "Nose tip width", "JNSQ_NoseTip_Narrow", "JNSQ_NoseTip_Broad"],
-  ["nostril_flare", "Nostril flare", "JNSQ_NostrilFlare_Subtle", "JNSQ_NostrilFlare_Flared"],
-  ["jaw_corner", "Jaw corner contour", "JNSQ_JawCorner_Soft", "JNSQ_JawCorner_Defined"],
-  ["eye_openness","Eye opening","JNSQ_EyeOpening_Narrow","JNSQ_EyeOpening_Round"],
-  ["eye_tilt","Inner eye corner height","JNSQ_EyeTilt_Down","JNSQ_EyeTilt_Up"],
-  ["eye_angle", "Eye angle", "JNSQ_EyeAngle_Down", "JNSQ_EyeAngle_Up"],
-  ["inner_eye_fold", "Inner eye fold", "JNSQ_InnerEyeFold_In", "JNSQ_InnerEyeFold_Out"],
-  ["inner_lid_opening", "Inner lid opening", "JNSQ_InnerLidOpening_Low", "JNSQ_InnerLidOpening_High"],
-  ["outer_lid_opening", "Outer lid opening", "JNSQ_OuterLidOpening_Low", "JNSQ_OuterLidOpening_High"],
+  ["body_frame","Body frame","JNAIQ_BodyFrame_Feminine","JNAIQ_BodyFrame_Masculine"],
+  ["stature","Stature","JNAIQ_Stature_Short","JNAIQ_Stature_Tall"],
+  ["body_mass","Body mass","JNAIQ_BodyMass_Light","JNAIQ_BodyMass_Full"],
+  ["muscularity","Muscularity","JNAIQ_Muscularity_Soft","JNAIQ_Muscularity_Strong"],
+  ["proportions","Proportions","JNAIQ_Proportions_Compact","JNAIQ_Proportions_Elongated"],
+  ["shoulder_width","Shoulder width","JNAIQ_ShoulderWidth_Narrow","JNAIQ_ShoulderWidth_Wide"],
+  ["hip_width","Hip width","JNAIQ_HipWidth_Narrow","JNAIQ_HipWidth_Wide"],
+  ["torso_length","Torso length","JNAIQ_TorsoLength_Short","JNAIQ_TorsoLength_Long"],
+  ["arm_length","Arm length","JNAIQ_ArmLength_Short","JNAIQ_ArmLength_Long"],
+  ["leg_length","Leg length","JNAIQ_LegLength_Short","JNAIQ_LegLength_Long"],
+  ["head_scale","Head scale","JNAIQ_HeadScale_Small","JNAIQ_HeadScale_Large"],
+  ["jaw_width","Jaw width","JNAIQ_JawWidth_Narrow","JNAIQ_JawWidth_Wide"],
+  ["chin_height","Chin height","JNAIQ_ChinHeight_Short","JNAIQ_ChinHeight_Long"],
+  ["cheekbones","Cheekbones","JNAIQ_Cheekbones_Soft","JNAIQ_Cheekbones_Prominent"],
+  ["cheekbone_height","Cheekbone height","JNAIQ_CheekboneHeight_Lower","JNAIQ_CheekboneHeight_Higher"],
+  ["nose_size","Nose size","JNAIQ_NoseSize_Small","JNAIQ_NoseSize_Large"],
+  ["nose_curve","Nose curve","JNAIQ_NoseCurve_Concave","JNAIQ_NoseCurve_Convex"],
+  ["nose_tip_angle","Nose tip length","JNAIQ_NoseTip_Down","JNAIQ_NoseTip_Up"],
+  ["nose_tip_rotation","Nose tip angle","JNAIQ_NoseTipAngle_Down","JNAIQ_NoseTipAngle_Up"],
+  ["nostril_angle","Nostril angle","JNAIQ_NostrilAngle_Down","JNAIQ_NostrilAngle_Up"],
+  ["nostril_width","Nostril width","JNAIQ_NostrilWidth_Narrow","JNAIQ_NostrilWidth_Wide"],
+  ["nose_projection","Nose projection","JNAIQ_NoseProjection_Recessed","JNAIQ_NoseProjection_Forward"],
+  ["nose_vertical","Nose height","JNAIQ_NoseVertical_Low","JNAIQ_NoseVertical_High"],
+  ["septum_angle","Septum angle","JNAIQ_SeptumAngle_Low","JNAIQ_SeptumAngle_High"],
+  ["jaw_angle","Jaw angle","JNAIQ_JawAngle_Raised","JNAIQ_JawAngle_Dropped"],
+  ["jaw_projection","Jaw projection","JNAIQ_JawProjection_Recessed","JNAIQ_JawProjection_Forward"],
+  ["jaw_definition","Jaw definition","JNAIQ_JawDefinition_Soft","JNAIQ_JawDefinition_Angular"],
+  ["chin_projection","Chin projection","JNAIQ_ChinProjection_Recessed","JNAIQ_ChinProjection_Prominent"],
+  ["lower_chin_width","Lower chin width","JNAIQ_LowerChinWidth_Narrow","JNAIQ_LowerChinWidth_Wide"],
+  ["lower_chin_projection","Lower chin projection","JNAIQ_LowerChinProjection_Recessed","JNAIQ_LowerChinProjection_Projected"],
+  ["eye_size","Eye size","JNAIQ_EyeSize_Small","JNAIQ_EyeSize_Large"],
+  ["eye_spacing","Eye spacing","JNAIQ_EyeSpacing_Close","JNAIQ_EyeSpacing_Wide"],
+  ["mouth_width","Mouth width","JNAIQ_MouthWidth_Narrow","JNAIQ_MouthWidth_Wide"],
+  ["ear_size","Ear size","JNAIQ_EarSize_Small","JNAIQ_EarSize_Large"],
+  ["nasolabial_definition","Nasolabial fold depth","JNAIQ_Nasolabial_Soft","JNAIQ_Nasolabial_Defined"],
+  ["midface_projection","Midface projection","JNAIQ_Midface_Recessed","JNAIQ_Midface_Projected"],
+  ["philtrum_depth","Philtrum depth","JNAIQ_Philtrum_Shallow","JNAIQ_Philtrum_Deep"],
+  ["brow_height","Brow height","JNAIQ_BrowHeight_Low","JNAIQ_BrowHeight_High"],
+  ["brow_angle","Brow angle","JNAIQ_BrowAngle_Up","JNAIQ_BrowAngle_Down"],
+  ["brow_projection","Brow ridge projection","JNAIQ_BrowProjection_Recessed","JNAIQ_BrowProjection_Prominent"],
+  ["brow_width","Brow span","JNAIQ_BrowWidth_Narrow","JNAIQ_BrowWidth_Wide"],
+  ["brow_arch","Brow arch","JNAIQ_BrowArch_Flat","JNAIQ_BrowArch_Arched"],
+  ["brow_inner_horizontal","Inner brow · horizontal","JNAIQ_BrowInner_Inward","JNAIQ_BrowInner_Outward"],
+  ["brow_inner_vertical","Inner brow · vertical","JNAIQ_BrowInner_Lower","JNAIQ_BrowInner_Higher"],
+  ["brow_arch_horizontal","Brow peak · horizontal","JNAIQ_BrowArch_Inward","JNAIQ_BrowArch_Outward"],
+  ["brow_arch_vertical","Brow peak · vertical","JNAIQ_BrowArch_Lower","JNAIQ_BrowArch_Higher"],
+  ["brow_tail_horizontal","Brow tail · horizontal","JNAIQ_BrowTail_Inward","JNAIQ_BrowTail_Outward"],
+  ["brow_tail_vertical","Brow tail · vertical","JNAIQ_BrowTail_Lower","JNAIQ_BrowTail_Higher"],
+  ["brow_hair_thickness","Brow hair thickness","JNAIQ_BrowHair_Thin","JNAIQ_BrowHair_Thick"],
+  ["brow_hair_length","Brow tail length","JNAIQ_BrowHair_Short","JNAIQ_BrowHair_Long"],
+  ["breast_size","Breast size","JNAIQ_BreastSize_Small","JNAIQ_BreastSize_Large"],
+  ["hip_depth","Hip fullness","JNAIQ_HipDepth_Shallow","JNAIQ_HipDepth_Full"],
+  ["upper_lip_volume","Upper lip fullness","JNAIQ_UpperLip_Thin","JNAIQ_UpperLip_Full"],
+  ["lower_lip_volume","Lower lip fullness","JNAIQ_LowerLip_Thin","JNAIQ_LowerLip_Full"],
+  ["cupids_bow","Cupid’s bow","JNAIQ_CupidsBow_Soft","JNAIQ_CupidsBow_Defined"],
+  ["cupids_bow_width","Cupid’s bow width","JNAIQ_CupidsBow_Narrow","JNAIQ_CupidsBow_Wide"],
+  ["outer_lip_width","Outer lip width","JNAIQ_OuterLips_Narrow","JNAIQ_OuterLips_Wide"],
+  ["upper_lip_border","Upper lip border height","JNAIQ_UpperLipBorder_Lower","JNAIQ_UpperLipBorder_Higher"],
+  ["lower_lip_border","Lower lip border height","JNAIQ_LowerLipBorder_Lower","JNAIQ_LowerLipBorder_Higher"],
+  ["eyelid_fold", "Upper eyelid contour", "JNAIQ_EyelidFold_Rounded", "JNAIQ_EyelidFold_Defined"],
+  ["eyelid_fold_height", "Upper eyelid fold height", "JNAIQ_EyelidFoldHeight_Low", "JNAIQ_EyelidFoldHeight_High"],
+  ["lower_lid_volume", "Lower eyelid fullness", "JNAIQ_LowerLid_Slim", "JNAIQ_LowerLid_Full"],
+  ["upper_lip_height", "Upper lip height", "JNAIQ_UpperLipHeight_Thin", "JNAIQ_UpperLipHeight_Tall"],
+  ["lower_lip_height", "Lower lip height", "JNAIQ_LowerLipHeight_Thin", "JNAIQ_LowerLipHeight_Tall"],
+  ["lower_nose_projection", "Lower nose projection", "JNAIQ_LowerNose_Recessed", "JNAIQ_LowerNose_Projected"],
+  ["nose_bridge_width", "Nose bridge width", "JNAIQ_NoseBridge_Narrow", "JNAIQ_NoseBridge_Broad"],
+  ["nose_tip_width", "Nose tip width", "JNAIQ_NoseTip_Narrow", "JNAIQ_NoseTip_Broad"],
+  ["nose_sidewall_width", "Nose sidewall width", "JNAIQ_NoseSidewalls_Narrow", "JNAIQ_NoseSidewalls_Wide"],
+  ["nostril_flare", "Nostril flare", "JNAIQ_NostrilFlare_Subtle", "JNAIQ_NostrilFlare_Flared"],
+  ["alar_groove_definition", "Nostril wing definition", "JNAIQ_AlarGroove_Soft", "JNAIQ_AlarGroove_Defined"],
+  ["jaw_corner", "Jaw corner contour", "JNAIQ_JawCorner_Soft", "JNAIQ_JawCorner_Defined"],
+  ["eye_openness","Eye opening","JNAIQ_EyeOpening_Narrow","JNAIQ_EyeOpening_Round"],
+  ["eye_tilt","Inner eye corner height","JNAIQ_EyeTilt_Down","JNAIQ_EyeTilt_Up"],
+  ["outer_lid_height","Outer eyelid height","JNAIQ_OuterLidHeight_Down","JNAIQ_OuterLidHeight_Up"],
+  ["eye_angle", "Eye angle", "JNAIQ_EyeAngle_Down", "JNAIQ_EyeAngle_Up"],
+  ["inner_eye_fold", "Inner eye fold", "JNAIQ_InnerEyeFold_In", "JNAIQ_InnerEyeFold_Out"],
+  ["inner_lid_opening", "Inner lid opening", "JNAIQ_InnerLidOpening_Low", "JNAIQ_InnerLidOpening_High"],
+  ["outer_lid_opening", "Outer lid opening", "JNAIQ_OuterLidOpening_Low", "JNAIQ_OuterLidOpening_High"],
 
-  ["mouth_position","Mouth position","JNSQ_MouthPosition_Lower","JNSQ_MouthPosition_Higher"],
-  ["lip_height","Lip height","JNSQ_LipHeight_Short","JNSQ_LipHeight_Tall"],
-  ["facial_definition","Facial definition","JNSQ_FacialDefinition_Soft","JNSQ_FacialDefinition_Defined"],
-  ["cheek_volume","Cheek hollowing / fullness","JNSQ_CheekVolume_Sunken","JNSQ_CheekVolume_Full"],
-  ["temple_definition","Temple definition","JNSQ_Temples_Full","JNSQ_Temples_Hollow"],
-  ["eye_socket_depth","Eye socket depth","JNSQ_Socket_Shallow","JNSQ_Socket_Deep"],
-  ["mouth_corner_shape","Mouth corner shape","JNSQ_MouthCorner_Down","JNSQ_MouthCorner_Up"],
-  ["forehead_slope","Forehead slope","JNSQ_Forehead_Upright","JNSQ_Forehead_Sloped"],
-  ["under_jaw_fullness","Under-jaw contour","JNSQ_UnderJaw_Tucked","JNSQ_UnderJaw_Full"],
-  ["jowl_volume","Jowls","JNSQ_Jowl_Taut","JNSQ_Jowl_Full"],
-  ["double_chin_volume","Double-chin volume","JNSQ_DoubleChin_Lean","JNSQ_DoubleChin_Full"],
-  ["neck_fullness","Neck fullness","JNSQ_Neck_Lean","JNSQ_Neck_Full"],
-  ["face_neck_fullness","Face & neck fullness","JNSQ_FaceNeck_Lean","JNSQ_FaceNeck_Full"],
-  ["nose_tip_roundness","Nose tip roundness","JNSQ_NoseTip_Angular","JNSQ_NoseTip_Bulbous"],
-  ["lip_taper","Lip corner fullness","JNSQ_LipCorners_Tapered","JNSQ_LipCorners_Full"],
-  ["lip_projection","Lip projection","JNSQ_Lips_Recessed","JNSQ_Lips_Projected"],
+  ["mouth_position","Mouth position","JNAIQ_MouthPosition_Lower","JNAIQ_MouthPosition_Higher"],
+  ["lip_height","Lip height","JNAIQ_LipHeight_Short","JNAIQ_LipHeight_Tall"],
+  ["facial_definition","Facial definition","JNAIQ_FacialDefinition_Soft","JNAIQ_FacialDefinition_Defined"],
+  ["cheek_volume","Cheek hollowing / fullness","JNAIQ_CheekVolume_Sunken","JNAIQ_CheekVolume_Full"],
+  ["temple_definition","Temple definition","JNAIQ_Temples_Full","JNAIQ_Temples_Hollow"],
+  ["eye_socket_depth","Eye socket depth","JNAIQ_Socket_Shallow","JNAIQ_Socket_Deep"],
+  ["mouth_corner_shape","Mouth corner shape","JNAIQ_MouthCorner_Down","JNAIQ_MouthCorner_Up"],
+  ["forehead_slope","Forehead slope","JNAIQ_Forehead_Upright","JNAIQ_Forehead_Sloped"],
+  ["under_jaw_fullness","Under-jaw contour","JNAIQ_UnderJaw_Tucked","JNAIQ_UnderJaw_Full"],
+  ["jowl_volume","Jowls","JNAIQ_Jowl_Taut","JNAIQ_Jowl_Full"],
+  ["double_chin_volume","Double-chin volume","JNAIQ_DoubleChin_Lean","JNAIQ_DoubleChin_Full"],
+  ["neck_fullness","Neck fullness","JNAIQ_Neck_Lean","JNAIQ_Neck_Full"],
+  ["face_neck_fullness","Face & neck fullness","JNAIQ_FaceNeck_Lean","JNAIQ_FaceNeck_Full"],
+  ["fullness_temples","Temple fullness","JNAIQ_Fullness_temples_Less","JNAIQ_Fullness_temples_More"],
+  ["fullness_upper_cheeks","Upper cheek fullness","JNAIQ_Fullness_upper_cheeks_Less","JNAIQ_Fullness_upper_cheeks_More"],
+  ["fullness_mouth_sides","Fullness beside mouth","JNAIQ_Fullness_mouth_sides_Less","JNAIQ_Fullness_mouth_sides_More"],
+  ["fullness_lower_cheeks","Lower cheek fullness","JNAIQ_Fullness_lower_cheeks_Less","JNAIQ_Fullness_lower_cheeks_More"],
+  ["fullness_jowls","Jowl fullness","JNAIQ_Fullness_jowls_Less","JNAIQ_Fullness_jowls_More"],
+  ["fullness_chin","Chin cushion","JNAIQ_Fullness_chin_Less","JNAIQ_Fullness_chin_More"],
+  ["fullness_under_chin","Under-chin fullness","JNAIQ_Fullness_under_chin_Less","JNAIQ_Fullness_under_chin_More"],
+  ["fullness_neck_sides","Side neck fullness","JNAIQ_Fullness_neck_sides_Less","JNAIQ_Fullness_neck_sides_More"],
+  ["fullness_nape","Back neck fullness","JNAIQ_Fullness_nape_Less","JNAIQ_Fullness_nape_More"],
+  ["nose_tip_roundness","Nose tip shape","JNAIQ_NoseTip_Angular","JNAIQ_NoseTip_Bulbous"],
+  ["lip_taper","Lip corner fullness","JNAIQ_LipCorners_Tapered","JNAIQ_LipCorners_Full"],
+  ["lip_projection","Lip projection","JNAIQ_Lips_Recessed","JNAIQ_Lips_Projected"],
+  ["mouth_projection","Mouth projection","JNAIQ_Mouth_Recessed","JNAIQ_Mouth_Forward"],
+  ["kay_head_envelope","Kay study · head envelope","JNAIQ_KayHeadEnvelope_Neutral","JNAIQ_KayHeadEnvelope_Full"],
+  ["kay_facial_structure","Kay study · facial planes","JNAIQ_KayFacialStructure_Neutral","JNAIQ_KayFacialStructure_Full"],
   ["ear_point","Pointed ears","FANTASY_ear_point_Neutral","FANTASY_ear_point_Full"],
+  ["ear_tip_angle","Ear tip angle","FANTASY_ear_tip_angle_Forward","FANTASY_ear_tip_angle_Back"],
+  ["ear_tip_spread","Ear tip spread","FANTASY_ear_tip_spread_Inward","FANTASY_ear_tip_spread_Outward"],
   ["ear_sweep","Swept ears","FANTASY_ear_sweep_Neutral","FANTASY_ear_sweep_Full"],
   ["ear_round","Rounded ears","FANTASY_ear_round_Neutral","FANTASY_ear_round_Full"],
   ["fangs","Fangs","FANTASY_fangs_Neutral","FANTASY_fangs_Full"],
+  ["fangs_protrusion","Fang protrusion","FANTASY_fangs_protrusion_Inside","FANTASY_fangs_protrusion_Outside"],
   ["tusks","Tusks","FANTASY_tusks_Neutral","FANTASY_tusks_Full"],
+  ["tusks_protrusion","Tusk protrusion","FANTASY_tusks_protrusion_Inside","FANTASY_tusks_protrusion_Outside"],
   ["horns","Horns","FANTASY_horns_Neutral","FANTASY_horns_Full"],
   ["tail","Tail","FANTASY_tail_Neutral","FANTASY_tail_Full"],
   ["character_heart","Heart structure","RANGE9_character_heart_Neutral","RANGE9_character_heart_Full"],
@@ -345,16 +391,28 @@ const HUMAN_MORPH_CONTROLS=[
   ["character_aquiline","Aquiline structure","RANGE9_character_aquiline_Neutral","RANGE9_character_aquiline_Full"],
   ["character_age","Facial soft-tissue descent","RANGE9_character_age_Neutral","RANGE9_character_age_Full"],
   ["body_softness","Soft volume distribution","RANGE9_body_softness_Neutral","RANGE9_body_softness_Full"],
-  ["body_power","Neck and upper-body volume","RANGE9_body_power_Neutral","RANGE9_body_power_Full"]
+  ["body_power","Neck and upper-body volume","RANGE9_body_power_Neutral","RANGE9_body_power_Full"],
+  ["body_adiposity", "Body fat fullness", "JNAIQ_Adiposity_Less", "JNAIQ_Adiposity_More"],
+  ["fat_upper_abdomen", "Upper abdomen", "JNAIQ_Fat_upper_abdomen_Less", "JNAIQ_Fat_upper_abdomen_More"],
+  ["fat_lower_abdomen", "Lower abdomen", "JNAIQ_Fat_lower_abdomen_Less", "JNAIQ_Fat_lower_abdomen_More"],
+  ["fat_waist", "Waist & flanks", "JNAIQ_Fat_waist_Less", "JNAIQ_Fat_waist_More"],
+  ["fat_upper_back", "Upper back", "JNAIQ_Fat_upper_back_Less", "JNAIQ_Fat_upper_back_More"],
+  ["fat_chest", "Chest fullness", "JNAIQ_Fat_chest_Less", "JNAIQ_Fat_chest_More"],
+  ["fat_seat", "Buttocks", "JNAIQ_Fat_seat_Less", "JNAIQ_Fat_seat_More"],
+  ["fat_outer_thighs", "Hips & outer thighs", "JNAIQ_Fat_outer_thighs_Less", "JNAIQ_Fat_outer_thighs_More"],
+  ["fat_inner_thighs", "Inner thighs", "JNAIQ_Fat_inner_thighs_Less", "JNAIQ_Fat_inner_thighs_More"],
+  ["fat_upper_arms", "Upper arms", "JNAIQ_Fat_upper_arms_Less", "JNAIQ_Fat_upper_arms_More"],
+  ["fat_calves", "Calves & lower legs", "JNAIQ_Fat_calves_Less", "JNAIQ_Fat_calves_More"],
+  ["fat_belly_hang", "Lower belly hang", "JNAIQ_Fat_belly_hang_Less", "JNAIQ_Fat_belly_hang_More"]
 ];
 const TRANSIENT_EXPRESSIONS=[
-  ["blink_left","Left blink","JNSQ_Expr_BlinkLeft"],
-  ["blink_right","Right blink","JNSQ_Expr_BlinkRight"],
-  ["mouth_open","Mouth open","JNSQ_Expr_MouthOpen"],
-  ["smile","Smile","JNSQ_Expr_Smile"],
-  ["frown","Frown","JNSQ_Expr_Frown"],
-  ["pucker","Pucker","JNSQ_Expr_Pucker"],
-  ["mouth_wide","Mouth wide","JNSQ_Expr_MouthWide"]
+  ["blink_left","Left blink","JNAIQ_Expr_BlinkLeft"],
+  ["blink_right","Right blink","JNAIQ_Expr_BlinkRight"],
+  ["mouth_open","Mouth open","JNAIQ_Expr_MouthOpen"],
+  ["smile","Smile","JNAIQ_Expr_Smile"],
+  ["frown","Frown","JNAIQ_Expr_Frown"],
+  ["pucker","Pucker","JNAIQ_Expr_Pucker"],
+  ["mouth_wide","Mouth wide","JNAIQ_Expr_MouthWide"]
 ];
 const AXES=[["1,0,0","+X"],["-1,0,0","−X"],["0,1,0","+Y"],["0,-1,0","−Y"],["0,0,1","+Z"],["0,0,-1","−Z"]];
 const BUILDER_FIELDS=[
@@ -364,7 +422,7 @@ const BUILDER_FIELDS=[
 ];
 const FACE_FIELDS=[
   ["nose_size","Nose size"],["nose_curve","Bridge curve"],
-  ["nose_tip_angle","Tip angle"],["nostril_angle","Nostril angle"],
+  ["nose_tip_angle","Tip length"],["nose_tip_rotation","Tip angle"],["nostril_angle","Nostril angle"],
   ["nostril_width","Nostril width"],["nose_projection","Nose projection"],
   ["nose_vertical","Nose height"],["septum_angle","Septum angle"],
   ["jaw_width","Jaw width"],["jaw_angle","Jaw angle"],
@@ -424,31 +482,51 @@ async function loadBuilderRecipes(selected=""){
   if(selected)$("builderRecipe").value=selected
 }
 async function selectBuilderRecipe(){
-  const id=$("builderRecipe").value;activeRecipe=id||null;builderHistory=[];builderFuture=[];
-  if(!id){writeBuilder(BUILDER_DEFAULT);$("builderState").textContent="New unsaved Testy recipe · install disabled.";paintBuilderButtons();return}
-  try{const recipe=await json(`/api/avatar-bodies/builder/recipes/${id}`);writeBuilder(recipe);if(recipe.source_candidate?.candidate_id)await openMapper(recipe.source_candidate.candidate_id,recipe.identity);$("builderState").textContent=`Loaded revision ${recipe.revision_id.slice(0,8)} · ${recipe.source_candidate?"real MPFB source restored · ":""}install disabled.`;paintBuilderButtons()}catch(error){$("builderState").className="error";$("builderState").textContent=error.message}
+  const id=$("builderRecipe").value;
+  if(!id){activeRecipe=null;builderHistory=[];builderFuture=[];writeBuilder(BUILDER_DEFAULT);$("builderState").textContent="New unsaved Testy recipe · install disabled.";paintBuilderButtons();return}
+  try{const recipe=await json(`/api/avatar-bodies/builder/recipes/${id}`);writeBuilder(recipe);activeRecipe=id;builderHistory=[];builderFuture=[];$("builderState").className="quiet";if(recipe.source_candidate?.candidate_id)await openMapper(recipe.source_candidate.candidate_id,recipe.identity);$("builderState").textContent=`Loaded revision ${recipe.revision_id.slice(0,8)} · ${recipe.source_candidate?"real MPFB source restored · ":""}install disabled.`;paintBuilderButtons()}catch(error){$("builderState").className="error";$("builderState").textContent=error.message}
 }
 async function saveBuilderRecipe(){
   const payload=readBuilder();$("builderState").className="quiet";$("builderState").textContent="Saving immutable recipe revision…";
   try{const url=activeRecipe?`/api/avatar-bodies/builder/recipes/${activeRecipe}`:"/api/avatar-bodies/builder/recipes",response=await fetch(url,{method:activeRecipe?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}),data=await response.json();if(!response.ok)throw new Error(data.error||`HTTP ${response.status}`);activeRecipe=data.recipe_id;builderLast=JSON.stringify(readBuilder());await loadBuilderRecipes(activeRecipe);$("builderState").className="";$("builderState").textContent=`Saved revision ${data.revision_id.slice(0,8)} · Testy bench only · install disabled.`}catch(error){$("builderState").className="error";$("builderState").textContent=error.message}
 }
 function readHumanMorphs(){const values={};document.querySelectorAll("[data-human-morph]").forEach(input=>values[input.dataset.humanMorph]=Number(input.value));return values}
-function applyHumanMorphPreview(){if(!humanPreviewReady)return;const apply=$("previewFrame").contentWindow?.jnsqHumanMorphApply;if(typeof apply==="function")apply(JSON.stringify(readHumanMorphs()))}
+function applyHumanMorphPreview(){updateHeightReadout();if(!humanPreviewReady)return;const apply=$("previewFrame").contentWindow?.jnsqHumanMorphApply;if(typeof apply==="function")apply(JSON.stringify(readHumanMorphs()))}
 function readExpressionPreview(){const values={};document.querySelectorAll("[data-expression-preview]").forEach(input=>values[input.dataset.expressionPreview]=Number(input.value));return values}
 function applyExpressionPreview(){if(!humanPreviewReady)return;const apply=$("previewFrame").contentWindow?.jnsqExpressionApply;if(typeof apply==="function")apply(JSON.stringify(readExpressionPreview()))}
+let avatarHeightProfile=null;
+function updateHeightReadout(forceFields=false){
+  const output=document.querySelector('[data-human-morph-value="stature"]');if(!output||!avatarHeightProfile)return;
+  const height=avatarHeightProfile.measure(readHumanMorphs()),imperial=avatarHeightImperial(height);
+  output.textContent=$('heightUnits')?.value==='cm'?`${(height*100).toFixed(1)} cm`:`${imperial.feet}′ ${imperial.inches}″`;
+  if($('heightCm')&&(forceFields||!['heightCm','heightFeet','heightInches'].includes(document.activeElement?.id))){$('heightCm').value=(height*100).toFixed(1);$('heightFeet').value=imperial.feet;$('heightInches').value=imperial.inches;}
+}
+async function mountHeightControls(candidateId){
+  avatarHeightProfile=null;const slider=document.querySelector('[data-human-morph="stature"]');if(!slider)return;
+  slider.step='any';
+  const panel=document.createElement('div');panel.id='exactHeight';panel.innerHTML=`<label>Height units<select id="heightUnits"><option value="ft">Feet &amp; inches</option><option value="cm">Centimeters</option></select></label><div id="heightImperial" style="display:flex;gap:.6rem"><label>Feet<input id="heightFeet" type="number" min="0" step="1"></label><label>Inches<input id="heightInches" type="number" min="0" max="11.9" step="0.1"></label></div><label id="heightMetric" hidden>Centimeters<input id="heightCm" type="number" min="1" step="0.1"></label><button id="applyHeight" type="button" disabled>Set height</button><p id="heightNote" class="quiet" role="status">Measuring body height…</p>`;
+  slider.closest('label').after(panel);panel.hidden=humanGroup!=='body';
+  let units='ft';try{units=localStorage.getItem('jnaiq.height.units')||units}catch{}
+  $('heightUnits').value=units==='cm'?'cm':'ft';
+  function switchUnits(){const metric=$('heightUnits').value==='cm';$('heightImperial').hidden=metric;$('heightImperial').style.display=metric?'none':'flex';$('heightMetric').hidden=!metric;try{localStorage.setItem('jnaiq.height.units',$('heightUnits').value)}catch{}updateHeightReadout();}
+  $('heightUnits').onchange=switchUnits;switchUnits();
+  $('applyHeight').onclick=()=>{try{const metric=$('heightUnits').value==='cm',fields=metric?[$('heightCm')]:[$('heightFeet'),$('heightInches')];if(fields.some(f=>f.value===''||!f.checkValidity()))throw Error('Enter a valid height in both fields.');const metres=metric?Number($('heightCm').value)/100:(Number($('heightFeet').value)*12+Number($('heightInches').value))*.0254;slider.value=avatarHeightProfile.solve(metres,readHumanMorphs());applyHumanMorphPreview();rememberHumanChange();$('heightNote').textContent='Body height, without hair or shoes. Other body proportions can change it.';}catch(error){$('heightNote').textContent=error.message}};
+  for(const field of ['heightCm','heightFeet','heightInches'])$(field).onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('applyHeight').click();}};
+  try{const response=await fetch(`/api/avatar-bodies/candidates/${candidateId}/model?brow_height=local-brows-2&lower_chin=lower-chin-1`);if(!response.ok)throw Error('Source model unavailable');const buffer=await response.arrayBuffer();if(activeCandidate!==candidateId||!panel.isConnected)return;avatarHeightProfile=createAvatarHeightProfile(buffer,HUMAN_MORPH_CONTROLS);$('applyHeight').disabled=false;updateHeightReadout();$('heightNote').textContent='Body height, without hair or shoes. Other body proportions can change it.';}catch(error){if(panel.isConnected)$('heightNote').textContent='Height measurement unavailable: '+error.message;}
+}
 function paintExpressionPreview(morphs){
-  const available=new Set(morphs),controls=TRANSIENT_EXPRESSIONS.filter(([_id,_label,morph])=>available.has(morph));
+  const available=new Set(morphs.map(name=>name.replace(/^JNSQ_/, 'JNAIQ_'))),controls=TRANSIENT_EXPRESSIONS.filter(([_id,_label,morph])=>available.has(morph));
   $("expressionPreviewSection").hidden=!controls.length;
   $("expressionPreviewFields").innerHTML=controls.map(([id,label])=>`<label><span>${esc(label)}<output data-expression-preview-value="${esc(id)}">0%</output></span><input data-expression-preview="${esc(id)}" type="range" min="0" max="1" step="0.01" value="0"></label>`).join("");
   document.querySelectorAll("[data-expression-preview]").forEach(input=>input.addEventListener("input",()=>{document.querySelector(`[data-expression-preview-value="${input.dataset.expressionPreview}"]`).textContent=Math.round(Number(input.value)*100)+"%";applyExpressionPreview()}))
 }
 function paintHumanMorphs(morphs,values={}){
-  const available=new Set(morphs);activeHumanMorphs=HUMAN_MORPH_CONTROLS.filter(([_id,_label,low,high])=>available.has(low)&&available.has(high));
+  const available=new Set(morphs.map(name=>name.replace(/^JNSQ_/, 'JNAIQ_')));activeHumanMorphs=HUMAN_MORPH_CONTROLS.filter(([_id,_label,low,high])=>available.has(low)&&available.has(high));
   $("humanMorphSection").hidden=!activeHumanMorphs.length;
   $("humanMorphFields").innerHTML=activeHumanMorphs.map(([id,label,low,high])=>{const value=Number(values[id]??.5);return `<label><span>${esc(label)}<output data-human-morph-value="${esc(id)}">${Math.round(value*100)}%</output></span><input data-human-morph="${esc(id)}" data-low="${esc(low)}" data-high="${esc(high)}" type="range" min="0" max="${id==='lower_nose_projection'?1.25:1}" step="0.01" value="${value}"></label>`}).join("");
   document.querySelectorAll("[data-human-morph]").forEach(input=>input.addEventListener("input",()=>{document.querySelector(`[data-human-morph-value="${input.dataset.humanMorph}"]`).textContent=Math.round(Number(input.value)*100)+"%";applyHumanMorphPreview()}))
 }
-async function openMapper(candidateId,identity=null){try{const data=await json(`/api/avatar-bodies/candidates/${candidateId}/mapping`),record=data.candidate,report=record.compatibility,adapter=data.adapter||{};activeCandidate=candidateId;activeCandidateMeta={candidate_id:candidateId,sha256:report.asset.sha256,original_name:record.original_name};$("mapper").dataset.candidateId=candidateId;humanPreviewReady=false;const nodes=report.mapping_options?.nodes||[],morphs=report.mapping_options?.morph_targets||[];$("mapper").hidden=false;$("mapperIntro").textContent=`${record.original_name} → ${record.pilot_target}. Proposals are evidence-ranked; nothing is installed.`;$("roleFields").innerHTML=ROLE_FIELDS.map(role=>{const selected=adapter.roles?.[role]??proposed(report,role);return `<label>${esc(role.replaceAll("_"," "))}<select data-role="${role}">${selectOptions(nodes,selected)}</select></label>`}).join("");$("expressionFields").innerHTML=EXPRESSION_FIELDS.map(role=>{const selected=adapter.expressions?.[role]??report.expression_candidates?.[role]?.[0]?.name??"";return `<label>${esc(role.replaceAll("_"," "))}<select data-expression="${role}">${selectOptions(morphs,selected)}</select></label>`}).join("")||'<div class="empty">No named morph targets observed.</div>';const restored=identity||(recipeSourceCandidate?.candidate_id===candidateId?recipeIdentity:{});paintHumanMorphs(morphs,restored);const fitted=report.fitted_assets||[];$("fittedAssetState").textContent=fitted.length?`Morph-fitted assets: ${fitted.map(item=>`${item.category} · ${item.name} · ${item.morph_targets} targets${item.rigged?" · rigged":""}`).join(" | ")}. Cloth collision remains unproven.`:"No compiler-authored fitted assets observed.";paintExpressionPreview(morphs);const optical=adapter.optical_origin||{},head=adapter.roles?.head||proposed(report,"head");$("opticalNode").innerHTML=selectOptions(nodes,optical.node||head);$("forwardAxis").innerHTML=axisOptions(optical.forward_axis_local);$("upAxis").innerHTML=axisOptions(optical.up_axis_local);const offset=optical.offset_m||[0,0,0];$("opticalX").value=offset[0];$("opticalY").value=offset[1];$("opticalZ").value=offset[2];$("mappingState").className="quiet";$("mappingState").textContent=adapter.revision_id?`Current revision ${adapter.revision_id.slice(0,8)} · ${adapter.mapping_state}${adapter.pov_ready?" · POV ready":""}`:"Unsaved proposal.";$("launchPreview").hidden=!adapter.revision_id;$("previewShell").hidden=true;if(!$("previewFrame").contentWindow?.jnsqStudio)$("previewFrame").src="about:blank";$("mapper").scrollIntoView({behavior:"smooth",block:"start"})}catch(error){$("mappingState").className="error";$("mappingState").textContent=error.message}}
+async function openMapper(candidateId,identity=null){try{const data=await json(`/api/avatar-bodies/candidates/${candidateId}/mapping`),record=data.candidate,report=record.compatibility,adapter=data.adapter||{};activeCandidate=candidateId;activeCandidateMeta={candidate_id:candidateId,sha256:report.asset.sha256,original_name:record.original_name};$("mapper").dataset.candidateId=candidateId;humanPreviewReady=false;const nodes=report.mapping_options?.nodes||[],morphs=data.preview_morph_targets||report.mapping_options?.morph_targets||[];$("mapper").hidden=false;$("mapperIntro").textContent=`${record.original_name} → ${record.pilot_target}. Proposals are evidence-ranked; nothing is installed.`;$("roleFields").innerHTML=ROLE_FIELDS.map(role=>{const selected=adapter.roles?.[role]??proposed(report,role);return `<label>${esc(role.replaceAll("_"," "))}<select data-role="${role}">${selectOptions(nodes,selected)}</select></label>`}).join("");$("expressionFields").innerHTML=EXPRESSION_FIELDS.map(role=>{const selected=adapter.expressions?.[role]??report.expression_candidates?.[role]?.[0]?.name??"";return `<label>${esc(role.replaceAll("_"," "))}<select data-expression="${role}">${selectOptions(morphs,selected)}</select></label>`}).join("")||'<div class="empty">No named morph targets observed.</div>';const restored=identity||(recipeSourceCandidate?.candidate_id===candidateId?recipeIdentity:{});paintHumanMorphs(morphs,restored);const fitted=report.fitted_assets||[];$("fittedAssetState").textContent=fitted.length?`Morph-fitted assets: ${fitted.map(item=>`${item.category} · ${item.name} · ${item.morph_targets} targets${item.rigged?" · rigged":""}`).join(" | ")}. Cloth collision remains unproven.`:"No compiler-authored fitted assets observed.";paintExpressionPreview(morphs);const optical=adapter.optical_origin||{},head=adapter.roles?.head||proposed(report,"head");$("opticalNode").innerHTML=selectOptions(nodes,optical.node||head);$("forwardAxis").innerHTML=axisOptions(optical.forward_axis_local);$("upAxis").innerHTML=axisOptions(optical.up_axis_local);const offset=optical.offset_m||[0,0,0];$("opticalX").value=offset[0];$("opticalY").value=offset[1];$("opticalZ").value=offset[2];$("mappingState").className="quiet";$("mappingState").textContent=adapter.revision_id?`Current revision ${adapter.revision_id.slice(0,8)} · ${adapter.mapping_state}${adapter.pov_ready?" · POV ready":""}`:"Unsaved proposal.";$("launchPreview").hidden=!adapter.revision_id;$("previewShell").hidden=true;if(!$("previewFrame").contentWindow?.jnsqStudio)$("previewFrame").src="about:blank";$("mapper").scrollIntoView({behavior:"smooth",block:"start"})}catch(error){$("mappingState").className="error";$("mappingState").textContent=error.message}}
 $("candidates").onclick=event=>{const button=event.target.closest("[data-map-candidate]");if(button)openMapper(button.dataset.mapCandidate)};
 $("inspect").onclick=async()=>{const asset=$("asset").value;if(!asset)return;$("summary").className="empty";$("summary").textContent="Inspecting metadata…";$("report").hidden=true;try{const data=await json(`/api/avatar-bodies/${encodeURIComponent(asset)}/compatibility`);const s=data.structure,c=data.capabilities;$("summary").className="";$("summary").innerHTML=`<p><strong>${esc(asset)}</strong> exposes ${s.meshes} mesh(es), ${s.skins} skin(s), ${s.animations} animation(s), and ${s.morph_targets} morph-target instance(s).</p><p>Gaze: ${esc(c.gaze)} · Blink: ${esc(c.blink)} · Speech: ${esc(c.speech_mouth)} · Wardrobe: ${esc(c.wardrobe_rigging)}</p>`;$("report").textContent=JSON.stringify(data,null,2);$("report").hidden=false}catch(error){$("summary").className="error";$("summary").textContent=error.message}};
 $("stage").onclick=async()=>{const file=$("upload").files[0];if(!file){$("uploadState").className="error";$("uploadState").textContent="Choose one GLB first.";return}$("uploadState").className="quiet";$("uploadState").textContent=`Staging ${file.name}…`;try{const response=await fetch(`/api/avatar-bodies/candidates?filename=${encodeURIComponent(file.name)}`,{method:"POST",headers:{"Content-Type":"model/gltf-binary"},body:file});const data=await response.json();if(!response.ok)throw new Error(data.error||`HTTP ${response.status}`);const s=data.compatibility.structure,c=data.compatibility.capabilities;$("uploadState").className="";$("uploadState").textContent=`Inspected for ${data.pilot_target}; install remains disabled.`;$("summary").className="";$("summary").innerHTML=`<p><strong>${esc(data.original_name)}</strong> is quarantined for ${esc(data.pilot_target)} with ${s.meshes} mesh(es), ${s.skins} skin(s), and ${s.morph_targets} morph-target instance(s).</p><p>Gaze: ${esc(c.gaze)} · Blink: ${esc(c.blink)} · Speech: ${esc(c.speech_mouth)} · Wardrobe: ${esc(c.wardrobe_rigging)}</p>`;$("report").textContent=JSON.stringify(data.compatibility,null,2);$("report").hidden=false;await loadCandidates()}catch(error){$("uploadState").className="error";$("uploadState").textContent=error.message}};
@@ -488,11 +566,12 @@ let humanHistory=[],humanFuture=[],humanLast={},humanGroup="body",studioDirty=fa
 const bodyControls=new Set(HUMAN_MORPH_CONTROLS.slice(0,11).map(([id])=>id));
 bodyControls.add('breast_size');bodyControls.add('hip_depth');
 bodyControls.add('body_softness');bodyControls.add('body_power');
+for(const [id] of HUMAN_MORPH_CONTROLS)if(id==='body_adiposity'||id.startsWith('fat_'))bodyControls.add(id);
 function studioStatus(message,error=false){$("studioState").textContent=message;$("studioState").className=error?"error studio-status":"quiet studio-status"}
 function updateHumanHistory(){ $("humanUndo").disabled=!humanHistory.length;$("humanRedo").disabled=!humanFuture.length; }
 function rememberHumanChange(){const current=readHumanMorphs();if(JSON.stringify(current)===JSON.stringify(humanLast))return;humanHistory.push({...humanLast});humanFuture=[];humanLast=current;studioDirty=true;updateHumanHistory();studioStatus("Unsaved changes");}
 function restoreHuman(values){document.querySelectorAll("[data-human-morph]").forEach(input=>{const value=values[input.dataset.humanMorph]??.5;input.value=value;document.querySelector(`[data-human-morph-value="${input.dataset.humanMorph}"]`).textContent=Math.round(value*100)+"%"});humanLast=readHumanMorphs();studioDirty=true;applyHumanMorphPreview();updateHumanHistory();studioStatus("Unsaved changes");}
-function showHumanGroup(group){humanGroup=group;document.querySelectorAll("[data-group]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.group===group)));document.querySelectorAll("[data-human-morph]").forEach(input=>input.closest("label").hidden=group==="expression"||(bodyControls.has(input.dataset.humanMorph)!==(group==="body")));$("studioShapeSlot").hidden=group==="expression";$("studioExpressionSlot").hidden=group!=="expression";}
+function showHumanGroup(group){humanGroup=group;if($("exactHeight"))$("exactHeight").hidden=group!=="body";document.querySelectorAll("[data-group]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.group===group)));document.querySelectorAll("[data-human-morph]").forEach(input=>input.closest("label").hidden=group==="expression"||(bodyControls.has(input.dataset.humanMorph)!==(group==="body")));$("studioShapeSlot").hidden=group==="expression";$("studioExpressionSlot").hidden=group!=="expression";}
 function launchStudioPreview(){if(!activeCandidate)return;humanPreviewReady=false;document.querySelectorAll("[data-view]").forEach(button=>button.disabled=true);$("previewShell").hidden=false;const hot=$("previewFrame").contentWindow?.jnsqStudio;if(typeof hot==="function"&&!window.studioForceRestart){hot(JSON.stringify({command:"source",value:activeCandidate}));}else{$("previewFrame").src=`/3d/designer/?candidate_preview=${encodeURIComponent(activeCandidate)}&designer=1`;}window.studioForceRestart=false;$("studioPreviewState").textContent="Loading 3D model… You can edit while it loads.";}
 const workshopOpenMapper=openMapper;
 openMapper=async function(candidateId,identity=null){
@@ -501,18 +580,17 @@ openMapper=async function(candidateId,identity=null){
   await workshopOpenMapper(candidateId,identity);
   $("studioCandidate").disabled=false;$("builderRecipe").disabled=false;
   if(opening!==studioOpening||activeCandidate!==candidateId)return;
-  if(!Array.from($("studioCandidate").options).some(option=>option.value===candidateId)){
-    const option=document.createElement("option");option.value=candidateId;option.textContent=activeCandidateMeta.original_name.replace(/\.glb$/i,"");$("studioCandidate").append(option);
-  }
-  $("studioCandidate").value=candidateId;
+  // Fitted outfits and saved designs are active candidates, not new body bases.
+  $("studioCandidate").value=Array.from($("studioCandidate").options).some(option=>option.value===candidateId)?candidateId:"";
   humanHistory=[];humanFuture=[];humanLast=readHumanMorphs();updateHumanHistory();showHumanGroup(humanGroup);
   document.querySelectorAll("[data-human-morph]").forEach(input=>{
     input.setAttribute("aria-label",HUMAN_MORPH_CONTROLS.find(([id])=>id===input.dataset.humanMorph)[1]);
     input.addEventListener("change",rememberHumanChange);
     const ends=document.createElement("div");ends.className="range-ends";
-    const low=input.dataset.humanMorph==='brow_angle'?'Downturned':input.dataset.low.split("_").pop(),high=input.dataset.humanMorph==='brow_angle'?'Upturned':input.dataset.high.split("_").pop();
+    const low=input.dataset.humanMorph==='brow_angle'?'Downturned':input.dataset.humanMorph==='nose_tip_roundness'?'Pointed':input.dataset.humanMorph==='nose_tip_angle'?'Longer':input.dataset.low.split("_").pop(),high=input.dataset.humanMorph==='brow_angle'?'Upturned':input.dataset.humanMorph==='nose_tip_roundness'?'Rounded':input.dataset.humanMorph==='nose_tip_angle'?'Shorter':input.dataset.high.split("_").pop();
     ends.innerHTML=`<span>${esc(low)}</span><span>${esc(high)}</span>`;input.after(ends);
   });
+  mountHeightControls(candidateId);
   if(!$("launchPreview").hidden){launchStudioPreview();}
   else{$("advancedWorkshop").open=true;$("studioPreviewState").textContent="This imported model needs a saved skeleton mapping. Review the proposed mapping below, then launch its preview.";}
   if(!activeHumanMorphs.length)studioStatus("Fixed body and face shape · edit appearance, try expressions, save or download this character.");
@@ -524,17 +602,22 @@ async function startStudio(){
     const candidates=data.candidates||[];
     const catalog=await json('/api/avatar-library/starters');
     starterAppearances=Object.fromEntries((catalog.starters||[]).filter(c=>c.appearance).map(c=>[c.candidate_id,c.appearance]));
-    const starters=(catalog.starters||[]).map(entry=>{const candidate=candidates.find(c=>c.candidate_id===entry.candidate_id);return candidate?{...candidate,original_name:entry.name+'.glb'}:null;}).filter(Boolean);
+    const starters=(catalog.starters||[]).filter(entry=>!entry.asset&&!entry.pieces).map(entry=>{const candidate=candidates.find(c=>c.candidate_id===entry.candidate_id);return candidate?{...candidate,original_name:entry.name+'.glb'}:null;}).filter(Boolean);
     const humans=[];
     for(const candidate of starters){
       if(!candidate.structure?.morph_targets)continue;
       const detail=await json(`/api/avatar-bodies/candidates/${candidate.candidate_id}/mapping`);
-      if((detail.candidate.compatibility?.mapping_options?.morph_targets||[]).includes("JNSQ_BodyFrame_Feminine")){humans.push(candidate);break;}
+      if((detail.candidate.compatibility?.mapping_options?.morph_targets||[]).some(name=>name.replace(/^JNSQ_/, 'JNAIQ_')==="JNAIQ_BodyFrame_Feminine")){humans.push(candidate);break;}
     }
     // Keep the old unmasked conversion experiments in the compatibility
     // workshop, rather than offering their broken geometry as new starters.
     $("studioCandidate").innerHTML='<option value="">Choose a starting model</option>'+starters.map(c=>`<option value="${esc(c.candidate_id)}">${esc(c.original_name.replace(/\.glb$/i,""))}</option>`).join("");
-    if(humans.length){await openMapper(humans[0].candidate_id);studioStatus("New design · saved locally when you choose Save design.");}
+    const linkedRecipe=new URLSearchParams(location.search).get('recipe');
+    if(linkedRecipe&&/^[a-f0-9]{32}$/.test(linkedRecipe)&&Array.from($("builderRecipe").options).some(option=>option.value===linkedRecipe)){
+      $("builderRecipe").value=linkedRecipe;await selectBuilderRecipe();studioDirty=false;
+      studioStatus($("builderState").classList.contains('error')?$("builderState").textContent:`Opened “${$("builderName").value}”.`,$("builderState").classList.contains('error'));return;
+    }
+    if(humans.length){const id=humans[0].candidate_id;if(starterAppearances[id]){appearanceState={...APPEARANCE_DEFAULT,...starterAppearances[id]};paintAppearance();}await openMapper(id);studioStatus("New design · saved locally when you choose Save design.");}
     else{studioStatus("No human base has been staged yet. Import a compatible human GLB below to start.");$("advancedWorkshop").open=true;}
   }catch(error){studioStatus(error.message,true);}
 }
@@ -559,21 +642,30 @@ $("humanReset").onclick=()=>{humanHistory.push(readHumanMorphs());humanFuture=[]
 document.querySelectorAll("[data-group]").forEach(button=>button.onclick=()=>showHumanGroup(button.dataset.group));
 document.querySelectorAll("[data-view]").forEach(button=>button.onclick=()=>{const apply=$("previewFrame").contentWindow?.jnsqDesignerView;if(typeof apply==="function")apply(button.dataset.view);});
 $("studioCandidate").onchange=async()=>{const id=$("studioCandidate").value;if(!id)return;if(studioDirty&&!confirm("Discard the unsaved changes and choose a different starting model?")){$("studioCandidate").value=activeCandidate;return;}activeRecipe=null;$("builderRecipe").value="";recipeSourceCandidate=null;recipeIdentity={};if(starterAppearances[id]){appearanceState={...APPEARANCE_DEFAULT,...starterAppearances[id]};paintAppearance();}await openMapper(id,{});studioDirty=false;studioStatus(activeHumanMorphs.length?"New design from selected model.":"Fixed body and face shape · edit appearance, try expressions, save or download this character.");};
+let studioSaving=false;
 async function saveStudio(copy=false){
+  if(studioSaving)return false;
   if(!activeCandidate){studioStatus("Select a starting model before saving a design.",true);return false;}
+  const previousRecipe=activeRecipe;
+  studioSaving=true;$("studioSave").disabled=true;$("studioCopy").disabled=true;
   if(copy)activeRecipe=null;
+  try{
   await $("saveHumanRecipe").onclick();
   const failed=$("humanRecipeState").classList.contains("error");
   studioStatus(failed?$("humanRecipeState").textContent:`Saved “${$("builderName").value}” locally. You can reopen it from Saved design.`,failed);
-  if(!failed)studioDirty=false;return !failed;
+  if(!failed){studioDirty=false;window.dispatchEvent(new Event("jnaiq-avatar-saved"));}
+  else if(copy){activeRecipe=previousRecipe;$("builderRecipe").value=previousRecipe||"";}
+  return !failed;
+  }finally{studioSaving=false;$("studioSave").disabled=false;$("studioCopy").disabled=false;}
 }
+$("studioEditSaved").onclick=()=>{$("builderRecipe").scrollIntoView({block:"center"});$("builderRecipe").focus();studioStatus("Choose a Saved design to reopen it. Save as new design keeps a separate variation.");};
 $("studioSave").onclick=()=>saveStudio();$("studioCopy").onclick=()=>saveStudio(true);
 $("builderName").addEventListener("input",()=>{studioDirty=true;studioStatus("Unsaved changes");});
 $("builderRecipe").removeEventListener("change",selectBuilderRecipe);
 $("builderRecipe").addEventListener("change",async()=>{
   if(studioDirty&&!confirm("Discard the unsaved changes and open another design?")){$("builderRecipe").value=activeRecipe||"";return;}
   if(!$("builderRecipe").value){activeRecipe=null;$("builderName").value="My avatar";restoreHuman({});humanHistory=[];humanFuture=[];updateHumanHistory();studioDirty=false;studioStatus("New unsaved design.");return;}
-  await selectBuilderRecipe();studioDirty=false;studioStatus($("builderState").classList.contains("error")?$("builderState").textContent:`Opened “${$("builderName").value}”.`,$("builderState").classList.contains("error"));
+  await selectBuilderRecipe();if(!$("builderState").classList.contains("error"))studioDirty=false;else $("builderRecipe").value=activeRecipe||"";studioStatus($("builderState").classList.contains("error")?$("builderState").textContent:`Opened “${$("builderName").value}”.`,$("builderState").classList.contains("error"));
 });
 $("launchPreview").onclick=launchStudioPreview;
 window.addEventListener("message",event=>{if(event.origin===location.origin&&event.source===$("previewFrame").contentWindow&&event.data?.type==="jnsq-human-morph-ready"){$("studioPreviewState").textContent="Preview ready · body and face controls update this model.";document.querySelectorAll("[data-view]").forEach(button=>button.disabled=false);}});
@@ -588,365 +680,14 @@ function shapedAvatarGLB(buffer,identity,designName,appearance={},allowUnshaped=
   const size=view.getUint32(12,true),end=20+size;
   if(end>buffer.byteLength)throw new Error("The source GLB has a truncated JSON chunk.");
   const model=JSON.parse(new TextDecoder().decode(new Uint8Array(buffer,20,size)));
-  model.asset=model.asset||{}; model.asset.extras={...(model.asset.extras||{}),jnsq_component_credits:[
-  {
-    "asset": "male_casualsuit01",
-    "name": "Casual shirt and trousers",
-    "source": "male_casualsuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "female_elegantsuit01",
-    "name": "Blouse and skirt",
-    "source": "female_elegantsuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_elegantsuit01",
-    "name": "Tailored suit",
-    "source": "male_elegantsuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_01",
-    "name": "Dress",
-    "source": "mindfront_f_dress_01",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_casualsuit02",
-    "name": "Casual outfit 2",
-    "source": "male_casualsuit02",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_casualsuit03",
-    "name": "Casual outfit 3",
-    "source": "male_casualsuit03",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_casualsuit04",
-    "name": "Casual outfit 4",
-    "source": "male_casualsuit04",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_casualsuit05",
-    "name": "Casual outfit 5",
-    "source": "male_casualsuit05",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_casualsuit06",
-    "name": "Casual outfit 6",
-    "source": "male_casualsuit06",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "female_casualsuit01",
-    "name": "Relaxed outfit 1",
-    "source": "female_casualsuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "female_casualsuit02",
-    "name": "Relaxed outfit 2",
-    "source": "female_casualsuit02",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "male_worksuit01",
-    "name": "Workwear",
-    "source": "male_worksuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "female_sportsuit01",
-    "name": "Sportswear",
-    "source": "female_sportsuit01",
-    "notices": [
-      "# This asset was explicitly released as CC0 in september 2020. The license",
-      "# text for CC0 can be found in the root of this repository.",
-      "# The copyright holders at the point of the release to CC0 were:",
-      "# Copyright (C) 2020 Data Collection AB, https://www.datacollection.se",
-      "# Copyright (C) 2020 Joel Palmius",
-      "# Copyright (C) 2020 Jonas Hauquier",
-      "# For more information, see homepage at http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_02",
-    "name": "Mindfront dress 2",
-    "source": "mindfront_f_dress_02",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_03",
-    "name": "Mindfront dress 3",
-    "source": "mindfront_f_dress_03",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_04",
-    "name": "Mindfront dress 4",
-    "source": "mindfront_f_dress_04",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_05",
-    "name": "Mindfront dress 5",
-    "source": "mindfront_f_dress_05",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_06",
-    "name": "Mindfront dress 6",
-    "source": "mindfront_f_dress_06",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_07",
-    "name": "Mindfront dress 7",
-    "source": "mindfront_f_dress_07",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_08",
-    "name": "Mindfront dress 8",
-    "source": "mindfront_f_dress_08",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_09",
-    "name": "Mindfront dress 9",
-    "source": "mindfront_f_dress_09",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_10",
-    "name": "Mindfront dress 10",
-    "source": "mindfront_f_dress_10",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_f_dress_11",
-    "name": "Mindfront dress 11",
-    "source": "mindfront_f_dress_11",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehumancommunity.org"
-    ]
-  },
-  {
-    "asset": "mindfront_ballet_dress_the_swan",
-    "name": "Swan ballet dress",
-    "source": "mindfront_ballet_dress_the_swan",
-    "notices": [
-      "# author Mindfront (Sweden)",
-      "# license CC BY 4.0",
-      "# homepage "
-    ]
-  },
-  {
-    "asset": "punkduck_black_cocktail_dress",
-    "name": "Black cocktail dress",
-    "source": "punkduck_black_cocktail_dress",
-    "notices": [
-      "# author punkduck",
-      "# license CC-BY 3.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  },
-  {
-    "asset": "punkduck_evening_gown",
-    "name": "Evening gown",
-    "source": "punkduck_evening_gown",
-    "notices": [
-      "# author punkduck",
-      "# license CC BY 3.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  },
-  {
-    "asset": "punkduck_figure_skating_dress",
-    "name": "Figure skating dress",
-    "source": "punkduck_figure_skating_dress",
-    "notices": [
-      "# author punkduck",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  },
-  {
-    "asset": "punkduck_medieval_dress",
-    "name": "Medieval dress",
-    "source": "punkduck_medieval_dress",
-    "notices": [
-      "# author punkduck",
-      "# license CC BY 4.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  },
-  {
-    "asset": "punkduck_middle_length_qipao",
-    "name": "Qipao",
-    "source": "punkduck_middle_length_qipao",
-    "notices": [
-      "# author punkduck",
-      "# license CC BY 3.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  },
-  {
-    "asset": "punkduck_tube_dress",
-    "name": "Tube dress",
-    "source": "punkduck_tube_dress",
-    "notices": [
-      "# author punkduck",
-      "# license CC BY 3.0",
-      "# homepage http://www.makehuman.org/"
-    ]
-  }
-]
-,modifications:"Fitted, remorphed and assembled with JNSQ Builders; credits list included wardrobe components."};
   const weights=new Map();
-  for(const [id,_label,low,high] of HUMAN_MORPH_CONTROLS){const value=Number(identity[id]??.5);if(!Number.isFinite(value)||value<0||value>(id==='lower_nose_projection'?1.25:1))throw new Error("Invalid shape value: "+id);weights.set(low,Math.max(0,(.5-value)*2));weights.set(high,Math.max(0,(value-.5)*2));}
+  for(const [id,_label,low,high] of HUMAN_MORPH_CONTROLS){const value=Number(identity[id]??.5);if(!Number.isFinite(value)||value<0||value>(id==='lower_nose_projection'?1.25:1))throw new Error("Invalid shape value: "+id);const gate=['fangs_protrusion','tusks_protrusion'].includes(id)?Math.max(0,(Number(identity[id.replace('_protrusion','')]??.5)-.5)*2):['ear_tip_angle','ear_tip_spread'].includes(id)?Math.max(0,(Number(identity.ear_point??.5)-.5)*2):id.startsWith('fat_')?Math.max(0,(Number(identity.body_adiposity??.5)-.5)*2):id.startsWith('fullness_')?Math.max(0,(Number(identity.face_neck_fullness??.5)-.5)*2):1;weights.set(low,Math.max(0,(.5-value)*2)*gate);weights.set(high,Math.max(0,(value-.5)*2)*gate);}
   for(const [_id,_label,name] of TRANSIENT_EXPRESSIONS)weights.set(name,0);
   const anchors=HUMAN_MORPH_CONTROLS.filter(([id])=>id.startsWith('character_')&&id!=='character_age').map(row=>row[3]);
   const anchorTotal=Math.max(1,anchors.reduce((sum,key)=>sum+(weights.get(key)||0),0));
   for(const key of anchors)weights.set(key,(weights.get(key)||0)/anchorTotal);
   let matched=0;
-  for(const mesh of model.meshes||[]){const names=mesh.extras?.targetNames||[];if(!names.some(name=>weights.has(name)))continue;mesh.weights=names.map((name,i)=>weights.has(name)?weights.get(name):(mesh.weights?.[i]??0));matched++;}
+  for(const mesh of model.meshes||[]){const names=(mesh.extras?.targetNames||[]).map(name=>name.replace(/^JNSQ_/, 'JNAIQ_'));if(!names.some(name=>weights.has(name)))continue;mesh.weights=names.map((name,i)=>weights.has(name)?weights.get(name):(mesh.weights?.[i]??0));matched++;}
   if(!matched&&!allowUnshaped)throw new Error("This model has no compatible human shape targets.");
   for(const node of model.nodes||[]){const mesh=model.meshes?.[node.mesh];if(mesh?.weights)node.weights=[...mesh.weights];}
   // Export helpers are not part of the visible avatar assembly.
@@ -955,7 +696,9 @@ function shapedAvatarGLB(buffer,identity,designName,appearance={},allowUnshaped=
     const category=node.extras?.jnsq_fit_category,asset=node.extras?.jnsq_fit_asset_name;
     if(category==='hair'&&appearance.hairstyle&&asset!==appearance.hairstyle)helper.add(i);
     if(category==='eyebrows'&&appearance.eyebrows&&asset!==appearance.eyebrows)helper.add(i);
+    if(category==='eyelashes'&&asset!==(appearance.eyelashes||'lashes_soft_natural'))helper.add(i);
     if(category==='beard'&&asset!==(appearance.beard||'none'))helper.add(i);
+    if(category==='fantasy'&&(asset==='horns'||node.extras?.jnsq_horn_style)&&(node.extras.jnsq_horn_style||'original')!==(appearance.horn_style||'original'))helper.add(i);
   }
   for(const node of model.nodes||[])if(node.children)node.children=node.children.filter(i=>!helper.has(i));
   for(const scene of model.scenes||[])if(scene.nodes)scene.nodes=scene.nodes.filter(i=>!helper.has(i));
@@ -1011,8 +754,8 @@ function shapedAvatarGLB(buffer,identity,designName,appearance={},allowUnshaped=
       model.extensionsUsed=[...new Set([...(model.extensionsUsed||[]),'KHR_materials_clearcoat'])];
     }
   }
-  for(const material of model.materials||[])if(['JNSQ.Cornea','JNSQ.Cornea.ClearV1'].includes(material.name)){
-    const clearProfile=material.name==='JNSQ.Cornea.ClearV1';
+  for(const material of model.materials||[])if(['JNAIQ.Cornea','JNAIQ.Cornea.ClearV1'].includes((material.name||'').replace(/^JNSQ\./,'JNAIQ.'))){
+    const clearProfile=material.name.replace(/^JNSQ\./,'JNAIQ.')==='JNAIQ.Cornea.ClearV1';
     material.alphaMode='BLEND';delete material.alphaCutoff;
     material.pbrMetallicRoughness={baseColorFactor:clearProfile?[.02,.02,.02,.012]:[1,1,1,.08],roughnessFactor:clearProfile?.06:.015,metallicFactor:0};
     material.extensions={...(material.extensions||{}),KHR_materials_clearcoat:{clearcoatFactor:clearProfile?.4:.9,clearcoatRoughnessFactor:clearProfile?.04:.015}};
@@ -1031,17 +774,17 @@ $("studioExport").onclick=async()=>{
   const source={...activeCandidateMeta},identity=readHumanMorphs(),name=$("builderName").value.trim()||"My avatar",appearance=typeof readAppearance==='function'?readAppearance():{};
   $("studioExport").disabled=true;studioStatus("Preparing your 3D avatar…");
   try{
-    const response=await fetch(`/api/avatar-bodies/candidates/${source.candidate_id}/model`);if(!response.ok)throw new Error(`Model download failed (HTTP ${response.status}).`);
+    const response=await fetch(`/api/avatar-bodies/candidates/${source.candidate_id}/model?brow_height=local-brows-2&lower_chin=lower-chin-1`);if(!response.ok)throw new Error(`Model download failed (HTTP ${response.status}).`);
     const buffer=await response.arrayBuffer(),hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",buffer)),v=>v.toString(16).padStart(2,"0")).join("");
-    if(hash!==source.sha256)throw new Error("The source model changed. Reopen it before exporting.");
+    if((response.headers.get('X-JNAIQ-Source-SHA256')||hash)!==source.sha256 || hash!==(response.headers.get('X-JNAIQ-Model-SHA256')||source.sha256))throw new Error("The source model changed. Reopen it before exporting.");
     const glb=shapedAvatarGLB(buffer,identity,name,await resolvedAppearance(appearance,source.candidate_id,identity),true),url=URL.createObjectURL(new Blob([glb],{type:"model/gltf-binary"})),link=document.createElement("a");
     if(avatarDownloadURL)URL.revokeObjectURL(avatarDownloadURL);avatarDownloadURL=url;
     link.href=url;link.download=(name.replace(/[^a-zA-Z0-9 _-]/g,"_")||"avatar")+".glb";link.textContent="Download "+link.download;link.style.color="var(--green)";$("studioDownload").replaceChildren(link);link.click();
     studioStatus("3D avatar ready with your shape and neutral expressions. If the download did not start, use the download link below.");
   }catch(error){studioStatus(error.message,true);}finally{$("studioExport").disabled=false;}
 };
-boot();loadCandidates();startStudio();
-</script><script src="/3d/designer/textures.js?v=11"></script><script src="/3d/designer/studio.js?v=42"></script><script src="/3d/designer/generated-skin.js?v=3"></script><script src="/3d/designer/surface-layers.js?v=9"></script><script src="/3d/designer/character-starts.js?v=2"></script></body></html>
+boot();loadCandidates();startStudio().then(()=>{if(new URLSearchParams(location.search).has("edit"))$("studioEditSaved").click();});
+</script><script src="/3d/designer/textures.js?v=12"></script><script src="/3d/designer/studio.js?v=50"></script><script src="/3d/designer/generated-skin.js?v=3"></script><script src="/3d/designer/surface-layers.js?v=9"></script><script type="module">import {avatarGuide} from "/assets/island-workshop/builder-guides.mjs";avatarGuide();</script></body></html>
 
 
 

@@ -18,12 +18,13 @@ from types import SimpleNamespace
 
 from fastapi import Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from shell.runtime_paths import load_run_state
 
 SCHEMA = 'jnsq-room-layout/1'
 PLACEMENT = ('position_m', 'rot_deg', 'size_m', 'y_off_m', 'support_surface', 'support_oid', 'light_settings', 'power')
 SEMANTICS = ('name', 'kind', 'description', 'texture', 'capability', 'owner', 'affordances', 'mass_kg')
 LOCK = threading.RLock()
-OBJECT_TYPES = {entry['id'] for entry in json.loads((Path(__file__).resolve().parents[1]/'assets/jnsq/island-workshop/object-types.json').read_text(encoding='utf-8'))}
+OBJECT_TYPES = {entry['id'] for entry in json.loads((Path(__file__).resolve().parents[1]/'assets/jnaiq/island-workshop/object-types.json').read_text(encoding='utf-8'))}
 
 
 def validate_catalog_types(value):
@@ -55,7 +56,7 @@ def atomic(path, value):
         if os.path.exists(tmp): os.unlink(tmp)
 
 
-def validate_objects(objects):
+def validate_objects(objects, *, room_range=True):
     if not isinstance(objects, dict) or len(objects) > 1000:
         raise ValueError('A layout supports up to 1,000 furniture objects')
     result = copy.deepcopy(objects)
@@ -69,7 +70,11 @@ def validate_objects(objects):
         # Existing architectural sites are larger than furniture. Preserve
         # them in a draft; the apply path bounds new/edited furniture below.
         if not .02 <= obj.get('size_m', .6) <= 240: raise ValueError('Invalid object size')
-        if max(abs(p[0]), abs(p[1])) > 240 or not -12 <= obj.get('y_off_m', 0) <= 100:
+        # Room layouts have a deliberately compact editing envelope. Island
+        # drafts use terrain-relative heights and enforce their horizontal
+        # footprint in validate_world(), so applying this room-only ceiling
+        # there rejects otherwise representable authored placements.
+        if room_range and (max(abs(p[0]), abs(p[1])) > 240 or not -12 <= obj.get('y_off_m', 0) <= 100):
             raise ValueError('Object is outside the supported world range')
         if obj.get('support_surface', 'yurt_floor') not in ('yurt_floor', 'yurt_wall', 'island_ground', 'object', 'free'):
             raise ValueError('Unknown object support')
@@ -81,6 +86,8 @@ def validate_objects(objects):
         if obj.get('kind'): ident(obj['kind'])
         for key in ('description', 'texture'):
             if not isinstance(obj.get(key, ''), str) or len(obj.get(key, '')) > 4000: raise ValueError('Invalid '+key)
+        if re.fullmatch(r'(fabric_curtain_(pair|closed|cafe)|rug_(rectangle|round|runner))', obj.get('kind') or '') and not (re.fullmatch(r'#[0-9a-fA-F]{6}',obj.get('texture','')) or re.fullmatch(r'custom_[a-f0-9-]{36}',obj.get('texture',''))):
+            raise ValueError('Textiles need a colour or uploaded image')
         obj.setdefault('power', 0.0)
         obj.setdefault('light_settings', None)
         if type(obj['power']) not in (int,float) or not math.isfinite(obj['power']) or not 0 <= obj['power'] <= 1: raise ValueError('Invalid light power')
@@ -175,11 +182,11 @@ def merge_furniture(room, previous, furniture, commit=True):
             if any(record.get(f)!=previous[oid].get(f) for f in SEMANTICS):
                 raise ValueError('Published furniture keeps its meaning and ownership. Adjust its placement, or add a new object: '+oid)
             if oid not in current or any(current[oid].get(f)!=previous[oid].get(f) for f in PLACEMENT):
-                raise FileExistsError('Furniture moved in JNSQ since this landscape was published: '+oid)
+                raise FileExistsError('Furniture moved in JNAIQ since this landscape was published: '+oid)
             for f in PLACEMENT:candidate[oid][f]=copy.deepcopy(record.get(f))
     for oid in set(previous)-set(furniture):
         if oid in current and any(current[oid].get(f)!=previous[oid].get(f) for f in PLACEMENT):
-            raise FileExistsError('This object moved in JNSQ. Keep it in this draft: '+oid)
+            raise FileExistsError('This object moved in JNAIQ. Keep it in this draft: '+oid)
         candidate.pop(oid,None)
     return apply_layout(room,{'objects':candidate,'base_revision':digest(current)},commit=commit)
 
@@ -187,7 +194,7 @@ def merge_furniture(room, previous, furniture, commit=True):
 class RoomWorkshop:
     def __init__(self, repo, app=None, root=None):
         self.repo = Path(repo); self.app = app
-        self.root = Path(root or os.environ.get('JNSQ_ROOM_DRAFTS') or self.repo/'state'/'room_layouts')
+        self.root = Path(root or os.environ.get('JNAIQ_ROOM_DRAFTS') or self.repo/'state'/'room_layouts')
 
     def offline_rooms(self):
         # Read saved records through the canonical restoration code without
@@ -221,12 +228,12 @@ class RoomWorkshop:
         if self.app is not None: return None
         import httpx
         try:
-            port = int(json.loads((self.repo/'jnsq_running.json').read_text())['room_port'])
+            port = int(load_run_state(self.repo)['room_port'])
             if not 1 <= port <= 65535: raise ValueError('Invalid room host port')
             with httpx.Client(timeout=15, trust_env=False) as client:
                 probe = client.get(f'http://127.0.0.1:{port}/api/room-workshop/health')
                 if probe.status_code != 200 or not probe.json().get('shared'):
-                    if method != 'GET': raise ValueError('Restart JNSQ once to load the workshop object bridge. Save your draft in the meantime.')
+                    if method != 'GET': raise ValueError('Restart JNAIQ once to load the workshop object bridge. Save your draft in the meantime.')
                     return None
                 response = client.request(method, f'http://127.0.0.1:{port}'+path, json=payload)
                 return JSONResponse(status_code=response.status_code, content=response.json())
@@ -278,6 +285,14 @@ def install(app, repo):
     @app.get('/api/room-workshop/health')
     def health(): return {'shared':manager.app is not None,'schema':SCHEMA}
 
+    @app.get('/api/room-workshop/asset-delivery')
+    def asset_delivery():
+        return {'schema': 'jnaiq-asset-delivery/1', 'quality': 'standard'}
+
+    @app.get('/api/room-workshop/asset-delivery')
+    def asset_delivery():
+        return {'schema': 'jnaiq-asset-delivery/1', 'quality': 'standard'}
+
     @app.get('/api/room-workshop/rooms')
     def rooms():
         def run():
@@ -327,7 +342,7 @@ def install(app, repo):
             # Validate against a read-only reconstruction before scheduling.
             apply_layout(manager.offline_rooms()[rid],draft)
             atomic(manager.root/'pending'/(rid+'.json'),draft)
-            return {'ok':True,'queued':True,'message':'Layout will apply when JNSQ next starts.'}
+            return {'ok':True,'queued':True,'message':'Layout will apply when JNAIQ next starts.'}
         return guarded(run)
 
     @app.get('/api/room-workshop/catalog')
@@ -343,6 +358,10 @@ def install(app, repo):
             try:metadata=json.loads((root/(f+'.scenery.json')).read_text(encoding='utf-8')).get('metadata',{})
             except (OSError,ValueError):metadata={}
             item=_catalog_item(stem,{'format':Path(f).suffix[1:],'filename':f,'metadata':metadata})
+            if f.lower().endswith('.glb') and item.get('thumbnail_ready'):
+                item['thumbnail_url']='/api/room-workshop/thumbnails/'+stem+'.png'
+            if f.lower().endswith('.glb') and item.get('thumbnail_ready'):
+                item['thumbnail_url']='/api/room-workshop/thumbnails/'+stem+'.png'
             if isinstance(metadata,dict) and 'categories' in metadata:
                 try:item['categories']=validate_catalog_types(metadata['categories'])
                 except ValueError:pass
@@ -354,12 +373,12 @@ def install(app, repo):
         from urllib.parse import unquote
         from room.host import _object_asset_root
         from core.body_packages import inspect_glb
-        name=Path(unquote(request.headers.get('x-jnsq-filename',''))).name
+        name=Path(unquote(request.headers.get('x-jnaiq-filename') or request.headers.get('x-jnsq-filename',''))).name
         suffix=Path(name).suffix.lower();stem=re.sub(r'[^a-z0-9]+','_',Path(name).stem.lower()).strip('_')[:90]
         if not stem or suffix not in ('.glb','.png','.jpg','.jpeg'):
             return JSONResponse(status_code=400,content={'error':'Choose a GLB model or PNG/JPEG picture'})
         try:
-            raw_types=request.headers.get('x-jnsq-categories')
+            raw_types=request.headers.get('x-jnaiq-categories') or request.headers.get('x-jnsq-categories')
             categories=validate_catalog_types(json.loads(raw_types)) if raw_types is not None else None
         except (ValueError,TypeError):
             return JSONResponse(status_code=400,content={'error':'Choose valid object types'})
@@ -402,6 +421,26 @@ def install(app, repo):
             return {'ok':True,'kind':stem,'filename':target.name}
         return guarded(run)
 
+    @app.get('/api/room-workshop/thumbnails/{filename}')
+    def thumbnail(filename:str):
+        def run():
+            from room.host import _object_asset_root
+            if Path(filename).name != filename or Path(filename).suffix.lower()!='.png':raise ValueError('Unsupported thumbnail')
+            root=(Path(_object_asset_root())/'.thumbnails').resolve();path=(root/filename).resolve()
+            if path.parent!=root or not path.is_file():raise FileNotFoundError()
+            return FileResponse(path)
+        return guarded(run)
+
+    @app.get('/api/room-workshop/thumbnails/{filename}')
+    def thumbnail(filename:str):
+        def run():
+            from room.host import _object_asset_root
+            if Path(filename).name != filename or Path(filename).suffix.lower()!='.png':raise ValueError('Unsupported thumbnail')
+            root=(Path(_object_asset_root())/'.thumbnails').resolve();path=(root/filename).resolve()
+            if path.parent!=root or not path.is_file():raise FileNotFoundError()
+            return FileResponse(path)
+        return guarded(run)
+
     @app.get('/api/room-workshop/assets/{category}/{filename}')
     def asset(category:str,filename:str):
         def run():
@@ -411,5 +450,8 @@ def install(app, repo):
             if root is None:raise ValueError('Unknown asset category')
             path=(root/filename).resolve()
             if path.parent != root.resolve() or not path.is_file():raise FileNotFoundError()
+            if category == 'objects' and path.suffix.lower() == '.glb':
+                from core.asset_delivery import model_path
+                path = Path(model_path(path))
             return FileResponse(path)
         return guarded(run)

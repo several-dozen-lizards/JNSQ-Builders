@@ -1,13 +1,15 @@
-"""Download, verify and extract the complete JNSQ Builders preview."""
+"""Download, verify and extract the complete JNAIQ Builders preview."""
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import shutil
 import urllib.request
 import zipfile
 
-BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.1.2-preview/'
+# Immutable release coordinates keep their original repository/asset names.
+# Product branding must not silently rewrite a download URL.
+BASE='https://github.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0.2.0-preview.1/'
 
 
 def digest(path):
@@ -24,16 +26,18 @@ def main():
         manifest=json.load(response)
     total=sum(item['bytes'] for item in manifest['archives'])
     print(f'Complete download: {total/1e9:.1f} GB. Keep this window open.\nRerun to reuse completed downloads.',flush=True)
-    if (root/'JNSQ-Builders'/'data').exists():
+    if any((root/name/'data').exists() for name in ('JNAIQ-Builders', 'JNSQ-Builders')):
         raise RuntimeError('This folder already contains saved builder work. Download into a new folder to preserve it.')
-    if shutil.disk_usage(root).free<total+28_000_000_000:
-        raise RuntimeError('Please free enough disk space for the ZIPs plus 28 GB extracted, then retry.')
+    extracted=manifest.get('extracted_bytes',28_000_000_000)
+    if not isinstance(extracted,int) or extracted<0:raise ValueError('Invalid extracted size')
+    if shutil.disk_usage(root).free<total+extracted:
+        raise RuntimeError(f'Please free enough disk space for the ZIPs plus {extracted/1e9:.2f} GB extracted, then retry.')
     for item in manifest['archives']:
         name=item['name']
-        if not re.fullmatch(r'JNSQ-Builders-0\.1\.\d+-[a-z]+-\d+\.zip',name):
+        if not re.fullmatch(r'(?:JNAIQ|JNSQ)-Builders-\d+\.\d+\.\d+(?:-preview\.\d+)?-[a-z]+-\d+\.zip',name):
             raise ValueError('Unexpected archive name')
         url=item.get('url',BASE+name)
-        if not re.fullmatch(r'https://github\.com/several-dozen-lizards/JNSQ-Builders/releases/download/v0\.1\.\d+-preview/'+re.escape(name),url):
+        if not re.fullmatch(r'https://github\.com/several-dozen-lizards/JNSQ-Builders/releases/download/v\d+\.\d+\.\d+-preview(?:\.\d+)?/'+re.escape(name),url):
             raise ValueError('Unexpected asset source')
         target=cache/name
         if target.exists() and target.stat().st_size==item['bytes'] and digest(target)==item['sha256']:
@@ -48,12 +52,26 @@ def main():
             partial.replace(target)
         print('Extracting '+name,flush=True)
         with zipfile.ZipFile(target) as archive:
+            destinations=[]
             for member in archive.infolist():
-                destination=(root/member.filename).resolve()
-                if not destination.is_relative_to(root/'JNSQ-Builders'):
+                relative=PurePosixPath(member.filename)
+                if ('\\' in member.filename or ':' in member.filename or relative.is_absolute()
+                        or '..' in relative.parts or not relative.parts
+                        or relative.parts[0] not in {'JNAIQ-Builders','JNSQ-Builders'}
+                        or (member.external_attr >> 16) & 0o170000 == 0o120000):
                     raise ValueError('Unsafe archive path')
-            archive.extractall(root)
-    print('\nReady. Open JNSQ-Builders, run INSTALL_BUILDERS.bat, then START_BUILDERS.bat.\nAfter installation you may delete download-cache to reclaim disk space.',flush=True)
+                destination=(root/'JNAIQ-Builders').joinpath(*relative.parts[1:]).resolve()
+                if not destination.is_relative_to((root/'JNAIQ-Builders').resolve()):
+                    raise ValueError('Unsafe archive path')
+                destinations.append((member,destination))
+            for member,destination in destinations:
+                if member.is_dir():
+                    destination.mkdir(parents=True,exist_ok=True)
+                else:
+                    destination.parent.mkdir(parents=True,exist_ok=True)
+                    with archive.open(member) as source,destination.open('wb') as out:
+                        shutil.copyfileobj(source,out)
+    print('\nReady. Open JNAIQ-Builders, run INSTALL_BUILDERS.bat, then START_BUILDERS.bat.\nAfter installation you may delete download-cache to reclaim disk space.',flush=True)
 
 
 if __name__=='__main__':

@@ -1,8 +1,13 @@
 /* Standalone product controls, loaded only by the packaged editors. */
-window.JNSQ_STANDALONE=true;
+window.JNAIQ_STANDALONE=true;
 document.addEventListener('DOMContentLoaded',()=>{
   const avatar=location.pathname==='/body-workshop';
   if(avatar){
+    if(window.JNAIQ_CURATED){
+      for(const id of ['wardrobePiecesTab','wardrobeGallery','wardrobeSearch','wardrobeGroup']){const el=document.getElementById(id);if(el)el.hidden=true;}
+      const note=document.createElement('p');note.className='quiet';note.textContent='Curated starter library: one finished human with casual clothes. Edit its shape, colors and markings, or import your own model.';
+      document.getElementById('wardrobeOutfitsPanel')?.prepend(note);
+    }
     for(const id of ['libraryMember','assignAvatar','restoreAvatar']){
       const el=document.getElementById(id);if(el)(el.closest('label')||el).hidden=true;
     }
@@ -15,7 +20,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(use){const summary=use.querySelector('summary');if(summary)summary.textContent='Finished avatars';}
   }else{
     for(const el of document.querySelectorAll('header button')){
-      if(['Add to JNSQ','Remove from JNSQ'].includes(el.textContent))el.hidden=true;
+      if(['Add to JNAIQ','Remove from JNAIQ'].includes(el.textContent))el.hidden=true;
     }
     for(const el of document.querySelectorAll('a[href="./room.html"]'))el.hidden=true;
   }

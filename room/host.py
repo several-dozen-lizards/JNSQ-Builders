@@ -6,7 +6,7 @@ OBJECT_CATALOG_CATEGORIES={"seating","beds","surfaces","pictures","misc"}
 
 def _object_asset_root():
     return os.environ.get(
-        "JNSQ_OBJECT_ASSETS",
+        "JNAIQ_OBJECT_ASSETS",
         os.path.join(REPO, "godot-room", "assets", "objects"))
 
 def _object_thumbnail_root():

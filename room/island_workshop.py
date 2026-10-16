@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import math
 import os
 from pathlib import Path
@@ -22,17 +23,19 @@ LOCK = threading.Lock()
 MAX_BYTES = 4_000_000
 SCENERY_KINDS = ('rose_quartz', 'citrine_points', 'emerald_shards', 'glow_crystal_cyan', 'glow_crystal_violet', 'glow_crystal_amber', 'button_mushrooms', 'toadstool_patch', 'chanterelle_patch', 'glowcap_patch', 'meadow_grass', 'meadow_daisies', 'creeping_thyme', 'wildflower_carpet',
                  'woodland_fern', 'lady_fern', 'sword_fern', 'tree_stump', 'fallen_log', 'lavender', 'flowering_heath', 'hibiscus_bush', 'firewheel_bush',
+                 'rose_crimson_formal', 'rose_blush_cottage', 'rose_ivory_vase', 'rose_apricot_sprawl', 'rose_yellow_spray', 'rose_magenta_climber',
                  'pampas_grass', 'foxglove', 'giant_rhubarb', 'rainbow_protea',
                  'tree', 'maple', 'pine', 'sycamore', 'palm', 'banana',
+                 'staghorn_sumac_summer', 'staghorn_sumac_winter',
                  'bird_of_paradise', 'jungle', 'bare', 'joshua', 'cactus',
                  'baobab', 'shrub', 'rock', 'giant_mushroom', 'glow_shrooms',
                  'shelf_fungus', 'coral_tree', 'lantern_plant', 'spiral_fern',
                  'crystal_lotus', 'star_bloom', 'river_rock', 'slate_rock',
                  'basalt_rock', 'standing_rock', 'rock_cluster', 'amethyst', 'quartz', 'azure_crystal')
 FINISHES = ('plaster', 'timber', 'stone', 'brick', 'concrete', 'marble', 'parquet', 'tiles', 'roof', 'copper', 'thatch')
-GENERATION_OPTIONS = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnsq/island-workshop/generation-options.json').read_text(encoding='utf-8'))
-TREE_KINDS = ('tree', 'maple', 'pine', 'sycamore', 'palm', 'jungle', 'bare', 'joshua', 'baobab', 'coral_tree')
-PLANT_SIZES = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnsq/island-workshop/plant-sizes.json').read_text(encoding='utf-8'))
+GENERATION_OPTIONS = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnaiq/island-workshop/generation-options.json').read_text(encoding='utf-8'))
+TREE_KINDS = ('tree', 'maple', 'pine', 'sycamore', 'palm', 'jungle', 'bare', 'joshua', 'baobab', 'coral_tree', 'staghorn_sumac_summer', 'staghorn_sumac_winter')
+PLANT_SIZES = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnaiq/island-workshop/plant-sizes.json').read_text(encoding='utf-8'))
 
 
 def validate_world(world):
@@ -134,7 +137,7 @@ def validate_world(world):
         from room.building_components import validate_components
         extras.update(validate_components(b, texture_ids))
         if 'architecture' in b:
-            catalogue = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnsq/island-workshop/architecture.json').read_text(encoding='utf-8'))
+            catalogue = json.loads((Path(__file__).resolve().parents[1] / 'assets/jnaiq/island-workshop/architecture.json').read_text(encoding='utf-8'))
             if not isinstance(b['architecture'], str) or b['architecture'] not in catalogue:
                 raise ValueError('Invalid architectural style')
             extras['architecture'] = b['architecture']
@@ -173,9 +176,12 @@ def validate_world(world):
                             t1,t2=(low-a)/d,(high-a)/d; lo=max(lo,min(t1,t2)); hi=min(hi,max(t1,t2))
                     if lo<=hi: raise ValueError('Interior wall blocks stairs')
                 wall_ids.add(p['id']); parts.append({k:p[k] for k in ('id','floor','ax','az','bx','bz','door')})
-                for key in ('doorLeaf', 'doorAngle', 'frames'):
+                for key in ('doorLeaf', 'doorStyle', 'doorColor', 'doorImage', 'doorAngle', 'frames'):
                     if key not in p: continue
                     if (key == 'doorLeaf' and p[key] not in ('none','solid')
+                            or key == 'doorStyle' and p[key] not in ('flat','panelled','medieval','glazed')
+                            or key == 'doorColor' and not re.fullmatch(r'#[0-9a-fA-F]{6}',str(p[key]))
+                            or key == 'doorImage' and p[key] not in texture_ids
                             or key == 'doorAngle' and not number(p[key],0,120)
                             or key == 'frames' and type(p[key]) is not bool):
                         raise ValueError('Invalid interior door')
@@ -190,14 +196,29 @@ def validate_world(world):
             "resolution": 128, "heights": list(heights), "objects": normalized}
     if 'furniture' in world:
         from room.room_workshop import validate_objects
-        result['furniture'] = validate_objects(world['furniture'])
-        for oid, obj in result['furniture'].items():
-            if max(abs(v) for v in obj['position_m']) > world['size']/2:
-                raise ValueError('Furniture is outside this landscape')
+        furniture = validate_objects(world['furniture'], room_range=False)
+        # The world includes ocean and air beyond the dry-land mesh, but an
+        # object dragged past twice the island width is no longer reachable in
+        # the ordinary editor. Discard those runaway records (and anything
+        # supported by them) rather than letting one object hold the entire
+        # island save hostage. The browser keeps the same operation undoable.
+        furniture_range = world['size'] * 2
+        for obj in furniture.values():
             if obj.get('size_m', .6) > 6 or obj.get('capability') not in (None,'','sitting','writing','private_writing','light','portal'):
                 raise ValueError('Choose ordinary furniture up to 6 metres across')
+            if re.fullmatch(r'(fabric_curtain_(pair|closed|cafe)|rug_(rectangle|round|runner))', obj.get('kind') or '') and obj.get('texture','').startswith('custom_') and obj['texture'] not in texture_ids:
+                raise ValueError('Choose an uploaded island image for this textile')
             if obj.get('capability') == 'private_writing' and not obj.get('owner'):
                 raise ValueError('A private writing desk needs an owner')
+        removed = {oid for oid, obj in furniture.items()
+                   if max(abs(v) for v in obj['position_m']) > furniture_range}
+        changed = True
+        while changed:
+            changed = False
+            for oid, obj in furniture.items():
+                if oid not in removed and obj.get('support_oid') in removed:
+                    removed.add(oid); changed = True
+        result['furniture'] = {oid: obj for oid, obj in furniture.items() if oid not in removed}
     if 'features' in world:
         features = world['features']
         if not isinstance(features, list) or len(features) > 12:
@@ -272,6 +293,9 @@ def validate_world(world):
                 raise ValueError('Invalid sculpted rock')
             seen.add(tuple(p[:3]))
         result['rockSculpt'] = [list(p) for p in points]
+    if 'vines' in world:
+        from room.island_vines import validate_vines
+        result['vines'] = validate_vines(world['vines'], world['size'])
     if 'structures' in world:
         result['structures'] = normalized_structures
     if 'columns' in world:
@@ -379,6 +403,9 @@ def validate_world(world):
     if 'frozenWater' in world:
         if type(world['frozenWater']) is not bool: raise ValueError('Invalid ice setting')
         result['frozenWater']=world['frozenWater']
+    if 'garden' in world:
+        from room.gardening import validate_garden
+        result['garden'] = validate_garden(world['garden'], world)
     return result
 
 
@@ -436,13 +463,25 @@ class IslandStore:
             finally:
                 if os.path.exists(temp):
                     os.unlink(temp)
-            return {"id": island_id, "revision": value["revision"]}
+            # A successful write is not yet a successful save contract. Read
+            # the canonical file back through the same loader used by Open so
+            # the UI never reports success for bytes it cannot load.
+            loaded = self.load(island_id)
+            if loaded != value:
+                raise OSError("Saved island did not survive canonical read-back")
+            digest = hashlib.sha256(json.dumps(
+                loaded, sort_keys=True, separators=(",", ":"),
+                allow_nan=False).encode("utf-8")).hexdigest()
+            return {"id": island_id, "revision": value["revision"],
+                    "load_ready": True, "content_sha256": digest,
+                    "load_url": "/api/islands/" + island_id +
+                    "?revision=" + value["revision"]}
 
 
 def install(app, repo, root=None, *, standalone=False):
     from room.room_workshop import install as install_room_workshop
     install_room_workshop(app, repo)
-    store = IslandStore(root or os.environ.get('JNSQ_ISLANDS_DIR') or Path(repo) / "state" / "islands")
+    store = IslandStore(root or os.environ.get('JNAIQ_ISLANDS_DIR') or Path(repo) / "state" / "islands")
     if not standalone:
         from room.world_destinations import install as install_destinations
         install_destinations(app, repo, store)
@@ -455,7 +494,7 @@ def install(app, repo, root=None, *, standalone=False):
 
     @app.get("/api/islands")
     def index():
-        return {"islands": store.index(), "capabilities": ["generated-sky-colors-v1", "building-components-v1", "sky-water-authoring-v1", "clustered-scenery-v1", "generation-recipe-v1", "land-lighting-v1", "step-routes-v1", "pools-v1", "columns-v1", "structures-v1", "landscape-features-v1", "building-interiors-v1", "crystals-v1", "garden-plants-v1", "landscape-paint-v1", "ponds-v1", "ground-surfaces-v1", "architecture-v1", "opening-shapes-v1", "rock-sculpt-v1"]}
+        return {"islands": store.index(), "capabilities": ["verified-save-readback-v1", "clinging-vines-v1", "shared-garden-v1", "generated-sky-colors-v1", "building-components-v1", "door-styles-v1", "door-surfaces-v1", "textile-surfaces-v1", "sky-water-authoring-v1", "clustered-scenery-v1", "generation-recipe-v1", "land-lighting-v1", "step-routes-v1", "pools-v1", "columns-v1", "structures-v1", "landscape-features-v1", "building-interiors-v1", "crystals-v1", "garden-plants-v1", "landscape-paint-v1", "ponds-v1", "ground-surfaces-v1", "architecture-v1", "opening-shapes-v1", "rock-sculpt-v1"]}
 
     @app.get("/api/islands/{island_id}")
     def load(island_id: str):

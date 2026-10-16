@@ -1,5 +1,6 @@
 /* Product layer shared by the visible designer and its downloadable package. */
-const APPEARANCE_DEFAULT={skin_sheen:0,iris_lightness:.5,eye_style:'original',pupil_shape:'round',pupil_width:.5,pupil_height:.5,iris_size:.5,eye_accent:'#8eefff',hair_lightness:.7,hair_highlight_color:'#d9b878',hair_highlight_amount:0,hair_highlight_pattern:'fine',skin:'#ffffff',hair:'#ffffff',eyes:'#ffffff',iris:'#ffffff',iris_inner:'#ffffff',skin_texture:'',eye_texture:'404c3124d841bd39938e19692c2e54b2130d572c8c6beefd973eede94f0e1b75',eye_shading:.65,outfit:'#ffffff',outfit_top:'#ffffff',outfit_bottom:'#ffffff',hairstyle:'short01',eyebrows:'eyebrow001',beard:'none'};
+const APPEARANCE_DEFAULT={skin_sheen:0,iris_lightness:.5,eye_style:'original',pupil_shape:'round',pupil_width:.5,pupil_height:.5,iris_size:.5,eye_accent:'#8eefff',hair_lightness:.7,hair_highlight_color:'#d9b878',hair_highlight_amount:0,hair_highlight_pattern:'fine',skin:'#ffffff',hair:'#ffffff',eyes:'#ffffff',iris:'#ffffff',iris_inner:'#ffffff',skin_texture:'',eye_texture:'',eye_shading:.65,outfit:'#ffffff',outfit_top:'#ffffff',outfit_bottom:'#ffffff',hairstyle:'short01',eyebrows:'eyebrow009',eyelashes:'lashes_soft_natural',beard:'none'};
+APPEARANCE_DEFAULT.horn_style='original';
 let appearanceState={...APPEARANCE_DEFAULT},comparison=null,comparing=false,libraryState=null;
 let editPast=[],editFuture=[],editLast=null,saveBusy=false,historyBusy=false;
 function studioCommand(command,value,extra={}){const f=$('previewFrame').contentWindow?.jnsqStudio;if(typeof f==='function')f(JSON.stringify({command,value,...extra}));}
@@ -7,13 +8,6 @@ function readAppearance(){return {...appearanceState};}
 let appearanceRequest=0;
 async function sendAppearance(values,identity=readHumanMorphs()){const request=++appearanceRequest;try{const value=await resolvedAppearance(values,activeCandidate,identity);if(request===appearanceRequest)studioCommand('appearance',value);}catch(error){studioStatus(error.message,true);}}
 function appearancePreview(){return sendAppearance(readAppearance());}
-const morphPreviewWithoutFoldShading=applyHumanMorphPreview;
-let lastPreviewFold=null;
-applyHumanMorphPreview=function(){
-  morphPreviewWithoutFoldShading();
-  const fold=readHumanMorphs().nasolabial_definition??.5;
-  if(humanPreviewReady&&fold!==lastPreviewFold){lastPreviewFold=fold;appearancePreview();}
-};
 function stateNow(){return {candidate_id:activeCandidate,identity:readHumanMorphs(),appearance:readAppearance()};}
 function invalidateDownload(){if(avatarDownloadURL){URL.revokeObjectURL(avatarDownloadURL);avatarDownloadURL=null;}$('studioDownload').replaceChildren();}
 function markEdit(){studioDirty=true;invalidateDownload();studioStatus('Unsaved changes');}
@@ -53,18 +47,24 @@ ${[["skin", "Skin tone"]].map(([id,label])=>`<label>${label}<input type="color" 
 <details><summary>Hair lightness and highlights</summary><label>Hair lightness<input type="range" min="0" max="1" step="0.05" value="0" data-appearance="hair_lightness" aria-label="Hair lightness"></label><label>Highlight color<input type="color" value="#d9b878" data-appearance="hair_highlight_color" aria-label="Highlight color"></label><label>Highlight strength<input type="range" min="0" max="1" step="0.05" value="0" data-appearance="hair_highlight_amount" aria-label="Highlight strength"></label><label>Highlight pattern<select data-appearance="hair_highlight_pattern" aria-label="Highlight pattern"><option value="fine">Fine streaks</option><option value="broad">Broad streaks</option><option value="tips">Tinted tips</option></select></label><p class="quiet">Lightness lifts dark textures before tinting. Set highlight strength above zero for a second color. Patterns follow the hair texture layout; tips can align differently between models. Lightness controls how bright the selected hair color appears. Brows keep their existing color.</p></details><label>Eyebrows<select id="eyebrows"><option value="eyebrow001">Natural</option><option value="eyebrow009">Defined</option><option value="none">No eyebrows</option></select></label>
 <label>Facial hair<select id="beard"><option value="none">Clean shaven</option><option value="wdg_scruffy_beard">Scruffy beard</option><option value="rehmanpolanski_moustache_viking">Moustache</option></select></label>
 ${[["hair", "Hair and brow color"]].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}<button type="button" data-accessory-shortcut="hair">Import custom hair</button></div></details>
-<details id="appearanceEyes" class="appearance-section"><summary>Eyes and eyelids<small>Textures, iris colors, sclera, pupils and creases</small></summary><div class="appearance-section-body"><label>Eye texture<select id="eyeDetail"><option value="">Original</option><option value="custom" disabled>Custom upload</option></select></label>
-${[["iris", "Iris color"], ["iris_inner", "Inner iris color"], ["eyes", "Sclera color"]].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}<label>Iris lightness<input type="range" min="0" max="1" step="0.05" value="0.5" data-appearance="iris_lightness" aria-label="Iris lightness"></label><label>Natural iris colors<select id="naturalIris"><option value="">Choose a color pair</option><option value="#715038,#ad814b">Warm brown</option><option value="#aa8746,#cfab65">Amber</option><option value="#73835c,#b28c49">Hazel</option><option value="#627f72,#a59c65">Sage green</option><option value="#658695,#a6b4ad">Blue gray</option><option value="#889698,#b4aca0">Silver gray</option></select></label><p class="quiet">Iris color sets the outer ring; Inner iris color blends around the pupil. White inherits the outer color. Color pairs keep your selected texture and eye pattern.</p><details><summary>Fantasy eyes and pupil shapes</summary><label>Eye pattern<select data-appearance="eye_style" aria-label="Eye pattern"><option value="original">Original / uploaded texture</option><option value="radial">Natural radial iris</option><option value="ember">Ember</option><option value="galaxy">Galaxy</option><option value="rings">Concentric rings</option><option value="crystal">Crystal</option><option value="spiral">Spiral</option><option value="starburst">Starburst</option><option value="void">Void</option></select></label><label>Pupil shape<select data-appearance="pupil_shape" aria-label="Pupil shape"><option value="round">Round / oval</option><option value="vertical">Vertical slit</option><option value="horizontal">Horizontal slit</option><option value="diamond">Diamond</option><option value="none">No pupil</option></select></label><label>Pupil width<input data-appearance="pupil_width" aria-label="Pupil width" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Pupil height<input data-appearance="pupil_height" aria-label="Pupil height" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Iris size<input data-appearance="iris_size" aria-label="Iris size" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Eye accent color<input data-appearance="eye_accent" aria-label="Eye accent color" type="color" value="#8eefff"></label><p class="quiet">Changing a pupil or iris-shape control activates the radial pattern; choose another pattern for fantasy effects. Iris color is the primary color; accent color adds contrast. Fantasy patterns replace the selected eye texture; Original restores it. Effects are painted, not light sources.</p></details><label>Eye shading<input type="range" min="0" max="1" step="0.05" value="0.65" data-appearance="eye_shading" aria-label="Eye shading"></label><p class="quiet">Soft shading gives the sclera more depth. Zero keeps the original texture brightness.</p><p class="quiet">Iris and sclera colors also work with eye textures. White keeps the texture's original color.</p>
+<details id="appearanceEyes" class="appearance-section"><summary>Eyes and eyelids<small>Textures, iris colors, lashes, sclera, pupils and creases</small></summary><div class="appearance-section-body"><label>Eyelashes<select id="eyelashes"><option value="lashes_soft_natural">Soft natural</option><option value="lashes_feathery">Feathery</option><option value="lashes_winged">Winged</option><option value="lashes_legacy">Original</option><option value="none">No eyelashes</option></select></label><p class="quiet">Each style stays fitted to the upper and lower lid curves and follows blink and eye-shape changes.</p><label>Eye texture<select id="eyeDetail"><option value="">Original</option><option value="custom" disabled>Custom upload</option></select></label>
+${[["iris", "Iris color"], ["iris_inner", "Inner iris color"], ["eyes", "Sclera color"]].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}<label>Iris lightness<input type="range" min="0" max="1" step="0.05" value="0.5" data-appearance="iris_lightness" aria-label="Iris lightness"></label><label>Natural iris colors<select id="naturalIris"><option value="">Choose a color pair</option><option value="#715038,#ad814b">Warm brown</option><option value="#aa8746,#cfab65">Amber</option><option value="#73835c,#b28c49">Hazel</option><option value="#627f72,#a59c65">Sage green</option><option value="#658695,#a6b4ad">Blue gray</option><option value="#889698,#b4aca0">Silver gray</option></select></label><p class="quiet">Iris color sets the outer ring; Inner iris color blends around the pupil. White inherits the outer color. Color pairs keep your selected texture and eye pattern.</p><details><summary>Fantasy eyes and pupil shapes</summary><label>Eye pattern<select data-appearance="eye_style" aria-label="Eye pattern"><option value="original">Original / uploaded texture</option><option value="radial">Natural radial iris</option><option value="ember">Ember</option><option value="galaxy">Galaxy</option><option value="rings">Concentric rings</option><option value="crystal">Crystal</option><option value="spiral">Spiral</option><option value="starburst">Starburst</option><option value="void">Void</option></select></label><label>Pupil shape<select data-appearance="pupil_shape" aria-label="Pupil shape"><option value="round">Round / oval</option><option value="vertical">Vertical slit</option><option value="horizontal">Horizontal slit</option><option value="diamond">Diamond</option><option value="none">No pupil</option></select></label><label>Pupil width<input data-appearance="pupil_width" aria-label="Pupil width" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Pupil height<input data-appearance="pupil_height" aria-label="Pupil height" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Iris size<input data-appearance="iris_size" aria-label="Iris size" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Eye accent color<input data-appearance="eye_accent" aria-label="Eye accent color" type="color" value="#8eefff"></label><p class="quiet">Changing a pupil or iris-shape control activates the radial pattern; choose another pattern for fantasy effects. Iris color is the primary color; accent color adds contrast. Fantasy patterns replace the selected eye texture; Original restores it. Effects are painted, not light sources.</p></details><label>Eye depth &amp; lid shadow<input type="range" min="0" max="1" step="0.05" value="0.65" data-appearance="eye_shading" aria-label="Eye depth and lid shadow"></label><p class="quiet">Shapes the whole globe beneath the lids: upper-lid shadow crosses the cornea and iris, while the sclera recedes toward both corners. Zero keeps the original texture brightness.</p><p class="quiet">Iris and sclera colors also work with eye textures. White keeps the texture's original color.</p>
 <details><summary>Eyelid creases and shading</summary><label>Eyelid finish<select id="lidFinish"><option value="soft">Soft low crease</option><option value="rounded">High rounded crease</option><option value="tapered">Tapered crease</option><option value="shadow">Socket shading only</option></select></label>
 <label>Crease and shadow strength<input id="lidStrength" type="range" min="0" max="1" step="0.05" value="0.65"></label>
 <label>Crease width<input id="lidWidth" type="range" min="0" max="1" step="0.05" value="0.5"></label><label>Crease height<input id="lidHeight" type="range" min="0" max="1" step="0.05" value="0.5"></label><button id="applyLidFinish">Apply eyelid finish</button><p class="quiet">Adds subtle shading to the current skin map. Save to keep it; Undo restores the previous map. This is painted detail, not a change to eyelid geometry.</p>
 </details><details><summary>Custom eye texture</summary><p class="quiet">Uploads replace iris and sclera together. Use this model’s UV layout. PNG, JPEG or WebP; large images are resized to 2048 pixels.</p><label>Custom eye texture<input id="eyeTextureUpload" type="file" accept="image/png,image/jpeg,image/webp"></label><button id="clearEyeTexture">Use original eye texture</button><a href="/3d/designer/eye-source.png" download="jnsq-starter-eyes.png">Download starter eye map</a></details></div></details>
-<details id="appearanceClothing" class="appearance-section"><summary>Clothing<small>Outfits, separate pieces and garment colors</small></summary><div class="appearance-section-body"><label>Find an outfit<input id="wardrobeSearch" type="search" placeholder="Try casual, dress, suit…"></label>
+<details id="appearanceClothing" class="appearance-section"><summary>Clothing<small>Browse complete looks or build an outfit piece by piece</small></summary><div class="appearance-section-body">
+<div class="wardrobe-switcher" role="tablist" aria-label="Wardrobe sections"><button type="button" id="wardrobeOutfitsTab" role="tab" aria-selected="true" aria-controls="wardrobeOutfitsPanel">Complete outfits</button><button type="button" id="wardrobePiecesTab" role="tab" aria-selected="false" aria-controls="wardrobePiecesPanel">Individual pieces</button></div>
+<section id="wardrobeOutfitsPanel" role="tabpanel" aria-labelledby="wardrobeOutfitsTab"><label>Find an outfit<input id="wardrobeSearch" type="search" placeholder="Try casual, dress, suit…"></label>
 <label>Outfit category<select id="wardrobeGroup"><option value="">All outfits</option></select></label>
 <label>Outfit<select id="wardrobe"><option value="">Current model</option></select></label>
 <p id="wardrobeCount" class="quiet" aria-live="polite"></p>
-<details><summary>Browse outfit previews</summary><div id="wardrobeGallery" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem;max-height:360px;overflow:auto"></div><p class="quiet">Asset previews show the original cut. The live model shows your chosen shape and colors.</p></details>
-${[["outfit", "Clothing color"]].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}<details id="separatesPanel"><summary>Mix shirts and trousers</summary><p class="quiet">These five casual cuts have compatible separate garments. Clothing color tints both pieces; white keeps the original texture, then the two colors below adjust each piece independently.</p><label>Shirt<select id="separateTop">${[2,3,4,5,6].map(i=>`<option value="${i}">Casual top ${i}</option>`).join('')}</select></label><label>Trousers<select id="separateBottom">${[2,3,4,5,6].map(i=>`<option value="${i}">Trousers ${i}</option>`).join('')}</select></label><button id="useSeparates">Wear this combination</button><fieldset id="separateColors" disabled><legend>Individual garment colors</legend>${[['outfit_top','Shirt color'],['outfit_bottom','Trouser color']].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}</fieldset></details>
+<div id="wardrobeGallery" class="wardrobe-gallery" aria-label="Complete outfit previews"></div><p class="quiet">Choose a card to fit that complete outfit to your current body.</p></section>
+<section id="wardrobePiecesPanel" role="tabpanel" aria-labelledby="wardrobePiecesTab" hidden><p class="quiet">Choose individual garments by picture. The live model shows the fitted combination.</p>
+<div class="wardrobe-piece-section"><h3>Quick casual separates</h3><p class="quiet">These ten existing pieces change immediately.</p><h3>Tops</h3><div id="wardrobeTopGallery" class="wardrobe-piece-gallery" aria-label="Top previews"></div><h3>Bottoms</h3><div id="wardrobeBottomGallery" class="wardrobe-piece-gallery" aria-label="Bottom previews"></div>
+<p id="wardrobePieceSelection" class="wardrobe-selection" aria-live="polite"></p><button id="useSeparates">Wear these pieces</button></div>
+<div class="wardrobe-piece-section"><h3>Expanded piece library</h3><p class="quiet">Licensed MakeHuman shirts, trousers, skirts, coats, shoes and hats. A new combination is fitted locally the first time, then reused.</p><div id="expandedPieceSections"></div><p id="expandedPieceSelection" class="wardrobe-selection" aria-live="polite"></p><button id="useExpandedPieces">Fit and wear these pieces</button><p id="expandedPieceProgress" class="quiet" aria-live="polite"></p></div></section>
+${[["outfit", "Clothing color"]].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}<fieldset id="separateColors" disabled><legend>Individual piece colors</legend>${[['outfit_top','Top color'],['outfit_bottom','Bottom color']].map(([id,label])=>`<label>${label}<input type="color" data-appearance="${id}" aria-label="${label}" value="#ffffff"></label>${colorSwatches(id,label)}`).join('')}</fieldset>
 <button type="button" data-accessory-shortcut="clothes">Import custom clothing</button></div></details>
 <p id="textureState" class="quiet"></p><button id="resetAppearance">Reset appearance</button>`;
 $('studioShapeSlot').after(appearancePanel);
@@ -72,7 +72,7 @@ const appearanceTab=document.createElement('button');appearanceTab.dataset.group
 const oldShowGroup=showHumanGroup;
 showHumanGroup=function(group){oldShowGroup(group);appearancePanel.hidden=group!=='appearance';if(group==='appearance')$('studioShapeSlot').hidden=true;};
 appearanceTab.onclick=()=>showHumanGroup('appearance');
-function paintAppearance(){if($('naturalIris'))$('naturalIris').value='';if($('textureState'))$('textureState').textContent=[appearanceState.skin_texture?'Skin texture selected':'Original skin',appearanceState.eye_texture?'Custom eyes selected':'Separate iris/sclera colors'].join(' · ');for(const el of document.querySelectorAll('[data-appearance]'))el.value=appearanceState[el.dataset.appearance];for(const id of ['hairstyle','eyebrows','beard'])$(id).value=appearanceState[id];const select=$('skinComplexion');if(select)select.value=[...select.options].some(o=>o.value===appearanceState.skin_texture)?appearanceState.skin_texture:'custom';}
+function paintAppearance(){if($('naturalIris'))$('naturalIris').value='';if($('textureState'))$('textureState').textContent=[appearanceState.skin_texture?'Skin texture selected':'Original skin',appearanceState.eye_texture?'Custom eyes selected':'Separate iris/sclera colors'].join(' · ');for(const el of document.querySelectorAll('[data-appearance]'))el.value=appearanceState[el.dataset.appearance];for(const id of ['hairstyle','eyebrows','eyelashes','beard'])$(id).value=appearanceState[id];const select=$('skinComplexion');if(select)select.value=[...select.options].some(o=>o.value===appearanceState.skin_texture)?appearanceState.skin_texture:'custom';}
 let skinComplexions=[];
 let lidFinishBase=null,lidFinishResult=null;
 $('applyLidFinish').onclick=async()=>{
@@ -109,7 +109,7 @@ $('skinComplexion').onchange=async()=>{
   }catch(error){paintAppearance();studioStatus(error.message,true);}finally{select.disabled=false;}
 };
 for(const el of document.querySelectorAll('[data-appearance]'))el.oninput=()=>{appearanceState[el.dataset.appearance]=el.type==='range'?Number(el.value):el.value;if(['pupil_shape','pupil_width','pupil_height','iris_size','eye_accent'].includes(el.dataset.appearance)&&appearanceState.eye_style==='original'){appearanceState.eye_style='radial';paintAppearance();}appearancePreview();commitEdit();};
-for(const id of ['hairstyle','eyebrows','beard'])$(id).onchange=()=>{appearanceState[id]=$(id).value;appearancePreview();commitEdit();};
+for(const id of ['hairstyle','eyebrows','eyelashes','beard'])$(id).onchange=()=>{appearanceState[id]=$(id).value;appearancePreview();commitEdit();};
 for(const el of document.querySelectorAll('[data-color-key]'))el.onclick=()=>{appearanceState[el.dataset.colorKey]=el.dataset.color;paintAppearance();appearancePreview();commitEdit();};
 $('naturalIris').onchange=()=>{if(!$('naturalIris').value)return;[appearanceState.iris,appearanceState.iris_inner]=$('naturalIris').value.split(',');paintAppearance();appearancePreview();commitEdit();};
 $('resetAppearance').onclick=()=>{appearanceState={...APPEARANCE_DEFAULT};paintAppearance();appearancePreview();commitEdit();};
@@ -131,13 +131,13 @@ Object.assign(facePresets,{
   delicate:{jaw_width:.28,nose_size:.3,nostril_width:.35,mouth_width:.4,eye_size:.6},
   sculpted:{cheekbones:.82,jaw_definition:.8,nose_projection:.7,chin_projection:.63},
   broad:{jaw_width:.76,cheekbones:.65,nose_size:.6,nostril_width:.7,mouth_width:.7},
-  'convex profile':{nose_projection:.85,nose_curve:.75,nose_size:.62,nose_tip_angle:.38,jaw_projection:.35,chin_projection:.28,cheekbones:.68,jaw_definition:.6},
+  'convex profile':{nose_projection:.85,nose_curve:.75,nose_size:.62,nose_tip_rotation:.38,jaw_projection:.35,chin_projection:.28,cheekbones:.68,jaw_definition:.6},
   'strong lower profile':{nose_projection:.45,jaw_projection:.83,chin_projection:.86,chin_height:.6,jaw_width:.64,jaw_definition:.72,nose_curve:.42},
   'projected balanced':{nose_projection:.78,jaw_projection:.7,chin_projection:.72,cheekbones:.72,jaw_definition:.62,nose_size:.55},
-  'soft recessed chin':{nose_projection:.6,jaw_projection:.28,chin_projection:.18,chin_height:.38,jaw_definition:.2,cheekbones:.38,nose_tip_angle:.64},
+  'soft recessed chin':{nose_projection:.6,jaw_projection:.28,chin_projection:.18,chin_height:.38,jaw_definition:.2,cheekbones:.38,nose_tip_rotation:.64},
   'long sculpted profile':{nose_projection:.88,nose_vertical:.62,nose_size:.66,nose_curve:.65,jaw_projection:.58,chin_projection:.75,chin_height:.78,jaw_width:.35,jaw_definition:.84,cheekbones:.86},
   'broad forward profile':{nose_projection:.64,nose_size:.66,nostril_width:.78,jaw_projection:.8,chin_projection:.62,jaw_width:.82,mouth_width:.7,cheekbones:.62,upper_lip_volume:.68,lower_lip_volume:.7},
-  'compact upturned profile':{nose_projection:.37,nose_size:.3,nose_tip_angle:.8,nose_curve:.25,jaw_projection:.55,chin_projection:.68,chin_height:.3,jaw_width:.38,cheekbones:.6},
+  'compact upturned profile':{nose_projection:.37,nose_size:.3,nose_tip_rotation:.8,nose_curve:.25,jaw_projection:.55,chin_projection:.68,chin_height:.3,jaw_width:.38,cheekbones:.6},
   'defined bridge soft jaw':{nose_projection:.9,nose_curve:.58,nostril_width:.35,nose_size:.52,jaw_projection:.4,chin_projection:.48,jaw_definition:.27,cheekbones:.7}
 });
 faceChoice.querySelector('select').innerHTML='<option value="">Choose a face</option>'+Object.keys(facePresets).map(key=>`<option value="${key}">${key[0].toUpperCase()+key.slice(1)}</option>`).join('');
@@ -160,7 +160,7 @@ $('shapePreset').onchange=()=>{const p=$('shapePreset').value;if(!p)return;oldRe
 $('compareSet').onclick=()=>{comparison=clone(stateNow());$('compareToggle').disabled=false;studioStatus('Comparison kept for this editing session.');};
 $('compareToggle').onclick=()=>{comparing=!comparing;$('compareToggle').textContent=comparing?'Show current':'Show before';$('compareToggle').setAttribute('aria-pressed',String(comparing));const value=comparing?comparison:stateNow();const f=$('previewFrame').contentWindow?.jnsqHumanMorphApply;if(f)f(JSON.stringify(value.identity));sendAppearance(value.appearance,value.identity);studioStatus(comparing?'Showing comparison · edits still belong to your current design.':'Showing current design.');};
 
-const motions=document.createElement('div');motions.className='studio-actions';motions.innerHTML='<label>Movement check<select id="studioMotion"><option value="idle">Standing / idle</option><option value="still">Still</option><option value="walk">Walk in place</option><option value="sit">Sit</option><option value="turn">Turntable</option><option value="blink">Blink</option><option value="talk">Speech mouth movement</option></select></label><span class="quiet">Preview only</span>';
+const motions=document.createElement('div');motions.className='studio-actions';motions.innerHTML='<label>Movement check<select id="studioMotion"><option value="idle">Standing</option><option value="still">Still</option><option value="turn">Turntable</option><option value="blink">Blink</option><option value="talk">Speech mouth movement</option></select></label><span class="quiet">Preview only</span>';
 $('studioPreviewState').before(motions);
 $('studioMotion').onchange=()=>{studioCommand('motion',$('studioMotion').value);};
 const recoveryControls=document.createElement('div');recoveryControls.className='studio-actions';
@@ -207,7 +207,7 @@ saveStudio=async function(copy=false){
     activeRecipe=result.recipe_id;
     let thumbnailSaved=false;
     if(image)try{await api(`/api/avatar-library/thumbnails/${result.recipe_id}/${result.revision_id}`,{image});thumbnailSaved=true;}catch(error){console.warn('Thumbnail unavailable',error);}
-    await loadBuilderRecipes(activeRecipe);studioDirty=false;
+    await loadBuilderRecipes(activeRecipe);studioDirty=false;window.dispatchEvent(new Event("jnaiq-avatar-saved"));
     studioStatus(`Saved “${result.name}” locally.${thumbnailSaved?'':' Preview thumbnail unavailable; the design is saved.'}`);
     await gallery();return true;
   }catch(error){studioStatus(error.message,true);return false;}
@@ -215,44 +215,111 @@ saveStudio=async function(copy=false){
 };
 $('builderName').addEventListener('input',invalidateDownload);
 
-const publishPanel=document.createElement('details');publishPanel.className='card';publishPanel.innerHTML=`<summary>Use an avatar in JNSQ</summary><p>Assign a 3D body for the JNSQ world. Profile pictures are separate.</p><p>Keep a finished avatar in your local library, then choose who will use it. You can restore their previous appearance.</p><div class="studio-actions"><button id="publishAvatar">Add current avatar to library</button></div><label>Finished avatar<select id="libraryPackage"></select></label><label>Persona or user<select id="libraryMember"></select></label><p id="assignmentState" class="quiet"></p><div class="studio-actions"><button id="assignAvatar">Use selected avatar</button><button id="restoreAvatar">Restore previous appearance</button></div>`;
+const publishPanel=document.createElement('details');publishPanel.className='card';publishPanel.innerHTML=`<summary>Use an avatar in JNAIQ</summary><p>Assign a 3D body for the JNAIQ world. Profile pictures are separate.</p><p>Keep a finished avatar in your local library, then choose who will use it. You can restore their previous appearance.</p><div class="studio-actions"><button id="publishAvatar">Add current avatar to library</button></div><label>Finished avatar<select id="libraryPackage"></select></label><label>Persona or user<select id="libraryMember"></select></label><p id="assignmentState" class="quiet"></p><div class="studio-actions"><button id="assignAvatar">Use selected avatar</button><button id="restoreAvatar">Restore previous appearance</button></div>`;
 $('advancedWorkshop').before(publishPanel);
 async function refreshLibrary(selected=''){libraryState=await json('/api/avatar-library');$('libraryPackage').innerHTML='<option value="">Choose a finished avatar</option>'+libraryState.packages.map(p=>`<option value="${p.package_id}">${esc(p.name)}</option>`).join('');if(selected)$('libraryPackage').value=selected;const member=$('libraryMember').value;const targets=libraryState.targets||libraryState.members.map(m=>({id:m,name:m,kind:'member'}));$('libraryMember').innerHTML='<option value="">Choose a persona or user</option>'+['persona','user','member'].map(kind=>{const rows=targets.filter(t=>t.kind===kind);return rows.length?`<optgroup label="${kind==='persona'?'Personas':kind==='user'?'Users':'Other room members'}">${rows.map(t=>`<option value="${esc(t.id)}">${esc(t.name)}${t.name!==t.id?' ('+esc(t.id)+')':''}</option>`).join('')}</optgroup>`:'';}).join('');$('libraryMember').value=member;assignmentLabel();}
 function assignmentLabel(){const m=$('libraryMember').value,a=libraryState?.assignments[m.toLowerCase()],p=libraryState?.packages.find(p=>p.package_id===a?.package_id);$('assignmentState').textContent=m?`Current appearance: ${p?.name||'original model'}`:'Choose who will use this avatar.';$('restoreAvatar').disabled=!a?.history?.length;}
 $('libraryMember').onchange=assignmentLabel;
 async function currentGLB(){
   const source={...activeCandidateMeta},identity=readHumanMorphs(),appearance=readAppearance(),name=$('builderName').value.trim()||'Imported avatar';
-  const response=await fetch(`/api/avatar-bodies/candidates/${source.candidate_id}/model`);
+  const response=await fetch(`/api/avatar-bodies/candidates/${source.candidate_id}/model?brow_height=local-brows-2&lower_chin=lower-chin-1`);
   if(!response.ok)throw new Error('Source model unavailable');
   const bytes=await response.arrayBuffer(),digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
-  if(digest!==source.sha256)throw new Error('Source changed; reopen it before publishing');
+  if((response.headers.get('X-JNAIQ-Source-SHA256')||digest)!==source.sha256 || digest!==(response.headers.get('X-JNAIQ-Model-SHA256')||source.sha256))throw new Error('Source changed; reopen it before publishing');
   return {glb:shapedAvatarGLB(bytes,identity,name,await resolvedAppearance(appearance,source.candidate_id,identity),true),name,source:source.candidate_id};
 }
-$('publishAvatar').onclick=async()=>{const b=$('publishAvatar');b.disabled=true;try{studioStatus('Preparing a finished local avatar…');const {source,glb,name}=await currentGLB();const response=await fetch('/api/avatar-bodies/candidates?filename='+encodeURIComponent(name+'.glb'),{method:'POST',headers:{'Content-Type':'model/gltf-binary'},body:glb});const staged=await response.json();if(!response.ok)throw new Error(staged.error);const package_=await api('/api/avatar-library/packages',{candidate_id:staged.candidate_id||staged.candidate?.candidate_id,name,mapping_source:source});await refreshLibrary(package_.package_id);studioStatus('Avatar added to your local library. Choose a persona or user to use it.');}catch(error){studioStatus(error.message,true);}finally{b.disabled=false;}};
+$('publishAvatar').after(Object.assign(document.createElement('p'),{id:'publishState',className:'quiet'}));
+$('publishState').setAttribute('role','status');
+function publishStatus(message,error=false){studioStatus(message,error);$('publishState').textContent=message;$('publishState').className=error?'error':'quiet';}
+$('publishAvatar').onclick=async()=>{
+  const b=$('publishAvatar');b.disabled=true;
+  try{
+    publishStatus('Preparing a finished local avatar…');
+    const {source,glb,name}=await currentGLB();
+    publishStatus('Adding your avatar to the local library…');
+    const response=await fetch('/api/avatar-bodies/candidates?filename='+encodeURIComponent(name+'.glb'),{method:'POST',headers:{'Content-Type':'model/gltf-binary'},body:glb});
+    const staged=await response.json();if(!response.ok)throw new Error(staged.error);
+    const package_=await api('/api/avatar-library/packages',{candidate_id:staged.candidate_id||staged.candidate?.candidate_id,name,mapping_source:source});
+    await refreshLibrary(package_.package_id);
+    publishStatus('Avatar added to your local library. Choose a persona or user to use it.');
+  }catch(error){publishStatus(error.message,true);}finally{b.disabled=false;}
+};
 async function assignSelected(restore=false){const member=$('libraryMember').value,package_id=$('libraryPackage').value;if(!member||(!restore&&!package_id)){studioStatus('Choose a persona or user and finished avatar first.',true);return;}try{const current=libraryState.assignments[member.toLowerCase()];await api('/api/avatar-library/assignments/'+encodeURIComponent(member),{package_id,restore,expected_revision:current?.revision||null});await refreshLibrary(package_id);studioStatus(restore?`Restored ${member}’s previous appearance.`:`${member} now uses the selected avatar.`);}catch(error){studioStatus(error.message,true);await refreshLibrary(package_id);}}
 $('assignAvatar').onclick=()=>assignSelected();$('restoreAvatar').onclick=()=>assignSelected(true);
-let wardrobeItems=[];
+let wardrobeItems=[],expandedWardrobePieces=[];
+let selectedWardrobeTop='2',selectedWardrobeBottom='2';
+let selectedExpandedPieces={top:'',bottom:'',outerwear:'none',shoes:'none',hat:'none'},expandedPieceBusy=false;
+const wardrobePieceNames={top:{2:'Long-sleeve top',3:'Collared shirt',4:'Layered shirt',5:'Casual top',6:'Fitted top'},bottom:{2:'Straight trousers',3:'Relaxed trousers',4:'Classic trousers',5:'Slim trousers',6:'Tapered trousers'}};
+function wardrobeImage(src,label){return `<span class="wardrobe-picture"><img loading="lazy" src="${src}" alt="${esc(label)} preview" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'wardrobe-picture-fallback',textContent:'Preview unavailable'}))"></span>`;}
+function currentWardrobeEntry(){return wardrobeItems.find(item=>item.candidate_id===activeCandidate||item.asset===fittedOutfit||(item.pieces&&fittedOutfit==='separates:'+item.top+':'+item.bottom));}
+function chooseWardrobeSection(section){
+  const pieces=section==='pieces';$('wardrobeOutfitsTab').setAttribute('aria-selected',String(!pieces));$('wardrobePiecesTab').setAttribute('aria-selected',String(pieces));
+  $('wardrobeOutfitsPanel').hidden=pieces;$('wardrobePiecesPanel').hidden=!pieces;
+}
+function paintWardrobePieces(){
+  for(const slot of ['top','bottom']){
+    const values=[...new Set(wardrobeItems.filter(item=>item.pieces).map(item=>item[slot]))].sort((a,b)=>Number(a)-Number(b));
+    const selected=slot==='top'?selectedWardrobeTop:selectedWardrobeBottom;
+    const gallery=$(slot==='top'?'wardrobeTopGallery':'wardrobeBottomGallery');
+    gallery.innerHTML=values.map(value=>{const label=wardrobePieceNames[slot][value]||`${slot} ${value}`;return `<button type="button" class="wardrobe-piece-card" data-piece-slot="${slot}" data-piece-value="${value}" aria-pressed="${value===selected}">${wardrobeImage(`/3d/designer/wardrobe-previews/pieces/${slot}-${value}.png`,label)}<span>${esc(label)}</span></button>`;}).join('');
+  }
+  $('wardrobePieceSelection').textContent=`Selected: ${wardrobePieceNames.top[selectedWardrobeTop]||'top '+selectedWardrobeTop} + ${wardrobePieceNames.bottom[selectedWardrobeBottom]||'bottom '+selectedWardrobeBottom}`;
+  for(const button of document.querySelectorAll('[data-piece-slot]'))button.onclick=()=>{if(button.dataset.pieceSlot==='top')selectedWardrobeTop=button.dataset.pieceValue;else selectedWardrobeBottom=button.dataset.pieceValue;paintWardrobePieces();};
+}
+function paintExpandedWardrobePieces(){
+  const host=$('expandedPieceSections'),labels={top:'Tops',bottom:'Bottoms and skirts',outerwear:'Outerwear',shoes:'Shoes',hat:'Hats'};
+  host.innerHTML=['top','bottom','outerwear','shoes','hat'].map(slot=>{
+    const pieces=expandedWardrobePieces.filter(piece=>piece.slot===slot),optional=!['top','bottom'].includes(slot);
+    const cards=(optional?[{id:'none',name:'None',thumbnail:'',slot}]:[]).concat(pieces).map(piece=>`<button type="button" class="wardrobe-piece-card" data-library-piece-slot="${slot}" data-library-piece-id="${esc(piece.id)}" aria-pressed="${selectedExpandedPieces[slot]===piece.id}">${piece.thumbnail?wardrobeImage(piece.thumbnail,piece.name):'<span class="wardrobe-picture"><span class="wardrobe-picture-fallback">No '+labels[slot].toLowerCase().replace(/s$/,'')+'</span></span>'}<span>${esc(piece.name)}</span>${piece.collection?`<small>${esc(piece.collection)}</small>`:''}</button>`).join('');
+    return `<div class="wardrobe-piece-section"><h3>${labels[slot]}</h3><p class="quiet">${pieces.length} choices</p><div class="wardrobe-piece-gallery" aria-label="${labels[slot]} previews">${cards}</div></div>`;
+  }).join('');
+  const named=Object.entries(selectedExpandedPieces).filter(([,id])=>id&&id!=='none').map(([,id])=>expandedWardrobePieces.find(piece=>piece.id===id)?.name).filter(Boolean);
+  $('expandedPieceSelection').textContent=named.length?'Selected: '+named.join(' + '):'Choose a top and bottom.';
+  $('useExpandedPieces').disabled=expandedPieceBusy||!selectedExpandedPieces.top||!selectedExpandedPieces.bottom;
+  for(const button of document.querySelectorAll('[data-library-piece-slot]'))button.onclick=()=>{selectedExpandedPieces[button.dataset.libraryPieceSlot]=button.dataset.libraryPieceId;paintExpandedWardrobePieces();};
+}
 function paintWardrobe(){
   const query=$('wardrobeSearch').value.trim().toLowerCase(),group=$('wardrobeGroup').value;
-  const visible=wardrobeItems.filter(c=>(!group||(c.group||'Originals')===group)&&`${c.name} ${c.group||''}`.toLowerCase().includes(query));
+  const outfits=wardrobeItems.filter(c=>!c.pieces);
+  const visible=outfits.filter(c=>(!group||(c.group||'Originals')===group)&&`${c.name} ${c.group||''}`.toLowerCase().includes(query));
   $('wardrobe').innerHTML='<option value="">Choose an outfit</option>'+visible.map(c=>`<option value="${c.candidate_id}">${esc(c.name)}</option>`).join('');
-  $('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===activeCandidate||item.asset===fittedOutfit||(item.pieces&&fittedOutfit==='separates:'+item.top+':'+item.bottom))?.candidate_id||'';
-  $('wardrobeCount').textContent=`${visible.length} of ${wardrobeItems.length} outfits. Your face, body and colors stay with you when changing outfits.`;
-  $('wardrobeGallery').innerHTML=visible.map(c=>`<button type="button" data-outfit-choice="${c.candidate_id}" style="width:100%;padding:.3rem">${c.asset?`<img loading="lazy" alt="" src="/3d/designer/wardrobe-previews/${esc(c.asset)}.png" style="width:100%;aspect-ratio:1;object-fit:contain">`:''}${esc(c.name)}</button>`).join('');
+  const current=currentWardrobeEntry();$('wardrobe').value=current&&!current.pieces?current.candidate_id:'';
+  $('wardrobeCount').textContent=`${visible.length} of ${outfits.length} complete outfits. Your face, body and colors stay with you when changing outfits.`;
+  $('wardrobeGallery').innerHTML=visible.map(c=>`<button type="button" class="wardrobe-card" data-outfit-choice="${c.candidate_id}" data-current="${c.candidate_id===current?.candidate_id}">${wardrobeImage(`/3d/designer/wardrobe-previews/${esc(c.asset)}.png`,c.name)}<span>${esc(c.name)}</span><small>${esc(c.group||'Outfit')}</small></button>`).join('');
   for(const button of $('wardrobeGallery').querySelectorAll('button'))button.onclick=()=>{$('wardrobe').value=button.dataset.outfitChoice;$('wardrobe').dispatchEvent(new Event('change'));};
+  paintWardrobePieces();
 }
 async function loadWardrobe(){
-  const data=await json('/api/avatar-library/starters');wardrobeItems=data.starters.filter(item=>item.asset||item.pieces);
-  $('wardrobeGroup').innerHTML='<option value="">All outfits</option>'+[...new Set(wardrobeItems.map(c=>c.group||'Originals'))].sort().map(group=>`<option>${esc(group)}</option>`).join('');
-  paintWardrobe();
+  const [data,pieces]=await Promise.all([json('/api/avatar-library/starters'),json('/api/avatar-library/wardrobe-pieces')]);wardrobeItems=data.starters.filter(item=>item.asset||item.pieces);expandedWardrobePieces=pieces.pieces;
+  for(const slot of ['top','bottom'])if(!selectedExpandedPieces[slot])selectedExpandedPieces[slot]=expandedWardrobePieces.find(piece=>piece.slot===slot)?.id||'';
+  $('wardrobeGroup').innerHTML='<option value="">All outfits</option>'+[...new Set(wardrobeItems.filter(c=>!c.pieces).map(c=>c.group||'Originals'))].sort().map(group=>`<option>${esc(group)}</option>`).join('');
+  paintWardrobe();paintExpandedWardrobePieces();
 }
+$('wardrobeOutfitsTab').onclick=()=>chooseWardrobeSection('outfits');$('wardrobePiecesTab').onclick=()=>chooseWardrobeSection('pieces');
 $('wardrobeSearch').oninput=paintWardrobe;$('wardrobeGroup').onchange=paintWardrobe;
-$('useSeparates').onclick=()=>{const entry=wardrobeItems.find(item=>item.top===$('separateTop').value&&item.bottom===$('separateBottom').value);if(!entry)return; $('wardrobeSearch').value='';$('wardrobeGroup').value='';paintWardrobe();$('wardrobe').value=entry.candidate_id;$('wardrobe').dispatchEvent(new Event('change'));};
+$('useSeparates').onclick=()=>{const entry=wardrobeItems.find(item=>item.top===selectedWardrobeTop&&item.bottom===selectedWardrobeBottom);if(!entry)return; $('wardrobe').value=entry.candidate_id;$('wardrobe').dispatchEvent(new Event('change'));};
+async function watchExpandedPieces(job,after=''){
+  const state=await json('/api/avatar-library/wardrobe-pieces/jobs/'+encodeURIComponent(job)+(after?'?after='+encodeURIComponent(after):''));
+  if(state.status==='queued'||state.status==='fitting'){
+    $('expandedPieceProgress').textContent=state.status==='queued'?'Waiting for the local fitter…':'Fitting every selected piece to the editable body…';
+    return watchExpandedPieces(job,state.status);
+  }
+  if(state.status!=='ready')throw new Error(state.error||'The outfit could not be fitted.');
+  const before=stateNow(),past=editPast.slice();await openMapper(state.candidate_id,before.identity);
+  appearanceState=before.appearance;paintAppearance();appearancePreview();editPast=[...past,before];editFuture=[];editLast=stateNow();historyButtons();markEdit();
+  $('expandedPieceProgress').textContent='Wearing '+state.name+' · unsaved changes';
+}
+$('useExpandedPieces').onclick=async()=>{
+  if(expandedPieceBusy)return;expandedPieceBusy=true;paintExpandedWardrobePieces();const source=activeCandidate;
+  try{studioStatus('Preparing your selected pieces…');const state=await api('/api/avatar-library/wardrobe-pieces/'+source,{pieces:selectedExpandedPieces});if(activeCandidate!==source)return;await watchExpandedPieces(state.job_id);studioStatus('Expanded outfit ready · unsaved changes');}
+  catch(error){$('expandedPieceProgress').textContent=error.message;studioStatus(error.message,true);}
+  finally{expandedPieceBusy=false;paintExpandedWardrobePieces();}
+};
 $('wardrobe').onchange=async()=>{
   const id=$('wardrobe').value,source=activeCandidate;if(!id||$('wardrobe').disabled||historyBusy)return;
   const outfit=wardrobeItems.find(item=>item.candidate_id===id);
   $('wardrobe').disabled=true;
-  for(const button of $('wardrobeGallery').querySelectorAll('button'))button.disabled=true;
+  for(const button of document.querySelectorAll('#appearanceClothing [data-outfit-choice],#appearanceClothing [data-piece-slot],#useSeparates'))button.disabled=true;
   try{
     studioStatus('Fitting '+outfit.name+' to your current character…');
     const result=await api('/api/avatar-library/wardrobe/'+source,{outfit_id:id});
@@ -264,7 +331,7 @@ $('wardrobe').onchange=async()=>{
     editPast=[...past,before];editFuture=[];editLast=stateNow();historyButtons();markEdit();
     $('wardrobe').value=id;studioStatus('Wearing '+outfit.name+' · unsaved changes');
   }catch(error){studioStatus(error.message,true);}
-  finally{$('wardrobe').disabled=false;for(const button of $('wardrobeGallery').querySelectorAll('button'))button.disabled=false;}
+  finally{$('wardrobe').disabled=false;for(const button of document.querySelectorAll('#appearanceClothing [data-outfit-choice],#appearanceClothing [data-piece-slot],#useSeparates'))button.disabled=false;}
 };
 paintAppearance();gallery().catch(()=>{});refreshLibrary().catch(()=>{$('assignmentState').textContent='Avatar library will be available when the updated room host is running.';});loadWardrobe().catch(()=>{});
 
@@ -281,13 +348,13 @@ let fittedOutfit='';
 let accessoryBusy=false;
 let extraHairItems=[],availableHairstyles=new Set();
 function mergeHairChoices(){
-  for(const item of extraHairItems){const existing=[...$('hairstyle').options].find(o=>o.value===item.id);if(existing){existing.disabled=!!window.JNSQ_STANDALONE&&!availableHairstyles.has(item.id);existing.textContent=item.name;continue;}
-    const option=document.createElement('option');option.value=item.id;option.disabled=!!window.JNSQ_STANDALONE&&!availableHairstyles.has(item.id);option.textContent=item.name;$('hairstyle').append(option);
+  for(const item of extraHairItems){const existing=[...$('hairstyle').options].find(o=>o.value===item.id);if(existing){existing.disabled=false;existing.textContent=item.name;continue;}
+    const option=document.createElement('option');option.value=item.id;option.textContent=item.name;$('hairstyle').append(option);
   }
   $('hairstyle').value=appearanceState.hairstyle;
 }
 Promise.all(['/3d/designer/masculine-hair/index.json','/3d/designer/extra-hair/index.json'].map(url=>json(url).catch(error=>{studioStatus('Some hairstyles are unavailable: '+error.message,true);return {hair:[]};}))).then(catalogs=>{extraHairItems=catalogs.flatMap(data=>data.hair);mergeHairChoices();});
-const hairHelp=document.createElement('p');hairHelp.className='quiet';hairHelp.setAttribute('role','status');hairHelp.textContent='Browse every included hairstyle. Prepared styles work directly; fitting additional styles requires the separate Blender/MPFB authoring tools.';
+const hairHelp=document.createElement('p');hairHelp.className='quiet';hairHelp.setAttribute('role','status');hairHelp.textContent='All hairstyles are in this list. Additional styles fit locally on first use, then apply automatically. Cached combinations open faster.';
 $('hairstyle').parentElement.after(hairHelp);
 $('hairstyle').onchange=async()=>{
   const selected=$('hairstyle').value,previous=appearanceState.hairstyle;
@@ -335,7 +402,7 @@ function updateHairPreviewDialog(){
   const current=item?.id===appearanceState.hairstyle;
   $('tryHairPreview').disabled=!item||item.disabled||$('hairstyle').disabled||!activeCandidate||current;
   $('tryHairPreview').textContent=current?'On your avatar':'Try on avatar';
-  $('hairPreviewNote').textContent=!item||item.disabled?(window.JNSQ_STANDALONE?'This style needs the separate Blender/MPFB fitting tools. Its source asset and preview are included.':'This style is unavailable for the current model.'):
+  $('hairPreviewNote').textContent=!item||item.disabled?'This style is unavailable for the current model.':
     !activeCandidate?'Choose a starting model to try this style.':
     $('hairstyle').disabled?'An accessory is being prepared. You can keep browsing while it finishes.':
     current?'This is your current hairstyle.':item.id==='none'?'Try your avatar without hair.':
@@ -443,19 +510,22 @@ openMapper=async function(id,identity=null){
   fittedOutfit=assets.find(asset=>asset.category==='clothes')?.name||'';
   const readyOutfit=readyAccessory?.candidate_id===id?readyAccessory.outfit:'';
   const separates=wardrobeItems.find(item=>item.pieces&&(item.candidate_id===id||fittedOutfit==='separates:'+item.top+':'+item.bottom||readyOutfit==='separates:'+item.top+':'+item.bottom));
-  $('separateColors').disabled=!separates;
-  if(separates){fittedOutfit='separates:'+separates.top+':'+separates.bottom;$('separateTop').value=separates.top;$('separateBottom').value=separates.bottom;}
+  const expanded=fittedOutfit.startsWith('pieces:');$('separateColors').disabled=!(separates||expanded);
+  if(separates){fittedOutfit='separates:'+separates.top+':'+separates.bottom;selectedWardrobeTop=separates.top;selectedWardrobeBottom=separates.bottom;}
+  if(expanded)for(const pair of fittedOutfit.slice(7).split(',')){const [slot,value]=pair.split('=',2);if(slot in selectedExpandedPieces)selectedExpandedPieces[slot]=value;}
   const labels={short01:'Short — classic',short02:'Short — cut 2',short03:'Short — cut 3',short04:'Short — cut 4',bob01:'Bob — classic',bob02:'Bob — cut 2',afro01:'Afro',braid01:'Braid',long01:'Long',ponytail01:'Ponytail',wdg_scruffy_beard:'Scruffy beard',rehmanpolanski_moustache_viking:'Viking moustache',rehmanpolanski_beard_viking:'Viking beard',grinsegold_beard_sigmund_wip:'Sigmund beard',culturalibre_faun_beard:'Faun beard'};
-  for(const [key,category,none] of [['hairstyle','hair','No hair'],['eyebrows','eyebrows','No eyebrows'],['beard','beard','Clean shaven']]){
-    const names=[...new Set(assets.filter(asset=>asset.category===category).map(asset=>asset.name))];
+  for(const [key,category,none] of [['hairstyle','hair','No hair'],['eyebrows','eyebrows','No eyebrows'],['eyelashes','eyelashes','No eyelashes'],['beard','beard','Clean shaven']]){
+    const styled=detail.appearance_styles?.[category]||[];
+    const names=styled.length?styled.map(item=>item.id):[...new Set(assets.filter(asset=>asset.category===category).map(asset=>asset.name))];
     if(key==='hairstyle')availableHairstyles=new Set(names);
-    const browName=name=>name==='eyebrow001'?'Natural':name==='eyebrow009'?'Defined':'Brow style '+Number(name.replace('eyebrow',''));
-    $(key).innerHTML=names.map(name=>`<option value="${esc(name)}">${esc(category==='eyebrows'?browName(name):labels[name]||extraHairItems.find(item=>item.id===name)?.name||name.replaceAll('_',' '))}</option>`).join('')+`<option value="none">${none}</option>`;
+    const styleNames=Object.fromEntries(styled.map(item=>[item.id,item.name]));
+    const browName=name=>name==='eyebrow001'?'Natural':name==='eyebrow009'?'Defined':name.startsWith('eyebrow')?'Brow style '+Number(name.replace('eyebrow','')):name.replaceAll('_',' ');
+    $(key).innerHTML=names.map(name=>`<option value="${esc(name)}">${esc(styleNames[name]||(category==='eyebrows'?browName(name):labels[name]||extraHairItems.find(item=>item.id===name)?.name||name.replaceAll('_',' ')))}</option>`).join('')+`<option value="none">${none}</option>`;
     if(appearanceState[key]!=='none'&&!names.includes(appearanceState[key])){
       const missing=document.createElement('option');missing.value=appearanceState[key];missing.textContent=appearanceState[key]+' (not in this model)';missing.disabled=true;$(key).append(missing);
     }
   }
-  mergeHairChoices();paintAppearance();$('wardrobe').value=wardrobeItems.find(item=>item.candidate_id===id||item.asset===fittedOutfit||(item.pieces&&fittedOutfit==='separates:'+item.top+':'+item.bottom))?.candidate_id||'';
+  mergeHairChoices();paintAppearance();paintWardrobe();
   const supported=new Set(activeHumanMorphs.map(([key])=>key));
   $('shapePreset').disabled=!activeHumanMorphs.length;
   $('humanReset').disabled=!activeHumanMorphs.length;
@@ -470,11 +540,12 @@ faceChoice.hidden=true;
 
 const featureChoices={
   Eyes:{Balanced:{eye_openness:.43},Round:{eye_size:.56,eye_openness:.64},Almond:{eye_openness:.32,eye_tilt:.55},Upturned:{eye_tilt:.68,eye_openness:.4}},
-  Nose:{Straight:{},Upturned:{nose_tip_angle:.8,nose_curve:.3,nose_size:.4},Convex:{nose_curve:.8,nose_projection:.7,nose_tip_angle:.4},Broad:{nostril_width:.8,nose_size:.65,nose_projection:.4}},
+  Nose:{Straight:{},Upturned:{nose_tip_rotation:.8,nose_curve:.3,nose_size:.4},Convex:{nose_curve:.8,nose_projection:.7,nose_tip_rotation:.4},Broad:{nostril_width:.8,nose_size:.65,nose_projection:.4}},
   Lips:{Balanced:{},Full:{upper_lip_volume:.85,lower_lip_volume:.85,mouth_width:.55},Slender:{upper_lip_volume:.2,lower_lip_volume:.25},'Defined bow':{cupids_bow:.85,upper_lip_volume:.6,lower_lip_volume:.65}},
   Jaw:{Balanced:{},Soft:{jaw_definition:.2,jaw_width:.45,chin_height:.4},Angular:{jaw_definition:.85,jaw_width:.7,jaw_angle:.65},Tapered:{jaw_width:.25,chin_height:.65,chin_projection:.6}}
 };
-const featureKeys={Eyes:['eye_angle','inner_eye_fold','inner_lid_opening','outer_lid_opening','eye_size','eye_spacing','eye_openness','eye_tilt','eyelid_fold','eyelid_fold_height','lower_lid_volume'],Nose:['nose_bridge_width','nose_tip_width','nostril_flare','lower_nose_projection','nose_size','nose_curve','nose_tip_angle','nostril_angle','nostril_width','nose_projection','nose_vertical','septum_angle'],Lips:['upper_lip_height','lower_lip_height','mouth_width','upper_lip_volume','lower_lip_volume','cupids_bow'],Jaw:['jaw_corner','jaw_width','jaw_angle','jaw_projection','jaw_definition','chin_height','chin_projection']};
+const featureKeys={Eyes:['eye_angle','inner_eye_fold','inner_lid_opening','outer_lid_opening','outer_lid_height','eye_size','eye_spacing','eye_openness','eye_tilt','eyelid_fold','eyelid_fold_height','lower_lid_volume'],Nose:['nose_bridge_width','nose_sidewall_width','nose_tip_width','nostril_flare','alar_groove_definition','lower_nose_projection','nose_size','nose_curve','nose_tip_angle','nose_tip_rotation','nostril_angle','nostril_width','nose_projection','nose_vertical','septum_angle'],Lips:['upper_lip_height','lower_lip_height','mouth_width','upper_lip_volume','lower_lip_volume','cupids_bow'],Jaw:['jaw_corner','jaw_width','jaw_angle','jaw_projection','jaw_definition','chin_height','chin_projection','lower_chin_width','lower_chin_projection']};
+featureKeys.Lips.push('outer_lip_width','upper_lip_border','lower_lip_border','cupids_bow_width');
 Object.assign(featureChoices.Eyes,{
   'Defined lids':{eyelid_fold:.78,eyelid_fold_height:.58,lower_lid_volume:.36,eye_openness:.4},
   'Soft hooded lids':{eyelid_fold:.28,eyelid_fold_height:.32,lower_lid_volume:.55,eye_openness:.38},
@@ -488,10 +559,10 @@ Object.assign(featureChoices.Eyes,{
 });
 Object.assign(featureChoices.Nose,{
   Petite:{nose_size:.23,nostril_width:.35,nose_projection:.35},
-  Button:{nose_size:.35,nose_tip_angle:.72,nose_projection:.32,nostril_width:.45},
-  Aquiline:{nose_curve:.85,nose_projection:.82,nose_tip_angle:.3},
+  Button:{nose_size:.35,nose_tip_rotation:.72,nose_projection:.32,nostril_width:.45},
+  Aquiline:{nose_curve:.85,nose_projection:.82,nose_tip_rotation:.3},
   'Long straight':{nose_vertical:.8,nose_projection:.65,nose_curve:.5},
-  'Wide rounded':{nostril_width:.85,nose_size:.7,nose_tip_angle:.58,nose_curve:.35},
+  'Wide rounded':{nostril_width:.85,nose_size:.7,nose_tip_rotation:.58,nose_curve:.35},
   'Narrow projected':{nostril_width:.25,nose_projection:.82,nose_size:.5}
 });
 Object.assign(featureChoices.Lips,{
@@ -527,16 +598,16 @@ featureChoices.Eyes={
  'Full lower lids':{eye_openness:.38,lower_lid_volume:.9,eyelid_fold:.7,eyelid_fold_height:.38}
 };
 Object.assign(featureChoices.Nose,{
- Button:{nose_size:.28,nose_tip_angle:.82,lower_nose_projection:.32,nose_tip_width:.64,nose_bridge_width:.32,nostril_flare:.35},
- Aquiline:{nose_curve:.9,nose_projection:.8,lower_nose_projection:.78,nose_tip_angle:.25,nose_bridge_width:.35,nose_tip_width:.4},
+ Button:{nose_size:.28,nose_tip_rotation:.82,lower_nose_projection:.32,nose_tip_width:.64,nose_bridge_width:.32,nostril_flare:.35},
+ Aquiline:{nose_curve:.9,nose_projection:.8,lower_nose_projection:.78,nose_tip_rotation:.25,nose_bridge_width:.35,nose_tip_width:.4},
  'Wide rounded':{nose_size:.68,nostril_width:.85,nose_tip_width:.85,nose_bridge_width:.7,nostril_flare:.75,nose_curve:.3},
  'Narrow projected':{nose_bridge_width:.18,nose_tip_width:.25,lower_nose_projection:.88,nose_projection:.65,nostril_width:.3},
  'Broad low bridge':{nose_bridge_width:.85,nose_tip_width:.7,nose_projection:.25,lower_nose_projection:.5,nostril_flare:.7},
- 'Soft rounded':{nose_curve:.25,nose_tip_width:.78,nose_bridge_width:.55,nose_tip_angle:.65,nostril_flare:.35},
+ 'Soft rounded':{nose_curve:.25,nose_tip_width:.78,nose_bridge_width:.55,nose_tip_rotation:.65,nostril_flare:.35},
  'Rounded bulb tip':{nose_tip_width:.95,nose_bridge_width:.38,nose_curve:.35,lower_nose_projection:.7,nostril_width:.6},
  Angular:{nose_bridge_width:.4,nose_tip_width:.22,nose_curve:.72,nose_projection:.65,lower_nose_projection:.8,nostril_flare:.25},
- 'Bony bridge':{nose_bridge_width:.28,nose_tip_width:.28,nose_curve:.95,nose_projection:.72,lower_nose_projection:.65,nose_tip_angle:.32,nostril_flare:.2},
- 'Long lower nose':{lower_nose_projection:1.2,nose_projection:.5,nose_tip_width:.4,nose_tip_angle:.45}
+ 'Bony bridge':{nose_bridge_width:.28,nose_tip_width:.28,nose_curve:.95,nose_projection:.72,lower_nose_projection:.65,nose_tip_rotation:.32,nostril_flare:.2},
+ 'Long lower nose':{lower_nose_projection:1.2,nose_projection:.5,nose_tip_width:.4,nose_tip_rotation:.45}
 });
 Object.assign(featureChoices.Lips,{
  Thin:{upper_lip_height:.08,lower_lip_height:.15,upper_lip_volume:.3,lower_lip_volume:.3,cupids_bow:.65},
@@ -551,7 +622,7 @@ Object.assign(featureChoices.Jaw,{
  'Long tapered':{jaw_width:.2,jaw_corner:.4,chin_height:.88,chin_projection:.62,jaw_definition:.7},
  'Broad defined':{jaw_width:.9,jaw_corner:.92,jaw_definition:.9,jaw_projection:.65,chin_height:.55}
 });
-featureKeys.Brows=['brow_height','brow_angle','brow_projection','brow_width','brow_arch','brow_hair_thickness','brow_hair_length'];
+featureKeys.Brows=['brow_height','brow_angle','brow_projection','brow_width','brow_arch','brow_inner_horizontal','brow_inner_vertical','brow_arch_horizontal','brow_arch_vertical','brow_tail_horizontal','brow_tail_vertical','brow_hair_thickness','brow_hair_length'];
 featureChoices.Brows={
  Natural:{},Straight:{brow_arch:.12,brow_angle:.5},
  'Soft arch':{brow_arch:.72,brow_height:.58},
@@ -591,14 +662,16 @@ shapeUpgradeButton.onclick=async()=>{
 
 // Keep existing inputs and handlers: folding a feature never resets its values.
 const faceSections=[
+ {id:'body-fat',title:'Fat distribution · sculpt study',keys:['body_adiposity','fat_upper_abdomen','fat_lower_abdomen','fat_waist','fat_upper_back','fat_chest','fat_seat','fat_outer_thighs','fat_inner_thighs','fat_upper_arms','fat_calves','fat_belly_hang']},
  {id:'character',title:'Character structure & age',keys:['character_heart','character_oval','character_square','character_fine','character_round','character_aquiline','character_age']},
- {id:'fantasy',title:'Fantasy anatomy',keys:['ear_point','ear_sweep','ear_round','fangs','tusks','horns','tail']},
- {id:'eyes',title:'Eyes & eyelids',preset:'Eyes',keys:['eye_socket_depth','eye_size','eye_spacing','eye_angle','eye_tilt','eye_openness','inner_lid_opening','outer_lid_opening','inner_eye_fold','eyelid_fold','eyelid_fold_height','lower_lid_volume']},
- {id:'brows',title:'Brows · bone & hair',preset:'Brows',keys:['brow_height','brow_angle','brow_projection','brow_width','brow_arch','brow_hair_thickness','brow_hair_length']},
- {id:'nose',title:'Nose',preset:'Nose',keys:['nose_size','nose_vertical','nose_projection','lower_nose_projection','nose_bridge_width','nose_tip_width','nose_tip_roundness','nose_curve','nose_tip_angle','nostril_width','nostril_flare','nostril_angle','septum_angle']},
- {id:'mouth',title:'Lips & mouth',preset:'Lips',keys:['mouth_corner_shape','mouth_position','mouth_width','philtrum_depth','lip_height','upper_lip_height','lower_lip_height','upper_lip_volume','lower_lip_volume','cupids_bow','lip_taper','lip_projection']},
+ {id:'fantasy',title:'Fantasy anatomy',keys:['ear_point','ear_tip_angle','ear_tip_spread','ear_sweep','ear_round','fangs','fangs_protrusion','tusks','tusks_protrusion','horns','tail']},
+ {id:'eyes',title:'Eyes & eyelids',preset:'Eyes',keys:['eye_socket_depth','eye_size','eye_spacing','eye_angle','eye_tilt','eye_openness','inner_lid_opening','outer_lid_opening','outer_lid_height','inner_eye_fold','eyelid_fold','eyelid_fold_height','lower_lid_volume']},
+ {id:'brows',title:'Brows · bone, contour & hair',preset:'Brows',keys:['brow_height','brow_angle','brow_projection','brow_width','brow_arch','brow_inner_horizontal','brow_inner_vertical','brow_arch_horizontal','brow_arch_vertical','brow_tail_horizontal','brow_tail_vertical','brow_hair_thickness','brow_hair_length']},
+ {id:'nose',title:'Nose',preset:'Nose',keys:['nose_size','nose_vertical','nose_projection','lower_nose_projection','nose_bridge_width','nose_sidewall_width','nose_tip_width','nose_tip_roundness','nose_curve','nose_tip_angle','nose_tip_rotation','nostril_width','nostril_flare','alar_groove_definition','nostril_angle','septum_angle']},
+{id:'mouth',title:'Lips & mouth',preset:'Lips',keys:['mouth_corner_shape','mouth_position','mouth_width','outer_lip_width','philtrum_depth','lip_height','upper_lip_height','lower_lip_height','upper_lip_border','lower_lip_border','upper_lip_volume','lower_lip_volume','cupids_bow','cupids_bow_width','lip_taper','lip_projection','mouth_projection']},
  {id:'cheeks',title:'Cheeks, folds & temples',keys:['cheekbones','cheekbone_height','cheek_volume','nasolabial_definition','midface_projection','temple_definition']},
- {id:'jaw',title:'Jaw, chin & neck',preset:'Jaw',keys:['face_neck_fullness','jowl_volume','double_chin_volume','neck_fullness','under_jaw_fullness','jaw_width','jaw_corner','jaw_definition','jaw_angle','jaw_projection','chin_height','chin_projection']},
+ {id:'fullness',title:'Face & neck fullness',keys:['face_neck_fullness','fullness_temples','fullness_upper_cheeks','fullness_mouth_sides','fullness_lower_cheeks','fullness_jowls','fullness_chin','fullness_under_chin','fullness_neck_sides','fullness_nape']},
+ {id:'jaw',title:'Jaw, chin & neck',preset:'Jaw',keys:['jowl_volume','double_chin_volume','neck_fullness','under_jaw_fullness','jaw_width','jaw_corner','jaw_definition','jaw_angle','jaw_projection','chin_height','chin_projection','lower_chin_width','lower_chin_projection']},
  {id:'contour',title:'Face contour & ears',keys:['forehead_slope','facial_definition','ear_size']}
 ];
 const faceSectionOpen=new Map();
@@ -630,20 +703,50 @@ function arrangeFaceSections(){
   const fields=document.createElement('div');fields.className='face-feature-fields';
   const preset=featurePresetLabels.get(section.preset);if(preset)fields.append(preset);
   fields.append(...labels);if(section.id==='brows')fields.append(browHairFields);
+  if(section.id==='fantasy' && inputs.has('horns')){
+   const picker=document.createElement('label');picker.innerHTML='<span>Horn style</span><select id="hornStyle" data-appearance="horn_style" aria-label="Horn style"><option value="original">Original · upright curve</option><option value="swept">Swept back</option><option value="ram">Curled ram</option><option value="antlers">Branching antlers</option></select>';
+   const size=inputs.get('horns');size.before(picker);
+   const select=picker.querySelector('select');select.value=appearanceState.horn_style||'original';
+   select.onchange=()=>{appearanceState.horn_style=select.value;const amount=document.querySelector('[data-human-morph="horns"]');if(Number(amount.value)<=.5){amount.value=1;document.querySelector('[data-human-morph-value="horns"]').textContent='100%';applyHumanMorphPreview();}appearancePreview();commitEdit();};
+   const help=document.createElement('p');help.className='quiet';help.textContent='Choose a silhouette, then adjust Horns for size. Choosing a style turns horns on if they were hidden. Saved designs keep their selected style.';size.after(help);
+  }
+  if(section.id==='fantasy' && (inputs.has('fangs')||inputs.has('tusks'))){
+   const mouth=document.createElement('label');mouth.innerHTML='<span>Open mouth · preview only<output id="fantasyMouthValue">0%</output></span><input id="fantasyMouthOpen" aria-label="Open mouth preview" type="range" min="0" max="1" step="0.01" value="0"><div class="range-ends"><span>Closed</span><span>Open</span></div>';
+   const teethHelp=document.createElement('p');teethHelp.className='quiet';teethHelp.textContent='Use Open mouth to inspect fang and tusk length. Protrusion moves each pair from inside the closed mouth to outside, with nearby lip tissue following; 50% keeps the original placement. Protrusion follows the amount of fangs or tusks. Mouth opening is a temporary preview and is not saved.';
+   const firstTooth=inputs.get('fangs')||inputs.get('tusks');firstTooth.before(mouth,teethHelp);
+   mouth.querySelector('input').oninput=e=>{const original=document.querySelector('[data-expression-preview="mouth_open"]');if(!original)return;original.value=e.target.value;document.querySelector('[data-expression-preview-value="mouth_open"]').textContent=Math.round(Number(original.value)*100)+'%';$('studioMotion').value='still';studioCommand('motion','still');applyExpressionPreview();};
+  }
+  if(section.id==='fantasy' && inputs.has('ear_tip_angle')){
+   const help=document.createElement('p');help.className='quiet';help.textContent='Ear tip angle tilts the pointed extension forward or back; 50% keeps it upright. Raise Pointed ears above 50% to give the angle something to shape. Ear tip spread brings the points closer to the head or farther outward. Both controls keep the ear roots in place; 50% spread preserves the original width.';fields.prepend(help);
+  }
+  if(section.id==='fullness' && keys.some(key=>key.startsWith('fullness_')&&inputs.has(key))){
+   const help=document.createElement('p');help.className='quiet';help.textContent='Raise Face & neck fullness above 50% to add volume. The regional sliders then adjust where it sits: 50% keeps the balanced distribution, Less or More reduces or increases that region. Their effect follows overall fullness.';fields.prepend(help);
+  }
+  if(section.id==='body-fat'){
+   const help=document.createElement('p');help.className='quiet';help.textContent='Raise Body fat fullness above 50% to add fullness. Regional sliders adjust it from Less to More; 50% keeps the balanced sculpt. Lower belly hang changes how far it settles. These are shape settings, not body-fat percentages. Regional edits can change overall volume.';fields.prepend(help);
+  }
+  if(section.id==='jaw' && inputs.has('lower_chin_width')){
+   const help=document.createElement('p');help.className='quiet';help.textContent='Lower chin width and projection shape the two sides at the bottom of the chin. Chin projection moves the central tip. 50% keeps the original shape.';fields.append(help);
+  }
+  if(section.id==='brows' && inputs.has('brow_inner_horizontal')){
+   const help=document.createElement('p');help.className='quiet';help.textContent='Contour zones move the inner end, peak and tail from the front: horizontal moves each point toward the nose or temple; vertical lowers or raises it. The curve blends between points. Brow ridge projection remains the single depth control.';fields.prepend(help);
+  }
   if(section.id==='nose'){
-   const help=document.createElement('p');help.className='quiet';help.textContent='Lower nose projection reaches 125% for extra length below the bridge. 50% is neutral. Updated models keep the philtrum steadier as the nose projects.';fields.append(help);
+   const help=document.createElement('p');help.className='quiet';help.textContent='Tip length preserves the older long/pointed to short tip shape. Tip angle separately rotates the point downward or upward around the base of the tip instead of stretching it. Nostril wing definition draws the two alar attachments inward and back, sharpening their grooves without changing the central opening. Lower nose projection reaches 125% for extra length below the bridge; 50% is neutral.';fields.prepend(help);
   }
   if(section.id==='cheeks'){
-   const help=document.createElement('p');help.className='quiet';help.textContent='Fold definition shapes the creases from the sides of the nose toward the mouth. Midface projection moves the inner cheeks and mouth area inward or outward; nose projection remains separate.';fields.append(help);
+   const help=document.createElement('p');help.className='quiet';help.textContent='Fold depth changes cheek geometry without painting dark lines. Add or soften surface lines separately in Wrinkle definition under Makeup & skin details. Midface projection moves the inner cheeks and mouth area; nose projection remains separate.';fields.append(help);
   }
   details.append(fields);host.append(details);
   details.ontoggle=()=>{if(details.isConnected)faceSectionOpen.set(section.id,details.open);};
  }
 }
 const paintBeforeFaceSections=paintHumanMorphs;
+const applyBeforeFantasyMouth=applyExpressionPreview;
+applyExpressionPreview=function(){const original=document.querySelector('[data-expression-preview="mouth_open"]'),linked=$('fantasyMouthOpen');if(linked&&original){linked.value=original.value;$('fantasyMouthValue').textContent=Math.round(Number(original.value)*100)+'%';}applyBeforeFantasyMouth();};
 paintHumanMorphs=function(...args){paintBeforeFaceSections(...args);arrangeFaceSections();};
 const showBeforeFaceSections=showHumanGroup;
-showHumanGroup=function(group){showBeforeFaceSections(group);document.querySelectorAll('[data-face-section]').forEach(section=>section.hidden=group!=='face');};
+showHumanGroup=function(group){showBeforeFaceSections(group);document.querySelectorAll('[data-face-section]').forEach(section=>section.hidden=group!==(section.dataset.faceSection==='body-fat'?'body':'face'));};
 const faceSectionStyle=document.createElement('style');
 faceSectionStyle.textContent=`#humanMorphFields .face-feature-section{border:1px solid #45614f;border-radius:12px;padding:0;background:#14271e;margin:0}#humanMorphFields .face-feature-section>summary{padding:.85rem 1rem;font-weight:650;cursor:pointer}#humanMorphFields .face-feature-fields{display:grid;gap:.8rem;padding:0 .8rem .8rem}#humanMorphFields .face-feature-section[hidden]{display:none!important}`;
 document.head.append(faceSectionStyle);

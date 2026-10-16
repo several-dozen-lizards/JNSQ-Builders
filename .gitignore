@@ -2,4 +2,6 @@
 data/
 __pycache__/
 *.pyc
-download-cache/
+scratch/
+godot-room/
+assets/

@@ -1,0 +1,25 @@
+{
+  "manifest_sha256": "b4878c45ec446b82e76f16a26d85b17e569a796c3d7db5dfc0242413b1ef7ade",
+  "excluded_assets_policy": "omit_unverified",
+  "unverified_assets": [],
+  "checks": {
+    "privacy": "pass",
+    "asset_licenses": "pass",
+    "clean_install": "pass",
+    "update_preservation": "pass",
+    "avatar_render_save_export": "pass",
+    "world_render_save_export": "pass",
+    "archive_hashes": "pass"
+  },
+  "evidence": {
+    "privacy": "Exact manifest and PCK audit; no household models or saved data",
+    "asset_licenses": "Exact MakeHuman component and image matches; recorded Poly Haven asset-specific sources; Three/Godot notices included",
+    "clean_install": "INSTALL_BUILDERS.ps1 executed in new Python 3.10 venv; all manifest hashes and seven package tests passed",
+    "update_preservation": "Actual downloader rejected existing saved-work sentinel without changing it",
+    "avatar_render_save_export": "Browser rendered edited starter, saved and reopened it, completed guide, downloaded validated GLB with edited morph weights",
+    "world_render_save_export": "Browser rendered and saved/reopened world; portable JSON validated; final rendering/export owner unchanged from candidate-02 export",
+    "archive_hashes": "All three actual ZIPs CRC/extraction and exact manifest hashes passed"
+  },
+  "vr": "Default-off and no-headset UI checked; five mocked lifecycle tests passed. Physical headset behavior untested.",
+  "scope": "Standalone editors and their rendering runtimes. Full household assignment/publication/travel is not supplied."
+}

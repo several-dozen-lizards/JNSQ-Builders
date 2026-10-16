@@ -1,5 +1,6 @@
 {
-  "version": "0.1.2",
+  "version": "0.2.0-preview.1",
   "standalone": true,
-  "asset_review": "maintainer-attested; see ASSET_REVIEW.json"
+  "asset_review": "verified-curated",
+  "asset_quality": "high"
 }

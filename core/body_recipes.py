@@ -39,6 +39,7 @@ FACE_PARAMETERS = (
     "nose_size",
     "nose_curve",
     "nose_tip_angle",
+    "nose_tip_rotation",
     "nostril_angle",
     "nostril_width",
     "nose_projection",
@@ -53,23 +54,35 @@ FACE_PARAMETERS = (
 )
 DEFAULT_FACE = {key: 0.50 for key in FACE_PARAMETERS}
 IDENTITY_PARAMETERS = (
+    "kay_head_envelope", "kay_facial_structure",
+    "nose_sidewall_width",
+    "alar_groove_definition",
+    "mouth_projection",
+    "outer_lip_width", "upper_lip_border", "lower_lip_border", "cupids_bow_width",
+    "lower_chin_width", "lower_chin_projection",
     "eye_socket_depth", "mouth_corner_shape", "forehead_slope", "under_jaw_fullness",
     "jowl_volume", "double_chin_volume", "neck_fullness", "nose_tip_roundness", "lip_taper", "lip_projection",
     "face_neck_fullness",
-    'ear_point', 'ear_sweep', 'ear_round', 'fangs', 'tusks', 'horns', 'tail',
+    "fullness_temples", "fullness_upper_cheeks", "fullness_mouth_sides", "fullness_lower_cheeks", "fullness_jowls", "fullness_chin", "fullness_under_chin", "fullness_neck_sides", "fullness_nape",
+    'ear_point', 'ear_tip_angle', 'ear_tip_spread', 'ear_sweep', 'ear_round', 'fangs', 'fangs_protrusion', 'tusks', 'tusks_protrusion', 'horns', 'tail',
     'character_heart', 'character_oval', 'character_square', 'character_fine', 'character_round', 'character_aquiline', 'character_age', 'body_softness', 'body_power',
+    "body_adiposity", "fat_upper_abdomen", "fat_lower_abdomen", "fat_waist", "fat_upper_back", "fat_chest", "fat_seat", "fat_outer_thighs", "fat_inner_thighs", "fat_upper_arms", "fat_calves", "fat_belly_hang",
     "body_frame", "stature", "body_mass", "muscularity", "proportions",
     "shoulder_width", "hip_width", "torso_length", "arm_length",
     "leg_length", "head_scale", "jaw_width", "chin_height", "cheekbones", "cheekbone_height",
-    "nose_size", "nose_curve", "nose_tip_angle", "nostril_angle",
+    "nose_size", "nose_curve", "nose_tip_angle", "nose_tip_rotation", "nostril_angle",
     "nostril_width", "nose_projection", "nose_vertical", "septum_angle",
     "jaw_angle", "jaw_projection", "jaw_definition", "chin_projection",
     "eye_size", "eye_spacing", "mouth_width", "ear_size", "brow_height",
+    "brow_inner_horizontal", "brow_inner_vertical",
+    "brow_arch_horizontal", "brow_arch_vertical",
+    "brow_tail_horizontal", "brow_tail_vertical",
     "breast_size", "hip_depth", "brow_angle", "brow_projection", "brow_width", "brow_arch", "brow_hair_thickness", "brow_hair_length", "philtrum_depth", "nasolabial_definition", "midface_projection",
-    "upper_lip_volume", "lower_lip_volume", "cupids_bow", "eye_openness", "eye_tilt", "eye_angle", "inner_eye_fold", "inner_lid_opening", "outer_lid_opening", "mouth_position", "lip_height", "facial_definition", "cheek_volume", "temple_definition", "eyelid_fold", "eyelid_fold_height", "lower_lid_volume", "upper_lip_height", "lower_lip_height", "lower_nose_projection", "nose_bridge_width", "nose_tip_width", "nostril_flare", "jaw_corner",
+    "upper_lip_volume", "lower_lip_volume", "cupids_bow", "eye_openness", "eye_tilt", "eye_angle", "inner_eye_fold", "inner_lid_opening", "outer_lid_opening", "outer_lid_height", "mouth_position", "lip_height", "facial_definition", "cheek_volume", "temple_definition", "eyelid_fold", "eyelid_fold_height", "lower_lid_volume", "upper_lip_height", "lower_lip_height", "lower_nose_projection", "nose_bridge_width", "nose_tip_width", "nostril_flare", "jaw_corner",
 )
 DEFAULT_IDENTITY = {key: 0.50 for key in IDENTITY_PARAMETERS}
 DEFAULT_APPEARANCE = {
+    'horn_style': 'original',
     'skin_sheen': 0.0,
     'iris_lightness':0.5,
     'brow_color':'#ffffff', 'brow_density':1.0,
@@ -77,7 +90,7 @@ DEFAULT_APPEARANCE = {
     'hair_lightness': 0.0, 'hair_highlight_color': '#d9b878', 'hair_highlight_amount': 0.0, 'hair_highlight_pattern': 'fine',
     'skin': '#ffffff', 'hair': '#ffffff', 'eyes': '#ffffff', 'iris': '#ffffff', 'iris_inner': '#ffffff',
     'skin_texture': '', 'eye_texture': '', 'eye_shading': 0.65,
-    'outfit': '#ffffff', 'outfit_top': '#ffffff', 'outfit_bottom': '#ffffff', 'hairstyle': 'short01', 'eyebrows': 'eyebrow001', 'beard': 'none',
+    'outfit': '#ffffff', 'outfit_top': '#ffffff', 'outfit_bottom': '#ffffff', 'hairstyle': 'short01', 'eyebrows': 'eyebrow009', 'eyelashes': 'lashes_soft_natural', 'beard': 'none',
 }
 
 def normalize_appearance(value):
@@ -100,6 +113,9 @@ def normalize_appearance(value):
         raise BodyPackageError('Brow density must be between zero and one')
     result['brow_density']=float(density)
     result['eye_style']=value.get('eye_style','original')
+    result['horn_style']=value.get('horn_style','original')
+    if result['horn_style'] not in ['original','swept','ram','antlers']:
+        raise BodyPackageError('Invalid horn style')
     if result['eye_style'] not in ['original','radial','ember','galaxy','rings','crystal','spiral','starburst','void']:
         raise BodyPackageError('Invalid eye style')
     result['pupil_shape']=value.get('pupil_shape','round')
@@ -126,7 +142,7 @@ def normalize_appearance(value):
         if not isinstance(item, str) or (item and not re.fullmatch('[a-f0-9]{64}', item)):
             raise BodyPackageError('Invalid texture identifier')
         result[key] = item
-    for key in ['hairstyle', 'eyebrows', 'beard']:
+    for key in ['hairstyle', 'eyebrows', 'eyelashes', 'beard']:
         item = value.get(key, DEFAULT_APPEARANCE[key])
         if not isinstance(item, str) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', item):
             raise BodyPackageError('Invalid accessory name')
