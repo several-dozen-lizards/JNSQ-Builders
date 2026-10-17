@@ -5,6 +5,25 @@ Optional local **Avatar Creator** and **World Builder** for
 Create and edit avatars and environments, save your original designs, and export
 creations to use in JNAIQ. The editors also work on their own.
 
+## A look inside
+
+### Avatar Creator
+
+Shape the included human starter, preview the result, and save an editable design
+or export a self-contained GLB for JNAIQ.
+
+![Avatar Creator showing the finished human starter, body controls, save and export actions](docs/images/avatar-creator.png)
+
+### World Builder
+
+Sculpt terrain, grow scenery, place objects, adjust the sky, and save or export
+your world. This screenshot shows the included procedural island in daylight.
+
+![World Builder showing a forested floating island with terrain brushes and editing controls](docs/images/world-builder.png)
+
+*Actual screenshots of the curated public Builders on an isolated test copy.
+Experimental VR remains off; these are desktop editor views.*
+
 ## Download the curated preview
 
 **[Download JNAIQ Builders 0.2.0-preview.1](https://github.com/several-dozen-lizards/JNSQ-Builders/releases/tag/v0.2.0-preview.1)**
