@@ -1,1 +1,1 @@
-"""Portable JNSQ editors. No resident services are started here."""
+"""Portable JNAIQ editors. No resident services are started here."""

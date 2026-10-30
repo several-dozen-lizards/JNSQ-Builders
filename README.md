@@ -147,3 +147,5 @@ avatar/world rendering, edits, save/reopen and export, guide completion, and
 no-headset/mocked VR lifecycle behavior. JNAIQ's import, assignment, travel and
 restart workflow was checked separately. Bugs may remain; feedback and headset
 compatibility reports are welcome.
+
+Source branding and compatibility details: [JNAIQ naming](docs/BRANDING.md).

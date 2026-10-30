@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(use){const summary=use.querySelector('summary');if(summary)summary.textContent='Finished avatars';}
   }else{
     for(const el of document.querySelectorAll('header button')){
-      if(['Add to JNSQ','Remove from JNSQ'].includes(el.textContent))el.hidden=true;
+      if(['Add to JNAIQ','Remove from JNAIQ'].includes(el.textContent))el.hidden=true;
     }
     for(const el of document.querySelectorAll('a[href="./room.html"]'))el.hidden=true;
   }

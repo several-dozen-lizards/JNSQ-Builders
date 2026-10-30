@@ -1,4 +1,4 @@
-"""Download, verify and extract the complete JNSQ Builders preview."""
+"""Download, verify and extract the complete JNAIQ Builders preview."""
 import hashlib
 import json
 from pathlib import Path

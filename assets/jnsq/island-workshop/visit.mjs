@@ -31,7 +31,7 @@ async function start(){
   if(!response.ok)throw Error('This published location is unavailable.');
   const published=await response.json(),world=published.world;
   if(!world||world.heights?.length!==(N+1)**2)throw Error('The published landscape is incomplete.');
-  document.title=world.name+' · JNSQ';$('loading-title').textContent='Entering '+world.name+'…';
+  document.title=world.name+' · JNAIQ';$('loading-title').textContent='Entering '+world.name+'…';
   let dirtyFrame=true,waterTime=0,renderer;
   window.addEventListener('island-texture-ready',()=>dirtyFrame=true);
   const state={hour:localClockHour(),followLocalTime:true,playing:false,minutes:15,environment:'clouds',weather:'scattered',strength:.65,cloudShadows:true,sunRays:true,nebulaClouds:false,cavernLighting:'natural',landBrightness:1,lightingColor:'#ffffff',water:{surface:'visible',color:'#087f91',glow:.35,ripples:1},customSky:null,...world.atmosphere};

@@ -175,11 +175,11 @@ def merge_furniture(room, previous, furniture, commit=True):
             if any(record.get(f)!=previous[oid].get(f) for f in SEMANTICS):
                 raise ValueError('Published furniture keeps its meaning and ownership. Adjust its placement, or add a new object: '+oid)
             if oid not in current or any(current[oid].get(f)!=previous[oid].get(f) for f in PLACEMENT):
-                raise FileExistsError('Furniture moved in JNSQ since this landscape was published: '+oid)
+                raise FileExistsError('Furniture moved in JNAIQ since this landscape was published: '+oid)
             for f in PLACEMENT:candidate[oid][f]=copy.deepcopy(record.get(f))
     for oid in set(previous)-set(furniture):
         if oid in current and any(current[oid].get(f)!=previous[oid].get(f) for f in PLACEMENT):
-            raise FileExistsError('This object moved in JNSQ. Keep it in this draft: '+oid)
+            raise FileExistsError('This object moved in JNAIQ. Keep it in this draft: '+oid)
         candidate.pop(oid,None)
     return apply_layout(room,{'objects':candidate,'base_revision':digest(current)},commit=commit)
 
@@ -226,7 +226,7 @@ class RoomWorkshop:
             with httpx.Client(timeout=15, trust_env=False) as client:
                 probe = client.get(f'http://127.0.0.1:{port}/api/room-workshop/health')
                 if probe.status_code != 200 or not probe.json().get('shared'):
-                    if method != 'GET': raise ValueError('Restart JNSQ once to load the workshop object bridge. Save your draft in the meantime.')
+                    if method != 'GET': raise ValueError('Restart JNAIQ once to load the workshop object bridge. Save your draft in the meantime.')
                     return None
                 response = client.request(method, f'http://127.0.0.1:{port}'+path, json=payload)
                 return JSONResponse(status_code=response.status_code, content=response.json())
@@ -327,7 +327,7 @@ def install(app, repo):
             # Validate against a read-only reconstruction before scheduling.
             apply_layout(manager.offline_rooms()[rid],draft)
             atomic(manager.root/'pending'/(rid+'.json'),draft)
-            return {'ok':True,'queued':True,'message':'Layout will apply when JNSQ next starts.'}
+            return {'ok':True,'queued':True,'message':'Layout will apply when JNAIQ next starts.'}
         return guarded(run)
 
     @app.get('/api/room-workshop/catalog')

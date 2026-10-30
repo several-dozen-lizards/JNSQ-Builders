@@ -26,9 +26,9 @@ export async function installVisitor({scene,camera,controls,canvas,world,restore
     applyEnvironment?.(atmosphere);invalidate();
   }
   document.body.classList.add('visiting');
-  document.title=world.name+' · JNSQ';
+  document.title=world.name+' · JNAIQ';
   document.querySelector('header h1').textContent=world.name;
-  document.querySelector('header small').textContent='JNSQ / VISITING';
+  document.querySelector('header small').textContent='JNAIQ / VISITING';
   document.querySelector('header .actions').replaceChildren();
   const bar=document.querySelector('header .actions');
   const weatherLabel=document.createElement('span');weatherLabel.style.cssText='font-size:12px;color:#b9d5cb';bar.append(weatherLabel);

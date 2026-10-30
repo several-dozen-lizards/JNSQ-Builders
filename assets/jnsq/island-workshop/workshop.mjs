@@ -417,7 +417,7 @@ document.addEventListener('visibilitychange',()=>{lastFrame=null;});
 function render(now=performance.now()){requestAnimationFrame(render);const delta=lastFrame===null?0:Math.max(0,(now-lastFrame)/1000);lastFrame=now;if(document.hidden)return;firstPerson?.update(delta);if(motion.checked)waterTime+=delta;const light=daylightControl.tick(delta);if(!dirtyFrame&&!motion.checked&&!daylightControl.state.playing)return;const rig=updateLighting(light);landscapeFeatures.update(waterTime);atmosphere.update(camera,waterTime,light,daylightControl.renderState);skyIllumination.update(light,daylightControl.renderState,rig);rig.applySky();renderer.render(scene,camera);dirtyFrame=false;}
 sidebar=installSidebar();
 if(!visitId){
-  if(!window.JNSQ_STANDALONE){const roomsLink=document.createElement('a');roomsLink.className='action';roomsLink.href='./room.html';roomsLink.textContent='Existing worlds';roomsLink.title='Edit objects in JNSQ worlds, including rooms and published landscapes';document.querySelector('header .actions').prepend(roomsLink);}
+  if(!window.JNSQ_STANDALONE){const roomsLink=document.createElement('a');roomsLink.className='action';roomsLink.href='./room.html';roomsLink.textContent='Existing worlds';roomsLink.title='Edit objects in JNAIQ worlds, including rooms and published landscapes';document.querySelector('header .actions').prepend(roomsLink);}
   const panel=document.createElement('section');
   const openFurniture=sidebar.addPanel('furniture','Furniture & objects',panel);
   document.getElementById('ribbon-tab-furniture').addEventListener('click',()=>{if(!firstPerson?.active)chooseTool('orbit');});
@@ -444,12 +444,12 @@ if(visitId){
     installVisitor({scene,camera,controls,canvas:renderer.domElement,world,arrival:published.arrival,id:visitId,status,applyEnvironment:value=>daylightControl.restore(value),invalidate:()=>{dirtyFrame=true;}});
   }catch(e){status(e.message,true);}
 }else if(!window.JNSQ_STANDALONE){
-  const publish=document.createElement('button');publish.textContent='Add to JNSQ';$('save').after(publish);
-  const unpublish=document.createElement('button');unpublish.textContent='Remove from JNSQ';publish.after(unpublish);
-  unpublish.onclick=async()=>{if(busy||!activeId)return;unpublish.disabled=true;try{await api('/'+activeId+'/unpublish',{method:'POST'});publish.textContent='Add to JNSQ';status('World removed from travel. Your editable draft is preserved.');}catch(e){status(e.message,true);}finally{unpublish.disabled=false;}};
+  const publish=document.createElement('button');publish.textContent='Add to JNAIQ';$('save').after(publish);
+  const unpublish=document.createElement('button');unpublish.textContent='Remove from JNAIQ';publish.after(unpublish);
+  unpublish.onclick=async()=>{if(busy||!activeId)return;unpublish.disabled=true;try{await api('/'+activeId+'/unpublish',{method:'POST'});publish.textContent='Add to JNAIQ';status('World removed from travel. Your editable draft is preserved.');}catch(e){status(e.message,true);}finally{unpublish.disabled=false;}};
   publish.onclick=async()=>{if(busy)return;publish.disabled=true;try{
-    await saveIsland();if(dirty||!activeId)throw Error('Save the island successfully before adding it to JNSQ.');
+    await saveIsland();if(dirty||!activeId)throw Error('Save the island successfully before adding it to JNAIQ.');
     const result=await api('/'+activeId+'/publish',{method:'POST'});
-    publish.textContent='Update JNSQ world';status(result.name+' published. Its teleporters are shared across JNSQ; add one under Furniture & objects if needed. Your draft stays editable.');
+    publish.textContent='Update JNAIQ world';status(result.name+' published. Its teleporters are shared across JNAIQ; add one under Furniture & objects if needed. Your draft stays editable.');
   }catch(e){status(e.message,true);}finally{publish.disabled=false;}};
 }

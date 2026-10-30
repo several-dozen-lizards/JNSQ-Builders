@@ -1,7 +1,7 @@
 import * as THREE from './vendor/three.module.js';
 import {groundSurfaceTexture} from './ground-surface.mjs';
 
-// Existing JNSQ photographed surfaces. Colour is sRGB; other maps are data.
+// Existing JNAIQ photographed surfaces. Colour is sRGB; other maps are data.
 export function islandMaterials(renderer,invalidate,reportError){
   const loader=new THREE.TextureLoader(),textures={};
   for(const kind of ['grass','dirt','rock','tree_bark']){

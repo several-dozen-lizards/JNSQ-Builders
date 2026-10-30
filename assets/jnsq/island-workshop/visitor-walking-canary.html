@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import {installVisitor} from './visitor.mjs';
 const realFetch=window.fetch.bind(window),delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const id='b128702d9a7046e88aa8ae3c1bf295c5',published=await (await realFetch('/api/world-destinations/'+id)).json();
-// Exercise the real visitor against a synthetic room. Actions never reach JNSQ.
+// Exercise the real visitor against a synthetic room. Actions never reach JNAIQ.
 const rec={position_m:[0,0],height_m:2,heading_deg:0,movement:{}},snapshot={members:{Re:rec},objects:{},last_seq:0};
 let actions=0,active=0,maxActive=0,gets=0;const controlsSeen=[],samples=[];
 function pose(){const m=rec.movement;if(!m.path_xyz)return [rec.position_m[0],rec.height_m,-rec.position_m[1]];const t=Math.min(1,Math.max(0,(Date.now()/1000-m.started_at)/m.move_duration_s));return m.path_xyz[0].map((v,i)=>v+(m.path_xyz[1][i]-v)*t);}

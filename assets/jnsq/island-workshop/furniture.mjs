@@ -21,7 +21,7 @@ export function validateFurniture(objects={}){
 
 // The same x/up/-y coordinates and largest-horizontal-extent fitting as Godot.
 export function furnitureLayer({scene,invalidate=()=>{},status=()=>{},ground=()=>0}){
-  const group=new THREE.Group();group.name='JNSQ furniture';scene.add(group);
+  const group=new THREE.Group();group.name='JNAIQ furniture';scene.add(group);
   const entries=new Map(),cache=new Map(),loader=new GLTFLoader();let files=[];
   const reloadCatalog=()=>request('/api/room-workshop/catalog').then(c=>{files=c.files;return c;});
   const ready=reloadCatalog().catch(e=>{status(e.message,true);return {files:[],items:[]};});

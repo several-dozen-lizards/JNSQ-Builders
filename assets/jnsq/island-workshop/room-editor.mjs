@@ -6,10 +6,10 @@ import {heightAt} from './terrain.mjs';
 import {normalizeImportedLights} from './imported-lighting.mjs';
 let landscapeWorld=null;
 const $=id=>document.getElementById(id),status=(text,error=false)=>{$('status').textContent=text;$('status').classList.toggle('error',error);};
-document.title='JNSQ · World workshop';document.querySelector('h1').textContent='World workshop';
+document.title='JNAIQ · World workshop';document.querySelector('h1').textContent='World workshop';
 document.querySelector('header small').textContent='EXISTING WORLDS · ROOMS & LANDSCAPES';
 const landscapeLink=document.querySelector('header nav a');landscapeLink.textContent='Build & furnish worlds';landscapeLink.href='./index.html?furniture=1';
-const worldLabel=$('rooms').parentElement;worldLabel.firstChild.textContent='JNSQ world';
+const worldLabel=$('rooms').parentElement;worldLabel.firstChild.textContent='JNAIQ world';
 const worldHint=document.createElement('p');worldHint.textContent='Rooms are worlds too. Open a room or published landscape here to edit its objects. To furnish an unpublished landscape, use Build & furnish worlds.';worldLabel.before(worldHint);
 const renderer=new THREE.WebGLRenderer({canvas:$('viewport'),antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0x253d42);renderer.toneMapping=THREE.ACESFilmicToneMapping;
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1,.02,3000),controls=new OrbitControls(camera,$('viewport'));controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.ROTATE,RIGHT:THREE.MOUSE.PAN};
@@ -38,7 +38,7 @@ async function loadBase(){const token=++loadToken;clearBase();const loader=new G
   if(!base.children.length){const size=(world.radius_m||5)*2;const floor=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshStandardMaterial({color:0x596d60,side:THREE.DoubleSide}));floor.rotation.x=-Math.PI/2;floor.position.y=-.02;base.add(floor);}
   editor.refresh();frame();
 }
-function validate(value){if(value?.schema!=='jnsq-room-layout/1'||!value.room_id||!value.base_revision)throw Error('Choose a JNSQ room layout file. Landscape files open in Landscapes.');validateFurniture(value.objects);return value;}
+function validate(value){if(value?.schema!=='jnsq-room-layout/1'||!value.room_id||!value.base_revision)throw Error('Choose a JNAIQ room layout file. Landscape files open in Landscapes.');validateFurniture(value.objects);return value;}
 async function open(value,id=null,rev=null){world=structuredClone(validate(value));original=structuredClone(value);draftId=id;revision=rev;past=[];future=[];dirty=false;history();$('source').textContent=world.name+' · saved layout copy. Editing does not change the household.';editor.refresh();frame();await loadBase();status('Opened '+world.name+' as a draft');}
 async function shelf(){const [rooms,drafts]=await Promise.all([request('/api/room-workshop/rooms'),request('/api/room-workshop/drafts')]);$('rooms').replaceChildren(...rooms.rooms.map(r=>new Option(r.name,r.id)));$('drafts').replaceChildren(new Option('Choose a saved draft',''),...drafts.drafts.map(d=>new Option(d.name,d.id)));return rooms;}
 async function save(copy=false){if(!world)throw Error('Open a world first');const result=await request('/api/room-workshop/drafts',{draft:world,draft_id:copy?null:draftId,revision:copy?null:revision});draftId=result.id;revision=result.revision;original=structuredClone(world);dirty=false;await shelf();status('Draft saved · household unchanged');return result;}
@@ -57,7 +57,7 @@ $('apply').onclick=()=>run(async()=>{
   if(live.base_revision!==world.base_revision)throw Error('The household layout has changed. Your draft is saved; open the room again before applying changes.');
   for(const [id,o] of Object.entries(world.objects)){const before=live.objects[id];if(!before)lines.push('Add '+o.name);else if(JSON.stringify(['position_m','rot_deg','size_m','y_off_m','support_surface','support_oid'].map(k=>before[k]))!==JSON.stringify(['position_m','rot_deg','size_m','y_off_m','support_surface','support_oid'].map(k=>o[k])))lines.push(`Move ${o.name}: X ${o.position_m[0].toFixed(2)}, Z ${(-o.position_m[1]).toFixed(2)}, height ${o.y_off_m.toFixed(2)} m; ${o.rot_deg}°, size ${o.size_m} m`);}
   for(const [id,o] of Object.entries(live.objects))if(!world.objects[id])lines.push('Remove '+o.name);
-  if(!lines.length)throw Error('This layout already matches JNSQ.');$('reviewText').textContent=world.name+'\n\n'+lines.join('\n');$('review').showModal();
+  if(!lines.length)throw Error('This layout already matches JNAIQ.');$('reviewText').textContent=world.name+'\n\n'+lines.join('\n');$('review').showModal();
 });
 $('cancelApply').onclick=()=>$('review').close();$('confirmApply').onclick=()=>run(async()=>{const result=await request('/api/room-workshop/apply',world);$('review').close();if(result.queued){status(result.message);return;}world.base_revision=result.base_revision;original=structuredClone(world);await save();status('Layout applied · resident objects and their histories preserved');});
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});

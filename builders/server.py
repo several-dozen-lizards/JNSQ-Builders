@@ -1,4 +1,4 @@
-"""Run both editors from an isolated JNSQ Builders installation."""
+"""Run both editors from an isolated JNAIQ Builders installation."""
 from __future__ import annotations
 import argparse
 import json
@@ -20,7 +20,7 @@ def create_app(root=ROOT, *, data_root=None):
     root = Path(root).resolve()
     # A marker is required: never run this service against the live workshop.
     if not (root / 'BUILDERS.json').is_file():
-        raise RuntimeError('Build or extract JNSQ Builders first; do not run it in the household workspace.')
+        raise RuntimeError('Build or extract JNAIQ Builders first; do not run it in the household workspace.')
     data = Path(data_root).resolve() if data_root else root / 'data'
     if not data.is_relative_to(root):
         raise ValueError('Builder data must stay inside its installation.')
@@ -31,7 +31,7 @@ def create_app(root=ROOT, *, data_root=None):
     os.environ['JNSQ_OBJECT_ASSETS'] = str(objects)
     os.environ['JNSQ_AVATAR_LIBRARY'] = str(data / 'avatar_library')
     os.environ['JNSQ_ROOM_DRAFTS'] = str(data / 'room_layouts')
-    app = FastAPI(title='JNSQ Builders', docs_url=None, redoc_url=None)
+    app = FastAPI(title='JNAIQ Builders', docs_url=None, redoc_url=None)
     app.state.rooms = {}
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=['127.0.0.1', 'localhost', 'testserver'])
 
@@ -201,7 +201,7 @@ def main():
             if info.get('application') == 'jnsq-builders' and info.get('root') == str(ROOT):
                 if not args.no_browser:
                     webbrowser.open(f'http://127.0.0.1:{port}{path}')
-                print('Using the running JNSQ Builders window.')
+                print('Using the running JNAIQ Builders window.')
                 return
         except (httpx.HTTPError, ValueError):
             pass
@@ -221,7 +221,7 @@ def main():
             if self.started:
                 marker.write_text(json.dumps({'port': port, 'pid': os.getpid()}))
                 url = f'http://127.0.0.1:{port}{path}'
-                print(f'JNSQ Builders: {url}\nKeep this window open. Ctrl+C stops the editors.', flush=True)
+                print(f'JNAIQ Builders: {url}\nKeep this window open. Ctrl+C stops the editors.', flush=True)
                 if not args.no_browser:
                     webbrowser.open(url)
 

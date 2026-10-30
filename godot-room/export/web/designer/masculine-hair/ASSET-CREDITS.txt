@@ -2,7 +2,7 @@ Swept-back quiff — Maxwell (elvs_maxwell_hair)
 By Elvaerwyn
 Source: https://www.makehumancommunity.org/node/1639
 License: CC-BY — https://creativecommons.org/licenses/by/4.0/
-Changes: Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified.
+Changes: Packaged for JNAIQ. Fitted to the avatar; exported shape and colors may be modified.
 Keep this attribution when redistributing the asset.
 
 
@@ -10,7 +10,7 @@ Side-part volume — Grump (elvs_grump_hair)
 By Elvaerwyn
 Source: https://www.makehumancommunity.org/node/2796
 License: CC-BY — https://creativecommons.org/licenses/by/4.0/
-Changes: Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified.
+Changes: Packaged for JNAIQ. Fitted to the avatar; exported shape and colors may be modified.
 Keep this attribution when redistributing the asset.
 
 
@@ -18,5 +18,5 @@ Cornrows with beads (elvs_braided_rows)
 By Elvaerwyn
 Source: https://www.makehumancommunity.org/node/1659
 License: CC-BY — https://creativecommons.org/licenses/by/4.0/
-Changes: Packaged for JNSQ. Fitted to the avatar; exported shape and colors may be modified.
+Changes: Packaged for JNAIQ. Fitted to the avatar; exported shape and colors may be modified.
 Keep this attribution when redistributing the asset.

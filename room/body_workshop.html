@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>JNSQ Avatar Designer</title>
+  <title>JNAIQ Avatar Designer</title>
   <style>
     :root{color-scheme:dark;--ink:#edf6ef;--muted:#9cb1a2;--line:#33483b;
       --panel:#121b17;--deep:#09100d;--green:#7feda7;--gold:#e7c56c;
@@ -91,7 +91,7 @@
   </style>
 <script>window.JNSQ_STANDALONE=true</script><script src="/builders/standalone.js" defer></script></head>
 <body><main>
-  <div class="studio-intro"><div class="eyebrow">JNSQ · make a face, find a form</div>
+  <div class="studio-intro"><div class="eyebrow">JNAIQ · make a face, find a form</div>
   <h1>Avatar designer</h1>
   <p>Start with a human body, shape its features, and save a design you can return to. Your source models stay unchanged while you work on a design.</p></div>
   <section id="studioSetup" class="card" aria-labelledby="studioSetupTitle">
@@ -169,7 +169,7 @@
   </details>
 
   <details id="advancedWorkshop" class="advanced"><summary>Import your own model · model compatibility · current appearances</summary>
-  <p class="quiet">Import a GLB and review its skeleton mapping here. When it is ready, add it to your library and choose a persona under “Use an avatar in JNSQ”. Importing alone never changes an appearance.</p>
+  <p class="quiet">Import a GLB and review its skeleton mapping here. When it is ready, add it to your library and choose a persona under “Use an avatar in JNAIQ”. Importing alone never changes an appearance.</p>
   <h2>Current assignments</h2>
   <div id="assignments" class="grid"><div class="empty">Reading the resolver…</div></div>
 
@@ -938,7 +938,7 @@ function shapedAvatarGLB(buffer,identity,designName,appearance={},allowUnshaped=
     ]
   }
 ]
-,modifications:"Fitted, remorphed and assembled with JNSQ Builders; credits list included wardrobe components."};
+,modifications:"Fitted, remorphed and assembled with JNAIQ Builders; credits list included wardrobe components."};
   const weights=new Map();
   for(const [id,_label,low,high] of HUMAN_MORPH_CONTROLS){const value=Number(identity[id]??.5);if(!Number.isFinite(value)||value<0||value>(id==='lower_nose_projection'?1.25:1))throw new Error("Invalid shape value: "+id);weights.set(low,Math.max(0,(.5-value)*2));weights.set(high,Math.max(0,(value-.5)*2));}
   for(const [_id,_label,name] of TRANSIENT_EXPRESSIONS)weights.set(name,0);

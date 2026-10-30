@@ -1,4 +1,4 @@
-"""Read-only inspection and manifest validation for JNSQ 3D bodies.
+"""Read-only inspection and manifest validation for JNAIQ 3D bodies.
 
 The inspector deliberately describes what an asset exposes.  It does not
 rewrite rigs, install models, or claim capabilities that cannot be observed in
@@ -115,7 +115,7 @@ def _read_glb_json(path: str) -> Tuple[dict, int, str]:
                 break
             digest.update(block)
     try:
-        document = json.loads(raw_json.rstrip(b" \t\r\n\x00").decode("utf-8"))
+        document = json.loads(raw_json.rstrip(b" \t\n\x00").decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise BodyPackageError(f"GLB JSON metadata is invalid: {exc}") from exc
     if not isinstance(document, dict):
